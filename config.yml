@@ -1,0 +1,24 @@
+version: 1
+validation: sovereign
+accounts: 
+- name: alice
+  coins:
+  - 10000000000ugz
+  - 200000000000uggez1
+  mnemonic: later rookie jazz alter minute group share scan random try brain brain task afraid roast fuel ring autumn awake diamond length sadness please round  
+- name: bob
+  coins:
+  - 10000000000ugz
+  - 1000000000000uggez1
+  mnemonic: float elder spice lamp blue cause office surge reopen brass stone garbage pistol noodle breeze fortune jewel flavor asthma dirt rubber lyrics vicious picnic  
+client:
+  openapi:
+    path: docs/static/openapi.yml
+faucet:
+  name: bob
+  coins:
+  - 50000ugz
+  - 100000uggez1
+validators:
+- name: alice
+  bonded: 100000000uggez1
