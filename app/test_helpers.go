@@ -2,10 +2,8 @@ package app
 
 import (
 	"encoding/json"
-	// "fmt"
 	"testing"
 	"time"
-	// storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/server"
 	cmttypes "github.com/cometbft/cometbft/types"
@@ -19,15 +17,11 @@ import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	tmtypes "github.com/cometbft/cometbft/types"
 	dbm "github.com/cosmos/cosmos-db"
-	// codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	// cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	// stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/require"
 
-	// "github.com/GGEZLabs/ggezchain/testutil"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 )
 
@@ -50,17 +44,6 @@ var DefaultConsensusParams = &tmproto.ConsensusParams{
 	},
 }
 
-// func setup(withGenesis bool) (*App, GenesisState) {
-// 	db := dbm.NewMemDB()
-// 	// encCdc := testutil.MakeEncodingConfig()
-// 	appOptions := make(simtestutil.AppOptionsMap, 0)
-// 	app,_ := New(log.NewNopLogger(), db, nil, true, appOptions)
-// 	// if withGenesis {
-// 	// 	return app, NewDefaultGenesisState(encCdc.Marshaler)
-// 	// }
-// 	return app, GenesisState{}
-// }
-
 func setup(withGenesis bool, invCheckPeriod uint) (*App, GenesisState) {
 	db := dbm.NewMemDB()
 
@@ -75,31 +58,6 @@ func setup(withGenesis bool, invCheckPeriod uint) (*App, GenesisState) {
 	return app, GenesisState{}
 }
 
-// Setup initializes a new App. A Nop logger is set in App.
-// func Setup(isCheckTx bool) *App {
-//     sdk.GetConfig().SetBech32PrefixForAccount("ggez", "ggez")
-//     sdk.GetConfig().SetBech32PrefixForValidator("ggezvaloper", "ggezvaloper")
-//     sdk.GetConfig().SetBech32PrefixForConsensusNode("ggezvalcons", "ggezvalcons")
-// 	app, genesisState := setup(!isCheckTx)
-// 	if !isCheckTx {
-// 		// init chain must be called to stop deliverState from being nil
-// 		stateBytes, err := json.MarshalIndent(genesisState, "", " ")
-// 		if err != nil {
-// 			panic(err)
-// 		}
-
-// 		// Initialize the chain
-// 		app.InitChain(
-// 			&abci.RequestInitChain{
-// 				Validators:      []abci.ValidatorUpdate{},
-// 				ConsensusParams: DefaultConsensusParams,
-// 				AppStateBytes:   stateBytes,
-// 			},
-// 		)
-// 	}
-
-// 	return app
-// }
 
 func Setup(t *testing.T, isCheckTx bool) *App {
 	t.Helper()
@@ -124,122 +82,6 @@ func Setup(t *testing.T, isCheckTx bool) *App {
 
 	return app
 }
-
-
-// SetupWithGenesisValSet initializes a new App with a validator set and genesis accounts
-// that also act as delegators. For simplicity, each validator is bonded with a delegation
-// of one consensus engine unit (10^6) in the default token of the simapp from first genesis
-// account. A Nop logger is set in App.
-// func SetupWithGenesisValSet(t *testing.T, valSet *tmtypes.ValidatorSet, genAccs []authtypes.GenesisAccount, balances ...banktypes.Balance) *App {
-// 	app, genesisState := setup(true)
-// 	// set genesis accounts
-// 	authGenesis := authtypes.NewGenesisState(authtypes.DefaultParams(), genAccs)
-// 	genesisState[authtypes.ModuleName] = app.AppCodec().MustMarshalJSON(authGenesis)
-
-// 	validators := make([]stakingtypes.Validator, 0, len(valSet.Validators))
-// 	delegations := make([]stakingtypes.Delegation, 0, len(valSet.Validators))
-
-// 	bondAmt := sdkmath.NewInt(1000000)
-
-// 	for _, val := range valSet.Validators {
-// 		pk, err := cryptocodec.FromTmPubKeyInterface(val.PubKey)
-// 		require.NoError(t, err)
-// 		pkAny, err := codectypes.NewAnyWithValue(pk)
-// 		require.NoError(t, err)
-// 		validator := stakingtypes.Validator{
-// 			OperatorAddress:   sdk.ValAddress(val.Address).String(),
-// 			ConsensusPubkey:   pkAny,
-// 			Jailed:            false,
-// 			Status:            stakingtypes.Bonded,
-// 			Tokens:            bondAmt,
-// 			DelegatorShares:   sdkmath.LegacyOneDec(),
-// 			Description:       stakingtypes.Description{},
-// 			UnbondingHeight:   int64(0),
-// 			UnbondingTime:     time.Unix(0, 0).UTC(),
-// 			Commission:        stakingtypes.NewCommission(sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec()),
-// 			MinSelfDelegation: sdkmath.ZeroInt(),
-// 		}
-// 		validators = append(validators, validator)
-// 		// Convert the validator address to a Bech32 string
-// 		valAddr := sdk.ValAddress(val.Address)
-// 		delegations = append(delegations, stakingtypes.NewDelegation(genAccs[0].GetAddress().String(), valAddr.String(), sdkmath.LegacyOneDec()))
-// 	}
-
-
-// 	// set validators and delegations
-// 	stakingGenesis := stakingtypes.NewGenesisState(stakingtypes.DefaultParams(), validators, delegations)
-
-// 	genesisState[stakingtypes.ModuleName] = app.AppCodec().MustMarshalJSON(stakingGenesis)
-
-// 	totalSupply := sdk.NewCoins()
-// 	for _, b := range balances {
-// 		// add genesis acc tokens to total supply
-// 		totalSupply = totalSupply.Add(b.Coins...)
-// 	}
-
-// 	// add bonded amount to bonded pool module account
-// 	balances = append(balances, banktypes.Balance{
-// 		Address: authtypes.NewModuleAddress(stakingtypes.BondedPoolName).String(),
-// 		Coins:   sdk.Coins{sdk.NewCoin(sdk.DefaultBondDenom, bondAmt)},
-// 	})
-
-// 	// add bonded amount to total supply
-// 	totalSupply = totalSupply.Add(sdk.NewCoin(sdk.DefaultBondDenom, bondAmt))
-
-// 	// update total supply
-// 	bankGenesis := banktypes.NewGenesisState(banktypes.DefaultGenesisState().Params, balances, totalSupply, []banktypes.Metadata{}, []banktypes.SendEnabled{})
-// 	genesisState[banktypes.ModuleName] = app.AppCodec().MustMarshalJSON(bankGenesis)
-
-// 	// trade genesis
-// 	tradeGenesis := types.DefaultGenesis()
-// 	genesisState[types.ModuleName] = app.AppCodec().MustMarshalJSON(tradeGenesis)
-
-// 	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
-// 	require.NoError(t, err)
-
-
-// 	// init chain will set the validator set and initialize the genesis accounts
-// 	app.InitChain(&abci.RequestInitChain{
-// 		Validators:      []abci.ValidatorUpdate{},  // Ensure validators are included
-// 		ConsensusParams: DefaultConsensusParams,
-// 		AppStateBytes:   stateBytes,
-// 	})
-
-// 	// commit genesis changes
-// 	app.Commit()
-// 	app.FinalizeBlock(&abci.RequestFinalizeBlock{Height: app.LastBlockHeight() + 1})
-// 	ctx := app.BaseApp.NewContext(false)
-
-// 	// Retrieve and print validators
-// 	store := ctx.KVStore(app.GetKey(stakingtypes.StoreKey))
-// 	iterator := storetypes.KVStorePrefixIterator(store, stakingtypes.ValidatorsKey)
-// 	defer iterator.Close()
-// 	for ; iterator.Valid(); iterator.Next() {
-// 		var validator stakingtypes.Validator
-// 		app.AppCodec().MustUnmarshal(iterator.Value(), &validator)
-// 		fmt.Printf("Validator: %v\n", validator)
-// 	}
-
-// 	// Retrieve and print delegations
-// 	iterator = storetypes.KVStorePrefixIterator(store, stakingtypes.DelegationKey)
-// 	defer iterator.Close()
-// 	for ; iterator.Valid(); iterator.Next() {
-// 		var delegation stakingtypes.Delegation
-// 		app.AppCodec().MustUnmarshal(iterator.Value(), &delegation)
-// 		fmt.Printf("Delegation: %v\n", delegation)
-// 	}
-
-// 	// Retrieve and print balances
-// 	bankStore := ctx.KVStore(app.GetKey(banktypes.StoreKey))
-// 	iterator = storetypes.KVStorePrefixIterator(bankStore, banktypes.BalancesPrefix)
-// 	defer iterator.Close()
-// 	for ; iterator.Valid(); iterator.Next() {
-// 		var balance banktypes.Balance
-// 		app.AppCodec().MustUnmarshal(iterator.Value(), &balance)
-// 		fmt.Printf("Balance: %v\n", balance)
-// 	}
-// 	return app
-// }
 
 func SetupWithGenesisValSet(t *testing.T, valSet *cmttypes.ValidatorSet, genAccs []authtypes.GenesisAccount, balances ...banktypes.Balance) *App {
 	t.Helper()
