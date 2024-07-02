@@ -19,10 +19,6 @@ func (suite *IntegrationTestSuite) TestCreateTrade() {
 		TradeData:       "{\"TradeData\":{\"tradeRequestID\":123,\"assetHolderID\":456,\"assetID\":789,\"tradeType\":\"Buy\",\"tradeValue\":100.50,\"currency\":\"USD\",\"exchange\":\"NYSE\",\"fundName\":\"TechFund\",\"issuer\":\"CompanyA\",\"noShares\":\"1000\",\"price\":\"50.25\",\"quantity\":\"10\",\"segment\":\"Technology\",\"sharePrice\":\"49.50\",\"ticker\":\"TECH\",\"tradeFee\":\"5.00\",\"tradeNetPrice\":\"500.00\",\"tradeNetValue\":\"495.00\"},\"Brokerage\":{\"name\":\"XYZBrokerage\",\"type\":\"Online\",\"country\":\"USA\"}}",
 	})
 	suite.Nil(err)
-	// keeper := suite.app.TradeKeeper
-// val,found:=keeper.GetTradeIndex(suite.ctx)
-// println(val.NextId)
-// println(found)
 	suite.EqualValues(types.MsgCreateTradeResponse{
 		TradeIndex: 1,
 		Status:     types.Pending,
