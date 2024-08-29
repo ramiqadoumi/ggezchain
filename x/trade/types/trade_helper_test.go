@@ -1,10 +1,11 @@
 package types_test
 
 import (
-	"github.com/GGEZLabs/ggezchain/testutil/sample"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/ramiqadoumi/ggezchain/testutil/sample"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestValidateProcess(t *testing.T) {

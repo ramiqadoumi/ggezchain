@@ -2,10 +2,11 @@ package keeper
 
 import (
 	"context"
+	"strconv"
 	"time"
 
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade) (*types.MsgCreateTradeResponse, error) {
@@ -20,8 +21,8 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	if !isAllowed {
 		return nil, types.ErrInvalidMakerPermission
 	}
-	currentTime := time.Now()
-	formattedDate := currentTime.Format("2006-01-02 03:04")
+	currentTime := ctx.BlockTime().UTC()
+	formattedDate := currentTime.Format(time.RFC3339)
 
 	err := msg.Validate()
 	if err != nil {
@@ -37,19 +38,24 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	status := types.Pending
 
 	storedTrade := types.StoredTrade{
-		TradeIndex:      newIndex,
-		Status:          status,
-		CreateDate:      formattedDate,
-		TradeType:       msg.TradeType,
-		Coin:            msg.Coin,
-		Price:           msg.Price,
-		Quantity:        msg.Quantity,
-		ReceiverAddress: msg.ReceiverAddress,
-		Maker:           msg.Creator,
-		Checker:         "",
-		ProcessDate:     formattedDate,
-		TradeData:       msg.TradeData,
-		Result:          types.ErrTradeCreatedSuccessfully.Error(),
+		TradeIndex:           newIndex,
+		Status:               status,
+		CreateDate:           formattedDate,
+		UpdateDate:           formattedDate,
+		TradeType:            msg.TradeType,
+		Coin:                 msg.Coin,
+		Price:                msg.Price,
+		Quantity:             msg.Quantity,
+		ReceiverAddress:      msg.ReceiverAddress,
+		Maker:                msg.Creator,
+		Checker:              "",
+		ProcessDate:          formattedDate,
+		TradeData:            msg.TradeData,
+		BankingSystemData:    msg.BankingSystemData,
+		CoinMintingPriceJSON: msg.CoinMintingPriceJSON,
+		ExchangeRateJSON:     msg.ExchangeRateJSON,
+
+		Result: types.ErrTradeCreatedSuccessfully.Error(),
 	}
 
 	storedTempTrade := types.StoredTempTrade{
@@ -66,8 +72,17 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	k.Keeper.SetTradeIndex(ctx, tradeIndex)
 
 	k.Keeper.CancelExpiredPendingTrades(ctx)
+	// check necessary data in callisto that should be returned in create and process trade TX
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			"create_trade_response",
+			sdk.NewAttribute("trade_index", strconv.FormatUint(newIndex, 10)),
+			sdk.NewAttribute("status", status),
+		),
+	)
 
 	return &types.MsgCreateTradeResponse{
 		TradeIndex: newIndex,
 		Status:     status,
-	}, nil}
+	}, nil
+}

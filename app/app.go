@@ -75,10 +75,10 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	trademodulekeeper "github.com/GGEZLabs/ggezchain/x/trade/keeper"
+	trademodulekeeper "github.com/ramiqadoumi/ggezchain/x/trade/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
-	"github.com/GGEZLabs/ggezchain/docs"
+	"github.com/ramiqadoumi/ggezchain/docs"
 )
 
 const (

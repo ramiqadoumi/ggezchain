@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 type (
@@ -16,12 +16,12 @@ type (
 		cdc          codec.BinaryCodec
 		storeService store.KVStoreService
 		logger       log.Logger
-		
+
 		// the address capable of executing a MsgUpdateParams message. Typically, this
 		// should be the x/gov module account.
 		authority string
-		
-		bankKeeper types.BankKeeper
+
+		bankKeeper    types.BankKeeper
 		stakingKeeper types.StakingKeeper
 	}
 )
@@ -46,7 +46,7 @@ func NewKeeper(
 		authority:    authority,
 		logger:       logger,
 
-		bankKeeper: bankKeeper,
+		bankKeeper:    bankKeeper,
 		stakingKeeper: stakingKeeper,
 	}
 }

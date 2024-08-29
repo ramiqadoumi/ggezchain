@@ -8,7 +8,7 @@ import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "ggezchain/trade/params.proto";
 
-option go_package = "github.com/GGEZLabs/ggezchain/x/trade/types";
+option go_package = "github.com/ramiqadoumi/ggezchain/x/trade/types";
 
 // Msg defines the Msg service.
 service Msg {
@@ -47,6 +47,9 @@ message MsgCreateTrade {
   string quantity        = 5;
   string receiverAddress = 6;
   string tradeData       = 7;
+  string bankingSystemData = 8; 
+  string coinMintingPriceJSON = 9; 
+  string exchangeRateJSON = 10; 
 }
 
 message MsgCreateTradeResponse {

@@ -31,9 +31,6 @@ import (
 	"cosmossdk.io/x/feegrant"
 	"cosmossdk.io/x/nft"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
-	trademodulev1 "github.com/GGEZLabs/ggezchain/api/ggezchain/trade/module"
-	_ "github.com/GGEZLabs/ggezchain/x/trade/module" // import for side-effects
-	trademoduletypes "github.com/GGEZLabs/ggezchain/x/trade/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
@@ -54,6 +51,9 @@ import (
 	ibcfeetypes "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
+	trademodulev1 "github.com/ramiqadoumi/ggezchain/api/ggezchain/trade/module"
+	_ "github.com/ramiqadoumi/ggezchain/x/trade/module" // import for side-effects
+	trademoduletypes "github.com/ramiqadoumi/ggezchain/x/trade/types"
 	"google.golang.org/protobuf/types/known/durationpb"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
@@ -279,7 +279,7 @@ var (
 			},
 			{
 				Name:   govtypes.ModuleName,
-				Config: appconfig.WrapAny(&govmodulev1.Module{}),
+				Config: appconfig.WrapAny(&govmodulev1.Module{MaxMetadataLen: 500000}),
 			},
 			{
 				Name:   crisistypes.ModuleName,

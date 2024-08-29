@@ -3,14 +3,14 @@ package trade
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/GGEZLabs/ggezchain/x/trade/keeper"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/keeper"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// Set if defined
-		k.SetTradeIndex(ctx, genState.TradeIndex)
+	k.SetTradeIndex(ctx, genState.TradeIndex)
 	// Set all the storedTrade
 	for _, elem := range genState.StoredTradeList {
 		k.SetStoredTrade(ctx, elem)

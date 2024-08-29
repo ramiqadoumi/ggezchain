@@ -3,7 +3,7 @@ package trade
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "github.com/GGEZLabs/ggezchain/api/ggezchain/trade"
+	modulev1 "github.com/ramiqadoumi/ggezchain/api/ggezchain/trade"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
@@ -57,9 +57,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "CreateTrade",
-					Use:            "create-trade [trade-type] [coin] [price] [quantity] [receiver-address] [trade-data]",
+					Use:            "create-trade [trade-type] [coin] [price] [quantity] [receiver-address] [trade-data] [banking-system-data] [coin-minting-price-json] [exchange-rate-json]",
 					Short:          "Send a createTrade tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "tradeType"}, {ProtoField: "coin"}, {ProtoField: "price"}, {ProtoField: "quantity"}, {ProtoField: "receiverAddress"}, {ProtoField: "tradeData"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "tradeType"}, {ProtoField: "coin"}, {ProtoField: "price"}, {ProtoField: "quantity"}, {ProtoField: "receiverAddress"}, {ProtoField: "tradeData"}, {ProtoField: "bankingSystemData"}, {ProtoField: "coinMintingPriceJSON"}, {ProtoField: "exchangeRateJSON"}},
 				},
 				{
 					RpcMethod:      "ProcessTrade",

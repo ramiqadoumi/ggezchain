@@ -2,10 +2,11 @@ package keeper
 
 import (
 	"context"
+	"strconv"
 	"time"
 
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrade) (*types.MsgProcessTradeResponse, error) {
@@ -16,8 +17,8 @@ func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrad
 		return nil, types.ErrInvalidCheckerPermission
 	}
 
-	currentTime := time.Now()
-	formattedDate := currentTime.Format("2006-01-02 03:04")
+	currentTime := ctx.BlockTime().UTC()
+	formattedDate := currentTime.Format(time.RFC3339)
 	tradeData, found := k.Keeper.GetStoredTrade(ctx, msg.TradeIndex)
 	if !found {
 		panic("Trade Index not found")
@@ -89,8 +90,22 @@ func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrad
 		k.RemoveStoredTempTrade(ctx, msg.TradeIndex)
 	}
 
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			"process_trade_response",
+			sdk.NewAttribute("trade_index", strconv.FormatUint(msg.TradeIndex, 10)),
+			sdk.NewAttribute("status", status),
+			sdk.NewAttribute("checker", msg.Creator),
+			sdk.NewAttribute("maker", tradeData.Maker),
+			sdk.NewAttribute("trade_data", tradeData.TradeData),
+			sdk.NewAttribute("create_date", tradeData.CreateDate),
+			sdk.NewAttribute("update_date", formattedDate),
+			sdk.NewAttribute("process_date", formattedDate),
+		),
+	)
 
 	return &types.MsgProcessTradeResponse{
 		TradeIndex: msg.TradeIndex,
 		Status:     status,
-	}, err}
+	}, err
+}

@@ -1,9 +1,9 @@
 package keeper_test
 
 import (
-	"github.com/GGEZLabs/ggezchain/x/trade/testutil"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/testutil"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 func (suite *IntegrationTestSuite) TestProcessTradeConfirm() {
@@ -83,7 +83,7 @@ func (suite *IntegrationTestSuite) TestProcessTradeWithInvalidCheckerPermission(
 		ProcessType: types.Confirm,
 		TradeIndex:  1,
 	})
-	suite.ErrorIs(err,types.ErrInvalidCheckerPermission)
+	suite.ErrorIs(err, types.ErrInvalidCheckerPermission)
 }
 
 func (suite *IntegrationTestSuite) TestStoredTradeAfterConfirmTrade() {
@@ -165,10 +165,9 @@ func (suite *IntegrationTestSuite) TestTempTradeAfterConfirmTrade() {
 
 	suite.False(found)
 	suite.EqualValues(types.StoredTempTrade{
-		TradeIndex:      0,
-		CreateDate:      "",
+		TradeIndex:     0,
+		CreateDate:     "",
 		TempTradeIndex: 0,
-		
 	}, tempTrade)
 }
 
@@ -251,10 +250,9 @@ func (suite *IntegrationTestSuite) TestTempTradeAfterRejectTrade() {
 
 	suite.False(found)
 	suite.EqualValues(types.StoredTempTrade{
-		TradeIndex:      0,
-		CreateDate:      "",
+		TradeIndex:     0,
+		CreateDate:     "",
 		TempTradeIndex: 0,
-		
 	}, tempTrade)
 }
 
@@ -283,7 +281,6 @@ func (suite *IntegrationTestSuite) TestProcessTwoTrade() {
 		TradeData:       "{\"TradeData\":{\"tradeRequestID\":123,\"assetHolderID\":456,\"assetID\":789,\"tradeType\":\"Buy\",\"tradeValue\":100.50,\"currency\":\"USD\",\"exchange\":\"NYSE\",\"fundName\":\"TechFund\",\"issuer\":\"CompanyA\",\"noShares\":\"1000\",\"price\":\"50.25\",\"quantity\":\"10\",\"segment\":\"Technology\",\"sharePrice\":\"49.50\",\"ticker\":\"TECH\",\"tradeFee\":\"5.00\",\"tradeNetPrice\":\"500.00\",\"tradeNetValue\":\"495.00\"},\"Brokerage\":{\"name\":\"XYZBrokerage\",\"type\":\"Online\",\"country\":\"USA\"}}",
 	})
 
-
 	tradeIndex, found := keeper.GetTradeIndex(suite.ctx)
 
 	suite.True(found)
@@ -293,8 +290,8 @@ func (suite *IntegrationTestSuite) TestProcessTwoTrade() {
 
 	tempTrades := keeper.GetAllStoredTempTrade(suite.ctx)
 	trades := keeper.GetAllStoredTrade(suite.ctx)
-	suite.EqualValues(len(tempTrades),2)
-	suite.EqualValues(len(trades),2)
+	suite.EqualValues(len(tempTrades), 2)
+	suite.EqualValues(len(trades), 2)
 
 	suite.msgServer.ProcessTrade(goCtx, &types.MsgProcessTrade{
 		Creator:     testutil.Mohd,
@@ -310,6 +307,6 @@ func (suite *IntegrationTestSuite) TestProcessTwoTrade() {
 
 	tempTrades = keeper.GetAllStoredTempTrade(suite.ctx)
 	trades = keeper.GetAllStoredTrade(suite.ctx)
-	suite.EqualValues(len(tempTrades),0)
-	suite.EqualValues(len(trades),2)
+	suite.EqualValues(len(tempTrades), 0)
+	suite.EqualValues(len(trades), 2)
 }

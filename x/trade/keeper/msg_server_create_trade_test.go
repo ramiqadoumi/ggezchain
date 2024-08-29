@@ -1,9 +1,9 @@
 package keeper_test
 
 import (
-	"github.com/GGEZLabs/ggezchain/x/trade/testutil"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/testutil"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 func (suite *IntegrationTestSuite) TestCreateTrade() {
@@ -169,7 +169,7 @@ func (suite *IntegrationTestSuite) TestCreateTradeWithInvalidMakerPermission() {
 	})
 
 	suite.Nil(createResponse)
-	suite.ErrorIs(err,types.ErrInvalidMakerPermission)
+	suite.ErrorIs(err, types.ErrInvalidMakerPermission)
 }
 
 func (suite *IntegrationTestSuite) TestCreateTradeWithInvalidTradeData() {
@@ -186,7 +186,7 @@ func (suite *IntegrationTestSuite) TestCreateTradeWithInvalidTradeData() {
 	})
 
 	suite.Nil(createResponse)
-	suite.ErrorIs(err,types.ErrTradeDataRequestID)
+	suite.ErrorIs(err, types.ErrTradeDataRequestID)
 }
 
 func (suite *IntegrationTestSuite) TestCreate2Trades() {
@@ -228,7 +228,7 @@ func (suite *IntegrationTestSuite) TestCreate2Trades() {
 		CreateDate:     tempTrade.CreateDate,
 		TempTradeIndex: 1,
 	}, tempTrade)
-	
+
 	suite.msgServer.CreateTrade(goCtx, &types.MsgCreateTrade{
 		Creator:         testutil.Mutaz,
 		TradeType:       types.Buy,
@@ -238,7 +238,7 @@ func (suite *IntegrationTestSuite) TestCreate2Trades() {
 		ReceiverAddress: testutil.Mutaz,
 		TradeData:       "{\"TradeData\":{\"tradeRequestID\":123,\"assetHolderID\":456,\"assetID\":789,\"tradeType\":\"Buy\",\"tradeValue\":100.50,\"currency\":\"USD\",\"exchange\":\"NYSE\",\"fundName\":\"TechFund\",\"issuer\":\"CompanyA\",\"noShares\":\"1000\",\"price\":\"50.25\",\"quantity\":\"10\",\"segment\":\"Technology\",\"sharePrice\":\"49.50\",\"ticker\":\"TECH\",\"tradeFee\":\"5.00\",\"tradeNetPrice\":\"500.00\",\"tradeNetValue\":\"495.00\"},\"Brokerage\":{\"name\":\"XYZBrokerage\",\"type\":\"Online\",\"country\":\"USA\"}}",
 	})
-	
+
 	trade, found = keeper.GetStoredTrade(suite.ctx, 2)
 	suite.True(found)
 	suite.EqualValues(types.StoredTrade{
@@ -265,7 +265,6 @@ func (suite *IntegrationTestSuite) TestCreate2Trades() {
 		TempTradeIndex: 2,
 	}, tempTrade)
 
-
 	// check get all trades and temp trades and next trade index
 	tradeIndex, found := keeper.GetTradeIndex(suite.ctx)
 	suite.True(found)
@@ -273,8 +272,8 @@ func (suite *IntegrationTestSuite) TestCreate2Trades() {
 		NextId: 3,
 	}, tradeIndex)
 	AllTrades := keeper.GetAllStoredTrade(suite.ctx)
-	suite.EqualValues(len(AllTrades),2)
+	suite.EqualValues(len(AllTrades), 2)
 
 	AllTempTrades := keeper.GetAllStoredTempTrade(suite.ctx)
-	suite.EqualValues(len(AllTempTrades),2)
+	suite.EqualValues(len(AllTempTrades), 2)
 }

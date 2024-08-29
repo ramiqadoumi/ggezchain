@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 var _ types.QueryServer = Keeper{}

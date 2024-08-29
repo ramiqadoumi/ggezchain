@@ -23,7 +23,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/GGEZLabs/ggezchain/app"
+	"github.com/ramiqadoumi/ggezchain/app"
 )
 
 func initRootCmd(

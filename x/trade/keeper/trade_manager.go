@@ -4,36 +4,36 @@ import (
 	"context"
 	"encoding/json"
 	"strings"
-
-	"os"
 	"time"
 
+	"os"
+
 	errors "cosmossdk.io/errors"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 type TradeDataObject struct {
 	TradeData struct {
-		TradeRequestID int     `json:"tradeRequestID"`
-		AssetHolderID  int     `json:"assetHolderID"`
-		AssetID        int     `json:"assetID"`
+		TradeRequestID uint64  `json:"tradeRequestID"`
+		AssetHolderID  uint64  `json:"assetHolderID"`
+		AssetID        uint64  `json:"assetID"`
 		TradeType      string  `json:"tradeType"`
 		TradeValue     float64 `json:"tradeValue"`
 		Currency       string  `json:"currency"`
 		Exchange       string  `json:"exchange"`
 		FundName       string  `json:"fundName"`
 		Issuer         string  `json:"issuer"`
-		NoShares       string  `json:"noShares"`
-		Price          string  `json:"price"`
-		Quantity       string  `json:"quantity"`
+		NoShares       uint64  `json:"noShares"`
+		Price          float64 `json:"price"`
+		Quantity       uint64  `json:"quantity"`
 		Segment        string  `json:"segment"`
-		SharePrice     string  `json:"sharePrice"`
+		SharePrice     float64 `json:"sharePrice"`
 		Ticker         string  `json:"ticker"`
-		TradeFee       string  `json:"tradeFee"`
-		TradeNetPrice  string  `json:"tradeNetPrice"`
-		TradeNetValue  string  `json:"tradeNetValue"`
+		TradeFee       float64 `json:"tradeFee"`
+		TradeNetPrice  float64 `json:"tradeNetPrice"`
+		TradeNetValue  float64 `json:"tradeNetValue"`
 	} `json:"TradeData"`
 	Brokerage struct {
 		Name    string `json:"name"`
@@ -159,39 +159,39 @@ func (k Keeper) MintOrBurnCoins(ctx sdk.Context, tradeData types.StoredTrade, co
 }
 
 func (k Keeper) IsAddressLinkedToValidator(goCtx context.Context, address string) (bool, error) {
-    ctx := sdk.UnwrapSDKContext(goCtx)
-    accAddress, err := sdk.AccAddressFromBech32(address)
-    if err != nil {
-        return false, err
-    }
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	accAddress, err := sdk.AccAddressFromBech32(address)
+	if err != nil {
+		return false, err
+	}
 
-    validators, err := k.stakingKeeper.GetAllValidators(ctx)
-    if err != nil {
-        return false, err
-    }
+	validators, err := k.stakingKeeper.GetAllValidators(ctx)
+	if err != nil {
+		return false, err
+	}
 	// Loop through the validators
-    for _, validator := range validators {
-        valAddress, err := sdk.ValAddressFromBech32(validator.OperatorAddress)
-        if err != nil {
-            // If validator address has error continue to other validators
-            continue
-        }
+	for _, validator := range validators {
+		valAddress, err := sdk.ValAddressFromBech32(validator.OperatorAddress)
+		if err != nil {
+			// If validator address has error continue to other validators
+			continue
+		}
 
-        delegation, err := k.stakingKeeper.GetDelegation(ctx, accAddress, valAddress)
-        if err != nil {
-            if err == stakingtypes.ErrNoDelegation {
-                // No delegation found, continue to next validator
-                continue
-            }
-            return false, err
-        }
+		delegation, err := k.stakingKeeper.GetDelegation(ctx, accAddress, valAddress)
+		if err != nil {
+			if err == stakingtypes.ErrNoDelegation {
+				// No delegation found, continue to next validator
+				continue
+			}
+			return false, err
+		}
 
-        if delegation.DelegatorAddress != "" {
-            return true, nil
-        }
-    }
+		if delegation.DelegatorAddress != "" {
+			return true, nil
+		}
+	}
 
-    return false, nil
+	return false, nil
 }
 
 func (k Keeper) CancelExpiredPendingTrades(goCtx context.Context) (err error) {
@@ -199,7 +199,7 @@ func (k Keeper) CancelExpiredPendingTrades(goCtx context.Context) (err error) {
 	allStoredTempTrade := k.GetAllStoredTempTrade(ctx)
 	status := types.Canceled
 
-	currentDate := time.Now()
+	currentDate := ctx.BlockTime().UTC()
 
 	for i := 0; i < len(allStoredTempTrade); i++ {
 		createDate := allStoredTempTrade[i].CreateDate
@@ -262,31 +262,31 @@ func (k Keeper) ValidateTradeData(tradeData string) (err error) {
 		if strings.TrimSpace(tradeData.Issuer) == "" {
 			return errors.Wrap(types.ErrTradeDataIssuer, "Invalid Trade Data Object")
 		}
-		if strings.TrimSpace(tradeData.NoShares) == "" {
+		if tradeData.NoShares == 0 {
 			return errors.Wrap(types.ErrTradeDataNoShares, "Invalid Trade Data Object")
 		}
-		if strings.TrimSpace(tradeData.Price) == "" {
+		if tradeData.Price == 0 {
 			return errors.Wrap(types.ErrTradeDataPrice, "Invalid Trade Data Object")
 		}
-		if strings.TrimSpace(tradeData.Quantity) == "" {
+		if tradeData.Quantity == 0 {
 			return errors.Wrap(types.ErrTradeDataQuantity, "Invalid Trade Data Object")
 		}
 		if strings.TrimSpace(tradeData.Segment) == "" {
 			return errors.Wrap(types.ErrTradeDataSegment, "Invalid Trade Data Object")
 		}
-		if strings.TrimSpace(tradeData.SharePrice) == "" {
+		if tradeData.SharePrice == 0 {
 			return errors.Wrap(types.ErrTradeDataSharePrice, "Invalid Trade Data Object")
 		}
 		if strings.TrimSpace(tradeData.Ticker) == "" {
 			return errors.Wrap(types.ErrTradeDataTicker, "Invalid Trade Data Object")
 		}
-		if strings.TrimSpace(tradeData.TradeFee) == "" {
+		if tradeData.TradeFee < 0 {
 			return errors.Wrap(types.ErrTradeDataFee, "Invalid Trade Data Object")
 		}
-		if strings.TrimSpace(tradeData.TradeNetPrice) == "" {
+		if tradeData.TradeNetPrice == 0 {
 			return errors.Wrap(types.ErrTradeDataNetPrice, "Invalid Trade Data Object")
 		}
-		if strings.TrimSpace(tradeData.TradeNetValue) == "" {
+		if tradeData.TradeNetValue == 0 {
 			return errors.Wrap(types.ErrTradeDataNetValue, "Invalid Trade Data Object")
 		}
 		if strings.TrimSpace(tradeData.TradeType) == "" {
