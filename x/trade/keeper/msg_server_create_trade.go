@@ -75,9 +75,9 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	// check necessary data in callisto that should be returned in create and process trade TX
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			"create_trade_response",
-			sdk.NewAttribute("trade_index", strconv.FormatUint(newIndex, 10)),
-			sdk.NewAttribute("status", status),
+			types.EventTypeCreateTrade,
+			sdk.NewAttribute(types.AttributeKeyTradeIndex, strconv.FormatUint(newIndex, 10)),
+			sdk.NewAttribute(types.AttributeKeyStatus, status),
 		),
 	)
 

@@ -92,15 +92,15 @@ func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrad
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			"process_trade_response",
-			sdk.NewAttribute("trade_index", strconv.FormatUint(msg.TradeIndex, 10)),
-			sdk.NewAttribute("status", status),
-			sdk.NewAttribute("checker", msg.Creator),
-			sdk.NewAttribute("maker", tradeData.Maker),
-			sdk.NewAttribute("trade_data", tradeData.TradeData),
-			sdk.NewAttribute("create_date", tradeData.CreateDate),
-			sdk.NewAttribute("update_date", formattedDate),
-			sdk.NewAttribute("process_date", formattedDate),
+			types.EventTypeProcessTrade,
+			sdk.NewAttribute(types.AttributeKeyTradeIndex, strconv.FormatUint(msg.TradeIndex, 10)),
+			sdk.NewAttribute(types.AttributeKeyStatus, status),
+			sdk.NewAttribute(types.AttributeKeyChecker, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyMaker, tradeData.Maker),
+			sdk.NewAttribute(types.AttributeKeyTradeData, tradeData.TradeData),
+			sdk.NewAttribute(types.AttributeKeyCreateDate, tradeData.CreateDate),
+			sdk.NewAttribute(types.AttributeKeyUpdateDate, formattedDate),
+			sdk.NewAttribute(types.AttributeKeyProcessDate, formattedDate),
 		),
 	)
 
