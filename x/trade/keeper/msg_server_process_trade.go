@@ -101,6 +101,7 @@ func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrad
 			sdk.NewAttribute(types.AttributeKeyCreateDate, tradeData.CreateDate),
 			sdk.NewAttribute(types.AttributeKeyUpdateDate, formattedDate),
 			sdk.NewAttribute(types.AttributeKeyProcessDate, formattedDate),
+			sdk.NewAttribute(types.AttributeKeyResult, result),
 		),
 	)
 

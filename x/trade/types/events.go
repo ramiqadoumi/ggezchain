@@ -13,6 +13,7 @@ const (
 	AttributeKeyCreateDate = "create_date"
 	AttributeKeyUpdateDate = "update_date"
 	AttributeKeyProcessDate = "process_date"
+	AttributeKeyResult = "result"
 	
 	
 )	
