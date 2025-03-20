@@ -2,6 +2,9 @@ package keeper_test
 
 import (
 	sdkmath "cosmossdk.io/math"
+	ggezchainapp "github.com/GGEZLabs/ggezchain/app"
+	"github.com/GGEZLabs/ggezchain/x/trade/keeper"
+	"github.com/GGEZLabs/ggezchain/x/trade/types"
 	"github.com/cometbft/cometbft/libs/bytes"
 	tmtypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -10,9 +13,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	ggezchainapp "github.com/ramiqadoumi/ggezchain/app"
-	"github.com/ramiqadoumi/ggezchain/x/trade/keeper"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 
 	"testing"
 
@@ -37,10 +37,6 @@ func TestTradeKeeperTestSuite(t *testing.T) {
 }
 
 func (suite *IntegrationTestSuite) SetupTestForCreateTrade() {
-	sdk.GetConfig().SetBech32PrefixForAccount("ggez", "ggez")
-	sdk.GetConfig().SetBech32PrefixForValidator("ggezvaloper", "ggezvaloper")
-	sdk.GetConfig().SetBech32PrefixForConsensusNode("ggezvalcons", "ggezvalcons")
-
 	privVal := mock.NewPV()
 	pubKey, err := privVal.GetPubKey()
 	suite.NoError(err)
@@ -91,10 +87,6 @@ func (suite *IntegrationTestSuite) SetupTestForCreateTrade() {
 }
 
 func (suite *IntegrationTestSuite) SetupTestForProcessTrade() {
-	sdk.GetConfig().SetBech32PrefixForAccount("ggez", "ggez")
-	sdk.GetConfig().SetBech32PrefixForValidator("ggezvaloper", "ggezvaloper")
-	sdk.GetConfig().SetBech32PrefixForConsensusNode("ggezvalcons", "ggezvalcons")
-
 	privVal := mock.NewPV()
 	pubKey, err := privVal.GetPubKey()
 	suite.NoError(err)

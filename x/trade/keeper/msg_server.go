@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/GGEZLabs/ggezchain/x/trade/types"
 )
 
 type msgServer struct {

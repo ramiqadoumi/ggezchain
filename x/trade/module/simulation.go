@@ -8,9 +8,9 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"github.com/ramiqadoumi/ggezchain/testutil/sample"
-	tradesimulation "github.com/ramiqadoumi/ggezchain/x/trade/simulation"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/GGEZLabs/ggezchain/testutil/sample"
+	tradesimulation "github.com/GGEZLabs/ggezchain/x/trade/simulation"
+	"github.com/GGEZLabs/ggezchain/x/trade/types"
 )
 
 // avoid unused import issue

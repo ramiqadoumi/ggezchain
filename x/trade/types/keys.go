@@ -24,9 +24,6 @@ const (
 )
 
 const (
-	CancelExpiredPendingTradesEventType = "status is changed"
-)
-const (
 	Pending             = "Pending"
 	Failed              = "Failed"
 	Rejected            = "Rejected"
@@ -40,6 +37,6 @@ const (
 	Sell                = "sell"
 	CreateTrade         = "CreateTrade"
 	ProcessTrade        = "ProcessTrade"
-	DefaultCoinDenom    = "ugz"
+	DefaultCoinDenom    = "uggz"
 	ACLFilePath         = "/.ggezchain/config/chain_acl.json"
 )

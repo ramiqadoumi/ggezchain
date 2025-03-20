@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/GGEZLabs/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade) (*types.MsgCreateTradeResponse, error) {
@@ -54,8 +54,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		BankingSystemData:    msg.BankingSystemData,
 		CoinMintingPriceJSON: msg.CoinMintingPriceJSON,
 		ExchangeRateJSON:     msg.ExchangeRateJSON,
-
-		Result: types.ErrTradeCreatedSuccessfully.Error(),
+		Result:               types.ErrTradeCreatedSuccessfully.Error(),
 	}
 
 	storedTempTrade := types.StoredTempTrade{
@@ -71,8 +70,17 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 
 	k.Keeper.SetTradeIndex(ctx, tradeIndex)
 
-	k.Keeper.CancelExpiredPendingTrades(ctx)
-	// check necessary data in callisto that should be returned in create and process trade TX
+	err = k.Keeper.CancelExpiredPendingTrades(ctx)
+
+	if err != nil {
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeCancelExpiredPendingTradesError,
+				sdk.NewAttribute(types.AttributeKeyError, err.Error()),
+			),
+		)
+	}
+
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeCreateTrade,

@@ -3,37 +3,37 @@ package keeper
 import (
 	"context"
 	"encoding/json"
+	"strconv"
 	"strings"
 	"time"
 
 	"os"
 
 	errors "cosmossdk.io/errors"
+	"github.com/GGEZLabs/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 type TradeDataObject struct {
 	TradeData struct {
-		TradeRequestID uint64  `json:"tradeRequestID"`
-		AssetHolderID  uint64  `json:"assetHolderID"`
-		AssetID        uint64  `json:"assetID"`
-		TradeType      string  `json:"tradeType"`
-		TradeValue     float64 `json:"tradeValue"`
-		Currency       string  `json:"currency"`
-		Exchange       string  `json:"exchange"`
-		FundName       string  `json:"fundName"`
-		Issuer         string  `json:"issuer"`
-		NoShares       uint64  `json:"noShares"`
-		Price          float64 `json:"price"`
-		Quantity       uint64  `json:"quantity"`
-		Segment        string  `json:"segment"`
-		SharePrice     float64 `json:"sharePrice"`
-		Ticker         string  `json:"ticker"`
-		TradeFee       float64 `json:"tradeFee"`
-		TradeNetPrice  float64 `json:"tradeNetPrice"`
-		TradeNetValue  float64 `json:"tradeNetValue"`
+		AssetHolderID uint64  `json:"assetHolderID"`
+		AssetID       uint64  `json:"assetID"`
+		TradeType     string  `json:"tradeType"`
+		TradeValue    float64 `json:"tradeValue"`
+		Currency      string  `json:"currency"`
+		Exchange      string  `json:"exchange"`
+		FundName      string  `json:"fundName"`
+		Issuer        string  `json:"issuer"`
+		NoShares      uint64  `json:"noShares"`
+		Price         float64 `json:"price"`
+		Quantity      uint64  `json:"quantity"`
+		Segment       string  `json:"segment"`
+		SharePrice    float64 `json:"sharePrice"`
+		Ticker        string  `json:"ticker"`
+		TradeFee      float64 `json:"tradeFee"`
+		TradeNetPrice float64 `json:"tradeNetPrice"`
+		TradeNetValue float64 `json:"tradeNetValue"`
 	} `json:"TradeData"`
 	Brokerage struct {
 		Name    string `json:"name"`
@@ -198,12 +198,13 @@ func (k Keeper) CancelExpiredPendingTrades(goCtx context.Context) (err error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	allStoredTempTrade := k.GetAllStoredTempTrade(ctx)
 	status := types.Canceled
+	var canceledIds []uint64
 
 	currentDate := ctx.BlockTime().UTC()
 
 	for i := 0; i < len(allStoredTempTrade); i++ {
 		createDate := allStoredTempTrade[i].CreateDate
-		formattedCreateDate, err := time.Parse("2006-01-02 15:04", createDate)
+		formattedCreateDate, err := time.Parse(time.RFC3339, createDate)
 		if err != nil {
 			return errors.Wrapf(types.ErrInvalidDateFormat, types.ErrInvalidDateFormat.Error())
 		}
@@ -214,15 +215,31 @@ func (k Keeper) CancelExpiredPendingTrades(goCtx context.Context) (err error) {
 
 			storedTrade, _ := k.GetStoredTrade(ctx, allStoredTempTrade[i].TempTradeIndex)
 			storedTrade.Status = status
-			storedTrade.UpdateDate = currentDate.Format("2006-01-02 15:04")
+			storedTrade.UpdateDate = currentDate.Format(time.RFC3339)
 
 			k.SetStoredTrade(ctx, storedTrade)
 			k.RemoveStoredTempTrade(ctx, allStoredTempTrade[i].TempTradeIndex)
 
-			ctx.EventManager().EmitEvent(
-				sdk.NewEvent(types.CancelExpiredPendingTradesEventType),
-			)
+			canceledIds = append(canceledIds, allStoredTempTrade[i].TempTradeIndex)
 		}
+
+	}
+
+	if len(canceledIds) > 0 {
+		attributes := []sdk.Attribute{
+			sdk.NewAttribute(types.AttributeKeyStatus, status),
+		}
+
+		for _, id := range canceledIds {
+			attributes = append(attributes, sdk.NewAttribute(types.AttributeKeyTradeIndex, strconv.FormatUint(id, 10)))
+		}
+
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeCancelExpiredPendingTrades,
+				attributes...,
+			),
+		)
 	}
 	return err
 }
@@ -243,9 +260,6 @@ func (k Keeper) ValidateTradeData(tradeData string) (err error) {
 		}
 		if tradeData.AssetID <= 0 {
 			return errors.Wrap(types.ErrTradeDataAssetID, "Invalid Trade Data Object")
-		}
-		if tradeData.TradeRequestID <= 0 {
-			return errors.Wrap(types.ErrTradeDataRequestID, "Invalid Trade Data Object")
 		}
 		if tradeData.TradeValue == 0 {
 			return errors.Wrap(types.ErrTradeDataValue, "Invalid Trade Data Object")

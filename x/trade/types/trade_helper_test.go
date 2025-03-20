@@ -3,8 +3,8 @@ package types_test
 import (
 	"testing"
 
-	"github.com/ramiqadoumi/ggezchain/testutil/sample"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/GGEZLabs/ggezchain/testutil/sample"
+	"github.com/GGEZLabs/ggezchain/x/trade/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -99,5 +99,4 @@ func TestValidateProcess(t *testing.T) {
 			require.NoError(t, err)
 		})
 	}
-
 }

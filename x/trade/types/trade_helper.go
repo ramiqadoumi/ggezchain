@@ -7,9 +7,9 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkmath "cosmossdk.io/math"
 	errors "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (msg *MsgCreateTrade) ValidateReceiverAddress() (receiverAddress sdk.AccAddress, err error) {
@@ -53,7 +53,6 @@ func (msg *MsgProcessTrade) GetPrepareCoin(storedTrade StoredTrade) (sdk.Coin, e
 	return sdk.NewCoin(storedTrade.Coin, sdkmath.NewInt(int64(number))), nil
 }
 
-
 func (msg *MsgProcessTrade) checkerAndMakerNotTheSame(maker string, checker string) (err error) {
 	if maker == checker {
 		return ErrCheckerMustBeDifferent
@@ -62,13 +61,13 @@ func (msg *MsgProcessTrade) checkerAndMakerNotTheSame(maker string, checker stri
 }
 
 func (msg *MsgProcessTrade) ValidateStatus(status string) (err error) {
-	if status == "Completed" {
+	if status == Completed {
 		return ErrTradeStatusCompleted
-	} else if status == "Rejected" {
+	} else if status == Rejected {
 		return ErrTradeStatusRejected
-	} else if status == "Canceled" {
+	} else if status == Canceled {
 		return ErrTradeStatusCanceled
-	} else if status == "Pending" {
+	} else if status == Pending {
 		return nil
 	}
 
