@@ -3,14 +3,15 @@ package keeper
 import (
 	"context"
 	"encoding/json"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 
-	"os"
+	"github.com/GGEZLabs/ggezchain/x/trade/types"
 
 	errors "cosmossdk.io/errors"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
@@ -56,10 +57,8 @@ type ChainACL struct {
 }
 
 func (k Keeper) IsAddressAllowed(goCtx context.Context, address string, msgType string) (isAllowed bool, err error) {
-
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	isAddressWhitelisted, err := k.IsAddressWhitelisted(address, msgType, types.ACLFilePath)
-
 	if err != nil {
 		return false, err
 	}
@@ -76,9 +75,12 @@ func (k Keeper) IsAddressAllowed(goCtx context.Context, address string, msgType 
 }
 
 func (k Keeper) IsAddressWhitelisted(address string, msgType string, ACLFilePath string) (isAddressWhitelisted bool, err error) {
-	userHomeDir, _ := os.UserHomeDir()
+	userHomeDir, err := os.UserHomeDir()
 	isWhitelisted := false
-	err = nil
+
+	if err != nil {
+		return isWhitelisted, err
+	}
 
 	file, err := os.ReadFile(userHomeDir + ACLFilePath)
 	if err != nil {
@@ -245,7 +247,6 @@ func (k Keeper) CancelExpiredPendingTrades(goCtx context.Context) (err error) {
 }
 
 func (k Keeper) ValidateTradeData(tradeData string) (err error) {
-
 	isJson := k.IsJSON(tradeData)
 
 	if isJson {
@@ -320,7 +321,6 @@ func (k Keeper) ValidateTradeData(tradeData string) (err error) {
 		return nil
 	}
 	return errors.Wrap(types.ErrInvalidTradeDataJSON, "Invalid Trade Data JSON")
-
 }
 
 func (k Keeper) IsJSON(str string) bool {

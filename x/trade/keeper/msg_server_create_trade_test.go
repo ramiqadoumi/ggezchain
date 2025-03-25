@@ -3,13 +3,11 @@ package keeper_test
 import (
 	"github.com/GGEZLabs/ggezchain/x/trade/testutil"
 	"github.com/GGEZLabs/ggezchain/x/trade/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (suite *IntegrationTestSuite) TestCreateTrade() {
 	suite.SetupTestForCreateTrade()
-	goCtx := sdk.WrapSDKContext(suite.ctx)
-	createResponse, err := suite.msgServer.CreateTrade(goCtx, &types.MsgCreateTrade{
+	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:           testutil.Mutaz,
 		TradeType:         types.Buy,
 		Coin:              types.DefaultCoinDenom,
@@ -28,10 +26,9 @@ func (suite *IntegrationTestSuite) TestCreateTrade() {
 
 func (suite *IntegrationTestSuite) TestIfTradeSaved() {
 	suite.SetupTestForCreateTrade()
-	goCtx := sdk.WrapSDKContext(suite.ctx)
 	keeper := suite.app.TradeKeeper
 
-	suite.msgServer.CreateTrade(goCtx, &types.MsgCreateTrade{
+	suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:           testutil.Mutaz,
 		TradeType:         types.Buy,
 		Coin:              types.DefaultCoinDenom,
@@ -65,15 +62,15 @@ func (suite *IntegrationTestSuite) TestIfTradeSaved() {
 		Result:               types.ErrTradeCreatedSuccessfully.Error(),
 		BankingSystemData:    "{}",
 		CoinMintingPriceJSON: "",
-		ExchangeRateJSON:     ""}, trade)
+		ExchangeRateJSON:     "",
+	}, trade)
 }
 
 func (suite *IntegrationTestSuite) TestIfTempTradeSaved() {
 	suite.SetupTestForCreateTrade()
-	goCtx := sdk.WrapSDKContext(suite.ctx)
 	keeper := suite.app.TradeKeeper
 
-	suite.msgServer.CreateTrade(goCtx, &types.MsgCreateTrade{
+	suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:           testutil.Mutaz,
 		TradeType:         types.Buy,
 		Coin:              types.DefaultCoinDenom,
@@ -99,10 +96,9 @@ func (suite *IntegrationTestSuite) TestIfTempTradeSaved() {
 
 func (suite *IntegrationTestSuite) TestGetAllStoredTrade() {
 	suite.SetupTestForCreateTrade()
-	goCtx := sdk.WrapSDKContext(suite.ctx)
 	keeper := suite.app.TradeKeeper
 
-	suite.msgServer.CreateTrade(goCtx, &types.MsgCreateTrade{
+	suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:           testutil.Mutaz,
 		TradeType:         types.Buy,
 		Coin:              types.DefaultCoinDenom,
@@ -135,15 +131,15 @@ func (suite *IntegrationTestSuite) TestGetAllStoredTrade() {
 		Result:               types.ErrTradeCreatedSuccessfully.Error(),
 		BankingSystemData:    "{}",
 		CoinMintingPriceJSON: "",
-		ExchangeRateJSON:     ""}, allTrades[0])
+		ExchangeRateJSON:     "",
+	}, allTrades[0])
 }
 
 func (suite *IntegrationTestSuite) TestGetAllStoredTempTrade() {
 	suite.SetupTestForCreateTrade()
-	goCtx := sdk.WrapSDKContext(suite.ctx)
 	keeper := suite.app.TradeKeeper
 
-	suite.msgServer.CreateTrade(goCtx, &types.MsgCreateTrade{
+	suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:           testutil.Mutaz,
 		TradeType:         types.Buy,
 		Coin:              types.DefaultCoinDenom,
@@ -168,8 +164,8 @@ func (suite *IntegrationTestSuite) TestGetAllStoredTempTrade() {
 
 func (suite *IntegrationTestSuite) TestCreateTradeWithInvalidMakerPermission() {
 	suite.SetupTestForCreateTrade()
-	goCtx := sdk.WrapSDKContext(suite.ctx)
-	createResponse, err := suite.msgServer.CreateTrade(goCtx, &types.MsgCreateTrade{
+
+	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:           testutil.Mohd,
 		TradeType:         types.Buy,
 		Coin:              types.DefaultCoinDenom,
@@ -186,8 +182,8 @@ func (suite *IntegrationTestSuite) TestCreateTradeWithInvalidMakerPermission() {
 
 func (suite *IntegrationTestSuite) TestCreateTradeWithInvalidTradeData() {
 	suite.SetupTestForCreateTrade()
-	goCtx := sdk.WrapSDKContext(suite.ctx)
-	createResponse, err := suite.msgServer.CreateTrade(goCtx, &types.MsgCreateTrade{
+
+	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:           testutil.Mutaz,
 		TradeType:         types.Buy,
 		Coin:              types.DefaultCoinDenom,
@@ -204,10 +200,9 @@ func (suite *IntegrationTestSuite) TestCreateTradeWithInvalidTradeData() {
 
 func (suite *IntegrationTestSuite) TestCreate2Trades() {
 	suite.SetupTestForCreateTrade()
-	goCtx := sdk.WrapSDKContext(suite.ctx)
 	keeper := suite.app.TradeKeeper
 
-	suite.msgServer.CreateTrade(goCtx, &types.MsgCreateTrade{
+	suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:           testutil.Mutaz,
 		TradeType:         types.Buy,
 		Coin:              types.DefaultCoinDenom,
@@ -247,7 +242,7 @@ func (suite *IntegrationTestSuite) TestCreate2Trades() {
 		TempTradeIndex: 1,
 	}, tempTrade)
 
-	suite.msgServer.CreateTrade(goCtx, &types.MsgCreateTrade{
+	suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:           testutil.Mutaz,
 		TradeType:         types.Buy,
 		Coin:              types.DefaultCoinDenom,
@@ -277,7 +272,8 @@ func (suite *IntegrationTestSuite) TestCreate2Trades() {
 		Result:               types.ErrTradeCreatedSuccessfully.Error(),
 		BankingSystemData:    "{}",
 		CoinMintingPriceJSON: "",
-		ExchangeRateJSON:     ""}, trade)
+		ExchangeRateJSON:     "",
+	}, trade)
 
 	tempTrade, found = keeper.GetStoredTempTrade(suite.ctx, 2)
 	suite.True(found)

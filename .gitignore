@@ -9,3 +9,4 @@ build/
 *.dot
 *.log
 *.ign
+coverage.txt

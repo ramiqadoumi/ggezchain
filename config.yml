@@ -22,9 +22,3 @@ faucet:
 validators:
 - name: alice
   bonded: 100000000stake
-build:
-  ldflags:
-    - "-X github.com/cosmos/cosmos-sdk/version.Name=ggezchain"
-    - "-X github.com/cosmos/cosmos-sdk/version.AppName=ggezchaind"
-    - "-X github.com/cosmos/cosmos-sdk/version.Version=dev-a1ba86b534ee9982ebe9cc74cbbb5bbd63f5f3af"
-    - "-X github.com/cosmos/cosmos-sdk/version.Commit=a1ba86b534ee9982ebe9cc74cbbb5bbd63f5f3af"

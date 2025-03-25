@@ -2,27 +2,28 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
+	abci "github.com/cometbft/cometbft/abci/types"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	cmttypes "github.com/cometbft/cometbft/types"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/cosmos/cosmos-sdk/testutil/mock"
+	dbm "github.com/cosmos/cosmos-db"
+	"github.com/stretchr/testify/require"
 
 	"cosmossdk.io/log"
 	sdkmath "cosmossdk.io/math"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
-	abci "github.com/cometbft/cometbft/abci/types"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	dbm "github.com/cosmos/cosmos-db"
+
+	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
+	"github.com/cosmos/cosmos-sdk/server"
+	"github.com/cosmos/cosmos-sdk/testutil/mock"
+	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"github.com/stretchr/testify/require"
-
-	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 )
 
 // DefaultConsensusParams defines the default Tendermint consensus params used in
@@ -47,11 +48,40 @@ var DefaultConsensusParams = &tmproto.ConsensusParams{
 func setup(withGenesis bool, invCheckPeriod uint) (*App, GenesisState) {
 	db := dbm.NewMemDB()
 
+	// Create a temporary directory for the test
+	tmpDir, err := os.MkdirTemp("", "ggezchain_test_")
+	if err != nil {
+		panic(err)
+	}
+
+	// Create the config directory inside tmpDir
+	configDir := filepath.Join(tmpDir, "config")
+	if err := os.MkdirAll(configDir, 0o755); err != nil {
+		panic(fmt.Sprintf("failed to create config directory: %v", err))
+	}
+
+	// Create the chain_acl.json file inside configDir
+	aclFilePath := filepath.Join(configDir, "chain_acl.json")
+
+	userHomeDir, err := os.UserHomeDir()
+	if err != nil {
+		panic(fmt.Sprintf("failed to get user home directory: %v", err))
+	}
+	chainAclPath := userHomeDir + "/ggezchain/chain_acl.json"
+	chainAclContent, err := os.ReadFile(chainAclPath)
+	if err != nil {
+		panic(fmt.Sprintf("failed to read chain_acl.json: %v, make sure that is exist in this path: %s", err, chainAclPath))
+	}
+
+	if err := os.WriteFile(aclFilePath, []byte(chainAclContent), 0o644); err != nil {
+		panic(fmt.Sprintf("failed to create chain_acl.json: %v", err))
+	}
+
 	appOptions := make(simtestutil.AppOptionsMap, 0)
-	appOptions[flags.FlagHome] = DefaultNodeHome
 	appOptions[server.FlagInvCheckPeriod] = invCheckPeriod
 
 	app, _ := New(log.NewNopLogger(), db, nil, true, appOptions)
+	DefaultNodeHome = tmpDir
 	if withGenesis {
 		return app, app.DefaultGenesis()
 	}
@@ -88,8 +118,6 @@ func SetupWithGenesisValSet(t *testing.T, valSet *cmttypes.ValidatorSet, genAccs
 	app, genesisState := setup(true, 5)
 	genesisState, err := simtestutil.GenesisStateWithValSet(app.AppCodec(), genesisState, valSet, genAccs, balances...)
 	require.NoError(t, err)
-	tradeGenesis := types.DefaultGenesis()
-	genesisState[types.ModuleName] = app.AppCodec().MustMarshalJSON(tradeGenesis)
 	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
 	require.NoError(t, err)
 
