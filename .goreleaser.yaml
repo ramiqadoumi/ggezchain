@@ -26,7 +26,7 @@ builds:
     ldflags:
       - -X github.com/cosmos/cosmos-sdk/version.Name=ggezchain
       - -X github.com/cosmos/cosmos-sdk/version.AppName=ggezchaind
-      - -X github.com/cosmos/cosmos-sdk/version.Version={{ .Version }}
+      - -X github.com/cosmos/cosmos-sdk/version.Version=v{{ .Version }}
       - -X github.com/cosmos/cosmos-sdk/version.Commit={{ .Commit }}
       - -X github.com/cosmos/cosmos-sdk/version.BuildTags=netgo,ledger,muslc,osusergo
       - -w -s
@@ -56,7 +56,7 @@ builds:
     ldflags:
       - -X github.com/cosmos/cosmos-sdk/version.Name=ggezchain
       - -X github.com/cosmos/cosmos-sdk/version.AppName=ggezchaind
-      - -X github.com/cosmos/cosmos-sdk/version.Version={{ .Version }}
+      - -X github.com/cosmos/cosmos-sdk/version.Version=v{{ .Version }}
       - -X github.com/cosmos/cosmos-sdk/version.Commit={{ .Commit }}
       - -X github.com/cosmos/cosmos-sdk/version.BuildTags=netgo,ledger,muslc,osusergo
       - -w -s
@@ -88,7 +88,7 @@ builds:
     ldflags:
       - -X github.com/cosmos/cosmos-sdk/version.Name=ggezchain
       - -X github.com/cosmos/cosmos-sdk/version.AppName=ggezchaind
-      - -X github.com/cosmos/cosmos-sdk/version.Version={{ .Version }}
+      - -X github.com/cosmos/cosmos-sdk/version.Version=v{{ .Version }}
       - -X github.com/cosmos/cosmos-sdk/version.Commit={{ .Commit }}
       - -X github.com/cosmos/cosmos-sdk/version.BuildTags=netgo,ledger,static_wasm
       - -w -s
@@ -117,7 +117,7 @@ builds:
     ldflags:
       - -X github.com/cosmos/cosmos-sdk/version.Name=ggezchain
       - -X github.com/cosmos/cosmos-sdk/version.AppName=ggezchaind
-      - -X github.com/cosmos/cosmos-sdk/version.Version={{ .Version }}
+      - -X github.com/cosmos/cosmos-sdk/version.Version=v{{ .Version }}
       - -X github.com/cosmos/cosmos-sdk/version.Commit={{ .Commit }}
       - -X github.com/cosmos/cosmos-sdk/version.BuildTags=netgo,ledger,static_wasm
       - -w -s
