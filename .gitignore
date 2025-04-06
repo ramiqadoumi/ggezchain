@@ -13,3 +13,4 @@ coverage.txt
 x86_64-linux-musl-cross
 x86_64-linux-musl-cross.tgz
 dist
+gorealesetest
