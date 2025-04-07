@@ -184,7 +184,7 @@ release:
     make install
     ````
 
-  name_template: "ggezchain v{{.Version}} 🧪"
+  name_template: "ggezchain v{{.Version}}"
   mode: replace
   draft: true
 
