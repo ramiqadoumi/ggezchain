@@ -62,7 +62,7 @@ build_tags_comma_sep := $(subst $(empty),$(comma),$(build_tags))
 # ref: https://github.com/golang/go/issues/63997
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=ggezchain \
 		  -X github.com/cosmos/cosmos-sdk/version.AppName=ggezchaind \
-		  -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
+		  -X github.com/cosmos/cosmos-sdk/version.Version=v$(VERSION) \
 		  -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
 		  -X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)" \
 		  -s -w
