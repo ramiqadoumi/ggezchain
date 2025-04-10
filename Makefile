@@ -5,7 +5,6 @@ COMMIT := $(shell git log -1 --format='%H')
 LEDGER_ENABLED ?= true
 # for dockerized protobuf tools
 DOCKER := $(shell which docker)
-# rami
 OUTPUT_DIR := build
 PLATFORMS = linux/amd64 darwin/amd64 darwin/arm64
 APPNAME := ggezchain
@@ -62,7 +61,7 @@ build_tags_comma_sep := $(subst $(empty),$(comma),$(build_tags))
 # ref: https://github.com/golang/go/issues/63997
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=ggezchain \
 		  -X github.com/cosmos/cosmos-sdk/version.AppName=ggezchaind \
-		  -X github.com/cosmos/cosmos-sdk/version.Version=v$(VERSION) \
+		  -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 		  -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
 		  -X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)" \
 		  -s -w
@@ -71,7 +70,7 @@ ifeq ($(WITH_CLEVELDB),yes)
   ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=cleveldb
 endif
 ifeq ($(LINK_STATICALLY),true)
-	ldflags += -linkmode=external -extldflags "-Wl,-z,muldefs -static -lm"
+	ldflags += -linkmode=external -extldflags "-Wl,-z,muldefs -static"
 endif
 ldflags += $(LDFLAGS)
 ldflags := $(strip $(ldflags))
@@ -140,9 +139,9 @@ clean:
 ### Testing
 ########################################
 
-test-all: test-race test-cover test-unit
+test-all: test-race test-cover test
 
-test-unit:
+test:
 	@VERSION=$(VERSION) go test -mod=readonly -tags='ledger test_ledger_mock' ./...
 
 test-race:
@@ -155,7 +154,7 @@ benchmark:
 	@go test -mod=readonly -bench=. ./...
 
 .PHONY: test test-all \
-	test-unit test-race \
+	test test-race \
 	test-cover benchmark
 
 ###############################################################################
