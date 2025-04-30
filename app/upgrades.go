@@ -32,9 +32,9 @@ func (app *App) setupUpgradeHandlers(configurator module.Configurator) {
 	case v1_0_1.UpgradeName:
 
 		// in case you want to add ,rename or delete module uncomment this:
-		// storeUpgrades = &storetypes.StoreUpgrades{
-		// 	Added: []string{"testmodule"},
-		// }
+		storeUpgrades = &storetypes.StoreUpgrades{
+			Added: []string{"acl"},
+		}
 	}
 
 	if storeUpgrades != nil {
