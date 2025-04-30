@@ -1,0 +1,14 @@
+syntax = "proto3";
+package ggezchain.acl;
+
+import "ggezchain/acl/module_access.proto";
+
+option go_package = "github.com/GGEZLabs/ggezchain/x/acl/types";
+
+message AclAuthority {
+           string       address       = 1; 
+           string       name          = 2; 
+  repeated ModuleAccess module_access = 3; 
+  
+}
+

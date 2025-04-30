@@ -1,0 +1,11 @@
+syntax = "proto3";
+package ggezchain.acl;
+
+option go_package = "github.com/GGEZLabs/ggezchain/x/acl/types";
+
+message ModuleAccess {
+  
+  string module   = 1; 
+  bool is_maker   = 2; 
+  bool is_checker = 3; 
+}

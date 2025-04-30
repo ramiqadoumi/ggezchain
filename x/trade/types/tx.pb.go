@@ -6,10 +6,6 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-
 	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/cosmos-sdk/types/msgservice"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
@@ -19,14 +15,15 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	io "io"
+	math "math"
+	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
-var (
-	_ = proto.Marshal
-	_ = fmt.Errorf
-	_ = math.Inf
-)
+var _ = proto.Marshal
+var _ = fmt.Errorf
+var _ = math.Inf
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -48,11 +45,9 @@ func (*MsgUpdateParams) ProtoMessage()    {}
 func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e7e8cb396d16e26c, []int{0}
 }
-
 func (m *MsgUpdateParams) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-
 func (m *MsgUpdateParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
 		return xxx_messageInfo_MsgUpdateParams.Marshal(b, m, deterministic)
@@ -65,15 +60,12 @@ func (m *MsgUpdateParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return b[:n], nil
 	}
 }
-
 func (m *MsgUpdateParams) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_MsgUpdateParams.Merge(m, src)
 }
-
 func (m *MsgUpdateParams) XXX_Size() int {
 	return m.Size()
 }
-
 func (m *MsgUpdateParams) XXX_DiscardUnknown() {
 	xxx_messageInfo_MsgUpdateParams.DiscardUnknown(m)
 }
@@ -96,7 +88,8 @@ func (m *MsgUpdateParams) GetParams() Params {
 
 // MsgUpdateParamsResponse defines the response structure for executing a
 // MsgUpdateParams message.
-type MsgUpdateParamsResponse struct{}
+type MsgUpdateParamsResponse struct {
+}
 
 func (m *MsgUpdateParamsResponse) Reset()         { *m = MsgUpdateParamsResponse{} }
 func (m *MsgUpdateParamsResponse) String() string { return proto.CompactTextString(m) }
@@ -104,11 +97,9 @@ func (*MsgUpdateParamsResponse) ProtoMessage()    {}
 func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e7e8cb396d16e26c, []int{1}
 }
-
 func (m *MsgUpdateParamsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-
 func (m *MsgUpdateParamsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
 		return xxx_messageInfo_MsgUpdateParamsResponse.Marshal(b, m, deterministic)
@@ -121,15 +112,12 @@ func (m *MsgUpdateParamsResponse) XXX_Marshal(b []byte, deterministic bool) ([]b
 		return b[:n], nil
 	}
 }
-
 func (m *MsgUpdateParamsResponse) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_MsgUpdateParamsResponse.Merge(m, src)
 }
-
 func (m *MsgUpdateParamsResponse) XXX_Size() int {
 	return m.Size()
 }
-
 func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 	xxx_messageInfo_MsgUpdateParamsResponse.DiscardUnknown(m)
 }
@@ -155,11 +143,9 @@ func (*MsgCreateTrade) ProtoMessage()    {}
 func (*MsgCreateTrade) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e7e8cb396d16e26c, []int{2}
 }
-
 func (m *MsgCreateTrade) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-
 func (m *MsgCreateTrade) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
 		return xxx_messageInfo_MsgCreateTrade.Marshal(b, m, deterministic)
@@ -172,15 +158,12 @@ func (m *MsgCreateTrade) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return b[:n], nil
 	}
 }
-
 func (m *MsgCreateTrade) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_MsgCreateTrade.Merge(m, src)
 }
-
 func (m *MsgCreateTrade) XXX_Size() int {
 	return m.Size()
 }
-
 func (m *MsgCreateTrade) XXX_DiscardUnknown() {
 	xxx_messageInfo_MsgCreateTrade.DiscardUnknown(m)
 }
@@ -268,11 +251,9 @@ func (*MsgCreateTradeResponse) ProtoMessage()    {}
 func (*MsgCreateTradeResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e7e8cb396d16e26c, []int{3}
 }
-
 func (m *MsgCreateTradeResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-
 func (m *MsgCreateTradeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
 		return xxx_messageInfo_MsgCreateTradeResponse.Marshal(b, m, deterministic)
@@ -285,15 +266,12 @@ func (m *MsgCreateTradeResponse) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-
 func (m *MsgCreateTradeResponse) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_MsgCreateTradeResponse.Merge(m, src)
 }
-
 func (m *MsgCreateTradeResponse) XXX_Size() int {
 	return m.Size()
 }
-
 func (m *MsgCreateTradeResponse) XXX_DiscardUnknown() {
 	xxx_messageInfo_MsgCreateTradeResponse.DiscardUnknown(m)
 }
@@ -326,11 +304,9 @@ func (*MsgProcessTrade) ProtoMessage()    {}
 func (*MsgProcessTrade) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e7e8cb396d16e26c, []int{4}
 }
-
 func (m *MsgProcessTrade) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-
 func (m *MsgProcessTrade) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
 		return xxx_messageInfo_MsgProcessTrade.Marshal(b, m, deterministic)
@@ -343,15 +319,12 @@ func (m *MsgProcessTrade) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return b[:n], nil
 	}
 }
-
 func (m *MsgProcessTrade) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_MsgProcessTrade.Merge(m, src)
 }
-
 func (m *MsgProcessTrade) XXX_Size() int {
 	return m.Size()
 }
-
 func (m *MsgProcessTrade) XXX_DiscardUnknown() {
 	xxx_messageInfo_MsgProcessTrade.DiscardUnknown(m)
 }
@@ -396,11 +369,9 @@ func (*MsgProcessTradeResponse) ProtoMessage()    {}
 func (*MsgProcessTradeResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e7e8cb396d16e26c, []int{5}
 }
-
 func (m *MsgProcessTradeResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-
 func (m *MsgProcessTradeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
 		return xxx_messageInfo_MsgProcessTradeResponse.Marshal(b, m, deterministic)
@@ -413,15 +384,12 @@ func (m *MsgProcessTradeResponse) XXX_Marshal(b []byte, deterministic bool) ([]b
 		return b[:n], nil
 	}
 }
-
 func (m *MsgProcessTradeResponse) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_MsgProcessTradeResponse.Merge(m, src)
 }
-
 func (m *MsgProcessTradeResponse) XXX_Size() int {
 	return m.Size()
 }
-
 func (m *MsgProcessTradeResponse) XXX_DiscardUnknown() {
 	xxx_messageInfo_MsgProcessTradeResponse.DiscardUnknown(m)
 }
@@ -544,10 +512,8 @@ var fileDescriptor_e7e8cb396d16e26c = []byte{
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
-var (
-	_ context.Context
-	_ grpc.ClientConn
-)
+var _ context.Context
+var _ grpc.ClientConn
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
@@ -609,16 +575,15 @@ type MsgServer interface {
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
-type UnimplementedMsgServer struct{}
+type UnimplementedMsgServer struct {
+}
 
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
 }
-
 func (*UnimplementedMsgServer) CreateTrade(ctx context.Context, req *MsgCreateTrade) (*MsgCreateTradeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTrade not implemented")
 }
-
 func (*UnimplementedMsgServer) ProcessTrade(ctx context.Context, req *MsgProcessTrade) (*MsgProcessTradeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProcessTrade not implemented")
 }
@@ -681,29 +646,27 @@ func _Msg_ProcessTrade_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-var (
-	Msg_serviceDesc  = _Msg_serviceDesc
-	_Msg_serviceDesc = grpc.ServiceDesc{
-		ServiceName: "ggezchain.trade.Msg",
-		HandlerType: (*MsgServer)(nil),
-		Methods: []grpc.MethodDesc{
-			{
-				MethodName: "UpdateParams",
-				Handler:    _Msg_UpdateParams_Handler,
-			},
-			{
-				MethodName: "CreateTrade",
-				Handler:    _Msg_CreateTrade_Handler,
-			},
-			{
-				MethodName: "ProcessTrade",
-				Handler:    _Msg_ProcessTrade_Handler,
-			},
+var Msg_serviceDesc = _Msg_serviceDesc
+var _Msg_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "ggezchain.trade.Msg",
+	HandlerType: (*MsgServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "UpdateParams",
+			Handler:    _Msg_UpdateParams_Handler,
 		},
-		Streams:  []grpc.StreamDesc{},
-		Metadata: "ggezchain/trade/tx.proto",
-	}
-)
+		{
+			MethodName: "CreateTrade",
+			Handler:    _Msg_CreateTrade_Handler,
+		},
+		{
+			MethodName: "ProcessTrade",
+			Handler:    _Msg_ProcessTrade_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "ggezchain/trade/tx.proto",
+}
 
 func (m *MsgUpdateParams) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -1026,7 +989,6 @@ func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-
 func (m *MsgUpdateParams) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1179,11 +1141,9 @@ func (m *MsgProcessTradeResponse) Size() (n int) {
 func sovTx(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
-
 func sozTx(x uint64) (n int) {
 	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-
 func (m *MsgUpdateParams) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1299,7 +1259,6 @@ func (m *MsgUpdateParams) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-
 func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1350,7 +1309,6 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-
 func (m *MsgCreateTrade) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1721,7 +1679,6 @@ func (m *MsgCreateTrade) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-
 func (m *MsgCreateTradeResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1823,7 +1780,6 @@ func (m *MsgCreateTradeResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-
 func (m *MsgProcessTrade) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1957,7 +1913,6 @@ func (m *MsgProcessTrade) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-
 func (m *MsgProcessTradeResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -2251,7 +2206,6 @@ func (m *MsgProcessTradeResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-
 func skipTx(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
