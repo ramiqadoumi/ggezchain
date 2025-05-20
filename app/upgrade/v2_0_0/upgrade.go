@@ -3,8 +3,8 @@ package v2_0_0
 import (
 	"context"
 
-	// capability "github.com/cosmos/ibc-go/modules/capability"
-	// capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
+	capability "github.com/cosmos/ibc-go/modules/capability"
+	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 
@@ -18,7 +18,7 @@ func CreateUpgradeHandler(
 ) upgradetypes.UpgradeHandler {
 	return func(context context.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 		ctx := sdk.UnwrapSDKContext(context)
-		// fromVM[capabilitytypes.ModuleName] = capability.AppModule{}.ConsensusVersion()
+		fromVM[capabilitytypes.ModuleName] = capability.AppModule{}.ConsensusVersion()
 
 		logger := ctx.Logger().With("upgrade", UpgradeName)
 

@@ -31,8 +31,6 @@ func (app *App) setupUpgradeHandlers(configurator module.Configurator) {
 
 	switch upgradeInfo.Name {
 	case v2_0_0.UpgradeName:
-
-		// in case you want to add ,rename or delete module uncomment this:
 		storeUpgrades = &storetypes.StoreUpgrades{
 			Added: []string{acltypes.ModuleName},
 		}
