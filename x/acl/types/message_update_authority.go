@@ -2,22 +2,23 @@ package types
 
 import (
 	errorsmod "cosmossdk.io/errors"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 var _ sdk.Msg = &MsgUpdateAuthority{}
 
-func NewMsgUpdateAuthority(creator string, authAddress string, newName string, newModuleAccess string, addModuleAccess string, updateModuleAccess string, deleteModuleAccess []string, clearAllModuleAccess bool) *MsgUpdateAuthority {
+func NewMsgUpdateAuthority(creator string, authAddress string, newName string, overwriteAccessDefinitions string, addAccessDefinitions string, updateAccessDefinition string, deleteAccessDefinitions []string, clearAllAccessDefinitions bool) *MsgUpdateAuthority {
 	return &MsgUpdateAuthority{
-		Creator:              creator,
-		AuthAddress:          authAddress,
-		NewName:              newName,
-		NewModuleAccess:      newModuleAccess,
-		AddModuleAccess:      addModuleAccess,
-		UpdateModuleAccess:   updateModuleAccess,
-		DeleteModuleAccess:   deleteModuleAccess,
-		ClearAllModuleAccess: clearAllModuleAccess,
+		Creator:                    creator,
+		AuthAddress:                authAddress,
+		NewName:                    newName,
+		OverwriteAccessDefinitions: overwriteAccessDefinitions,
+		AddAccessDefinitions:       addAccessDefinitions,
+		UpdateAccessDefinition:     updateAccessDefinition,
+		DeleteAccessDefinitions:    deleteAccessDefinitions,
+		ClearAllAccessDefinitions:  clearAllAccessDefinitions,
 	}
 }
 
@@ -29,51 +30,45 @@ func (msg *MsgUpdateAuthority) ValidateBasic() error {
 
 	_, err = sdk.AccAddressFromBech32(msg.AuthAddress)
 	if err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid AuthAddress (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid auth-address (%s)", err)
 	}
 
-	// check if none of the flags provided
+	// Check if none of the flags provided
 	hasUpdate := msg.NewName != "" ||
-		msg.NewModuleAccess != "" ||
-		msg.AddModuleAccess != "" ||
-		msg.UpdateModuleAccess != "" ||
-		len(msg.DeleteModuleAccess) > 0 ||
-		msg.ClearAllModuleAccess
+		msg.OverwriteAccessDefinitions != "" ||
+		msg.AddAccessDefinitions != "" ||
+		msg.UpdateAccessDefinition != "" ||
+		len(msg.DeleteAccessDefinitions) > 0 ||
+		msg.ClearAllAccessDefinitions
 
 	if !hasUpdate {
 		return ErrNoUpdateFlags
 	}
 
-	// if NewModuleAccess passed ignores other module access flags
-	if msg.NewModuleAccess != "" {
-		if msg.ClearAllModuleAccess || msg.UpdateModuleAccess != "" || msg.AddModuleAccess != "" || len(msg.DeleteModuleAccess) > 0 {
-			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "NewModuleAccess cannot be combined with other module access flags")
+	// If OverwriteAccessDefinitions passed ignores other access definition flags
+	if msg.OverwriteAccessDefinitions != "" {
+		if msg.ClearAllAccessDefinitions || msg.UpdateAccessDefinition != "" || msg.AddAccessDefinitions != "" || len(msg.DeleteAccessDefinitions) > 0 {
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "overwrite-access-definitions cannot be combined with other access definition flags")
 		}
-		return ValidateJSONFormat(msg.NewModuleAccess, "NewModuleAccess")
+		return validateJSONFormat(msg.OverwriteAccessDefinitions, "overwrite-access-definitions")
 	}
 
-	// if ClearAllModuleAccess is true ignores other module access flags
-	if msg.ClearAllModuleAccess {
-		if msg.UpdateModuleAccess != "" || msg.AddModuleAccess != "" || len(msg.DeleteModuleAccess) > 0 {
-			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "ClearAllModuleAccess cannot be combined with other module access flags")
+	// If ClearAllAccessDefinitions is true ignores other access definition flags
+	if msg.ClearAllAccessDefinitions {
+		if msg.UpdateAccessDefinition != "" || msg.AddAccessDefinitions != "" || len(msg.DeleteAccessDefinitions) > 0 {
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "clear-all-access-definitions cannot be combined with other access definition flags")
 		}
 		return nil
 	}
 
-	if msg.UpdateModuleAccess != "" {
-		if err := ValidateJSONFormat(msg.UpdateModuleAccess, "UpdateModuleAccess"); err != nil {
+	if msg.UpdateAccessDefinition != "" {
+		if err := validateJSONFormat(msg.UpdateAccessDefinition, "update-access-definition"); err != nil {
 			return err
 		}
 	}
 
-	if msg.AddModuleAccess != "" {
-		if err := ValidateJSONFormat(msg.AddModuleAccess, "AddModuleAccess"); err != nil {
-			return err
-		}
-	}
-
-	if (msg.UpdateModuleAccess != "" || msg.AddModuleAccess != "") && len(msg.DeleteModuleAccess) > 0 {
-		if err := ValidateConflictBetweenModuleAccess(msg.UpdateModuleAccess, msg.AddModuleAccess, msg.DeleteModuleAccess); err != nil {
+	if msg.AddAccessDefinitions != "" {
+		if err := validateJSONFormat(msg.AddAccessDefinitions, "add-access-definitions"); err != nil {
 			return err
 		}
 	}

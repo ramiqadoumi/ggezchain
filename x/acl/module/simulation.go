@@ -3,14 +3,14 @@ package acl
 import (
 	"math/rand"
 
+	"github.com/GGEZLabs/ggezchain/testutil/sample"
+	aclsimulation "github.com/GGEZLabs/ggezchain/x/acl/simulation"
+	"github.com/GGEZLabs/ggezchain/x/acl/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-
-	"github.com/GGEZLabs/ggezchain/testutil/sample"
-	aclsimulation "github.com/GGEZLabs/ggezchain/x/acl/simulation"
-	"github.com/GGEZLabs/ggezchain/x/acl/types"
 )
 
 // avoid unused import issue
@@ -34,6 +34,18 @@ const (
 	opWeightMsgUpdateAuthority = "op_weight_msg_update_authority"
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgUpdateAuthority int = 100
+
+	opWeightMsgInitAclAdmin = "op_weight_msg_init_acl_admin"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgInitAclAdmin int = 100
+
+	opWeightMsgAddAclAdmin = "op_weight_msg_add_acl_admin"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgAddAclAdmin int = 100
+
+	opWeightMsgDeleteAclAdmin = "op_weight_msg_delete_acl_admin"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgDeleteAclAdmin int = 100
 
 	// this line is used by starport scaffolding # simapp/module/const
 )
@@ -91,6 +103,39 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		aclsimulation.SimulateMsgUpdateAuthority(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
+	var weightMsgInitAclAdmin int
+	simState.AppParams.GetOrGenerate(opWeightMsgInitAclAdmin, &weightMsgInitAclAdmin, nil,
+		func(_ *rand.Rand) {
+			weightMsgInitAclAdmin = defaultWeightMsgInitAclAdmin
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgInitAclAdmin,
+		aclsimulation.SimulateMsgInitAclAdmin(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgAddAclAdmin int
+	simState.AppParams.GetOrGenerate(opWeightMsgAddAclAdmin, &weightMsgAddAclAdmin, nil,
+		func(_ *rand.Rand) {
+			weightMsgAddAclAdmin = defaultWeightMsgAddAclAdmin
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgAddAclAdmin,
+		aclsimulation.SimulateMsgAddAclAdmin(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgDeleteAclAdmin int
+	simState.AppParams.GetOrGenerate(opWeightMsgDeleteAclAdmin, &weightMsgDeleteAclAdmin, nil,
+		func(_ *rand.Rand) {
+			weightMsgDeleteAclAdmin = defaultWeightMsgDeleteAclAdmin
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgDeleteAclAdmin,
+		aclsimulation.SimulateMsgDeleteAclAdmin(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
 	// this line is used by starport scaffolding # simapp/module/operation
 
 	return operations
@@ -120,6 +165,30 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			defaultWeightMsgUpdateAuthority,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
 				aclsimulation.SimulateMsgUpdateAuthority(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgInitAclAdmin,
+			defaultWeightMsgInitAclAdmin,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				aclsimulation.SimulateMsgInitAclAdmin(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgAddAclAdmin,
+			defaultWeightMsgAddAclAdmin,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				aclsimulation.SimulateMsgAddAclAdmin(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgDeleteAclAdmin,
+			defaultWeightMsgDeleteAclAdmin,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				aclsimulation.SimulateMsgDeleteAclAdmin(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),

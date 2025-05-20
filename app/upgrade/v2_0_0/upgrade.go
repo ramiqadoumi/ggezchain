@@ -1,10 +1,8 @@
-package v1_0_1
+package v2_0_0
 
 import (
 	"context"
 
-	// acltypes "github.com/GGEZLabs/ggezchain/x/acl/types"
-	// aclmodule "github.com/GGEZLabs/ggezchain/x/acl/module"
 	capability "github.com/cosmos/ibc-go/modules/capability"
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
 
@@ -21,7 +19,6 @@ func CreateUpgradeHandler(
 	return func(context context.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 		ctx := sdk.UnwrapSDKContext(context)
 		fromVM[capabilitytypes.ModuleName] = capability.AppModule{}.ConsensusVersion()
-		// fromVM[acltypes.ModuleName] = aclmodule.AppModule{}.ConsensusVersion()
 
 		logger := ctx.Logger().With("upgrade", UpgradeName)
 

@@ -2,9 +2,9 @@ package keeper
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/GGEZLabs/ggezchain/x/acl/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -25,54 +25,59 @@ func (k msgServer) UpdateAuthority(goCtx context.Context, msg *types.MsgUpdateAu
 	}
 
 	var err error
-	// if NewModuleAccess passed ignore another flags
-	if msg.NewModuleAccess != "" {
-		aclAuthority, err = k.OverwriteModuleAccessList(aclAuthority, msg.NewModuleAccess)
+	// If OverwriteAccessDefinitions passed ignore another flags
+	if msg.OverwriteAccessDefinitions != "" {
+		aclAuthority, err = k.OverwriteAccessDefinitionList(aclAuthority, msg.OverwriteAccessDefinitions)
 		if err != nil {
 			return nil, err
 		}
-	} else if msg.ClearAllModuleAccess {
-		// if ClearAllModuleAccess passed ignore another flags
-		aclAuthority = k.ClearAllModuleAccess(aclAuthority)
+	} else if msg.ClearAllAccessDefinitions {
+		// If ClearAllAccessDefinitions passed ignore another flags
+		aclAuthority = k.ClearAllAccessDefinitions(aclAuthority)
 	} else {
-		if msg.UpdateModuleAccess != "" {
-			aclAuthority, err = k.UpdateModuleAccess(aclAuthority, msg.UpdateModuleAccess)
+
+		if len(msg.DeleteAccessDefinitions) != 0 {
+			if err := types.ValidateDeletedModules(msg.DeleteAccessDefinitions); err != nil {
+				return nil, err
+			}
+		}
+
+		if (msg.UpdateAccessDefinition != "" || msg.AddAccessDefinitions != "") && len(msg.DeleteAccessDefinitions) > 0 {
+			if err := types.ValidateConflictBetweenAccessDefinition(msg.UpdateAccessDefinition, msg.AddAccessDefinitions, msg.DeleteAccessDefinitions); err != nil {
+				return nil, err
+			}
+		}
+
+		if msg.UpdateAccessDefinition != "" {
+			aclAuthority, err = k.UpdateAccessDefinitions(aclAuthority, msg.UpdateAccessDefinition)
 			if err != nil {
 				return nil, err
 			}
 		}
 
-		if msg.AddModuleAccess != "" {
-			aclAuthority, err = k.AddModuleAccess(aclAuthority, msg.AddModuleAccess)
+		if msg.AddAccessDefinitions != "" {
+			aclAuthority, err = k.AddAccessDefinitions(aclAuthority, msg.AddAccessDefinitions)
 			if err != nil {
 				return nil, err
 			}
 		}
 
-		if len(msg.DeleteModuleAccess) != 0 {
-			aclAuthority, err = k.DeleteModuleAccess(aclAuthority, msg.DeleteModuleAccess)
+		if len(msg.DeleteAccessDefinitions) != 0 {
+			aclAuthority, err = k.DeleteAccessDefinitions(aclAuthority, msg.DeleteAccessDefinitions)
 			if err != nil {
 				return nil, err
 			}
 		}
 	}
-	// apply updated aclAuthority
+	// Apply updated aclAuthority
 	k.SetAclAuthority(ctx, aclAuthority)
-
-	var moduleAccessJSON []byte = []byte("[]")
-	if aclAuthority.ModuleAccess != nil {
-		moduleAccessJSON, err = json.Marshal(aclAuthority.ModuleAccess)
-		if err != nil {
-			moduleAccessJSON = []byte("[]")
-		}
-	}
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeUpdateAuthority,
-			sdk.NewAttribute(types.AttributeKeyAuthorityAddress, msg.AuthAddress),
+			sdk.NewAttribute(types.AttributeKeyAuthorityAddress, aclAuthority.Address),
 			sdk.NewAttribute(types.AttributeKeyName, aclAuthority.Name),
-			sdk.NewAttribute(types.AttributeKeyModuleAccess, string(moduleAccessJSON)),
+			sdk.NewAttribute(types.AttributeKeyAccessDefinitions, aclAuthority.AccessDefinitionsJSON()),
 		),
 	)
 

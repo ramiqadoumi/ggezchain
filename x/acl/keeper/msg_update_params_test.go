@@ -3,10 +3,10 @@ package keeper_test
 import (
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/GGEZLabs/ggezchain/x/acl/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/GGEZLabs/ggezchain/x/acl/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestMsgUpdateParams(t *testing.T) {
@@ -31,14 +31,28 @@ func TestMsgUpdateParams(t *testing.T) {
 			expErr:    true,
 			expErrMsg: "invalid authority",
 		},
-		{
-			name: "send enabled param",
-			input: &types.MsgUpdateParams{
-				Authority: k.GetAuthority(),
-				Params:    types.Params{},
-			},
-			expErr: false,
-		},
+		// {
+		// 	name: "invalid admin",
+		// 	input: &types.MsgUpdateParams{
+		// 		Authority: k.GetAuthority(),
+		// 		Params:    types.Params{
+		// 			Admin: "invalid_address",
+		// 		},
+		// 	},
+		// 	expErr:    true,
+		// 	expErrMsg: "invalid admin address",
+		// },
+		// {
+		// 	name: "empty admin",
+		// 	input: &types.MsgUpdateParams{
+		// 		Authority: k.GetAuthority(),
+		// 		Params:    types.Params{
+		// 			Admin: "",
+		// 		},
+		// 	},
+		// 	expErr:    true,
+		// 	expErrMsg: "admin address cannot be empty",
+		// },
 		{
 			name: "all good",
 			input: &types.MsgUpdateParams{

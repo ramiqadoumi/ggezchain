@@ -4,8 +4,9 @@ import (
 	"testing"
 
 	"github.com/GGEZLabs/ggezchain/testutil/sample"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func TestMsgDeleteAuthority_ValidateBasic(t *testing.T) {
@@ -15,15 +16,25 @@ func TestMsgDeleteAuthority_ValidateBasic(t *testing.T) {
 		err  error
 	}{
 		{
-			name: "invalid address",
+			name: "invalid creator address",
 			msg: MsgDeleteAuthority{
 				Creator: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
-		}, {
-			name: "valid address",
+		},
+		{
+			name: "invalid auth address",
 			msg: MsgDeleteAuthority{
-				Creator: sample.AccAddress(),
+				Creator:     sample.AccAddress(),
+				AuthAddress: "invalid_address",
+			},
+			err: sdkerrors.ErrInvalidAddress,
+		},
+		{
+			name: "all good",
+			msg: MsgDeleteAuthority{
+				Creator:     sample.AccAddress(),
+				AuthAddress: sample.AccAddress(),
 			},
 		},
 	}

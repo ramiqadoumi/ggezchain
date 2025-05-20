@@ -9,7 +9,6 @@ import (
 	aclmoduletypes "github.com/GGEZLabs/ggezchain/x/acl/types"
 	_ "github.com/GGEZLabs/ggezchain/x/trade/module" // import for side-effects
 	trademoduletypes "github.com/GGEZLabs/ggezchain/x/trade/types"
-
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
 	icatypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/types"
 	ibcfeetypes "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/types"

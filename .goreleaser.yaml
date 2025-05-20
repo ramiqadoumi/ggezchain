@@ -169,8 +169,8 @@ changelog:
 # Docs: https://goreleaser.com/customization/release/
 release:
   github:
-    owner: "{{ .Env.REPO_OWNER }}"
-    name:  "{{ .Env.REPO_NAME }}"
+    owner: GGEZLabs
+    name: ggezchain
   replace_existing_draft: true
   header: |
 

@@ -2,6 +2,7 @@ package types
 
 import (
 	errorsmod "cosmossdk.io/errors"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -23,7 +24,7 @@ func (msg *MsgDeleteAuthority) ValidateBasic() error {
 
 	_, err = sdk.AccAddressFromBech32(msg.AuthAddress)
 	if err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid AuthAddress (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid auth-address (%s)", err)
 	}
 
 	return nil

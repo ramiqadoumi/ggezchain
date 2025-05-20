@@ -3,9 +3,8 @@ package ggezchain.acl;
 
 option go_package = "github.com/GGEZLabs/ggezchain/x/acl/types";
 
-message ModuleAccess {
+message AclAdmin {
+  string address = 1; 
   
-  string module   = 1; 
-  bool is_maker   = 2; 
-  bool is_checker = 3; 
 }
+

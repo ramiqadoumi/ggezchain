@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/GGEZLabs/ggezchain/x/acl/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -20,24 +21,24 @@ func (k msgServer) AddAuthority(goCtx context.Context, msg *types.MsgAddAuthorit
 		return nil, types.ErrAuthorityAddressExist
 	}
 
-	moduleAccess, err := types.ValidateModuleAccessList(msg.ModuleAccess)
+	accessDefinitions, err := types.ValidateAccessDefinitionList(msg.AccessDefinitions)
 	if err != nil {
 		return nil, err
 	}
 
 	aclAuthority := types.AclAuthority{
-		Address:      msg.AuthAddress,
-		Name:         strings.TrimSpace(msg.Name),
-		ModuleAccess: moduleAccess,
+		Address:           msg.AuthAddress,
+		Name:              strings.TrimSpace(msg.Name),
+		AccessDefinitions: accessDefinitions,
 	}
 	k.SetAclAuthority(ctx, aclAuthority)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeAddAuthority,
-			sdk.NewAttribute(types.AttributeKeyAuthorityAddress, msg.AuthAddress),
-			sdk.NewAttribute(types.AttributeKeyName, msg.Name),
-			sdk.NewAttribute(types.AttributeKeyModuleAccess, msg.ModuleAccess),
+			sdk.NewAttribute(types.AttributeKeyAuthorityAddress, aclAuthority.Address),
+			sdk.NewAttribute(types.AttributeKeyName, aclAuthority.Name),
+			sdk.NewAttribute(types.AttributeKeyAccessDefinitions, aclAuthority.AccessDefinitionsJSON()),
 		),
 	)
 	return &types.MsgAddAuthorityResponse{}, nil
