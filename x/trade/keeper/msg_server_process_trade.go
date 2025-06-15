@@ -2,15 +2,13 @@ package keeper
 
 import (
 	"context"
-	"strconv"
+	"fmt"
 	"time"
 
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
-
 	errorsmod "cosmossdk.io/errors"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrade) (*types.MsgProcessTradeResponse, error) {
@@ -65,7 +63,6 @@ func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrad
 		}
 	} else if msg.ProcessType == types.ProcessTypeConfirm {
 		status, err = k.MintOrBurnCoins(ctx, tradeData)
-
 		if err != nil {
 			result = err.Error()
 		}
@@ -96,7 +93,7 @@ func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrad
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeProcessTrade,
-			sdk.NewAttribute(types.AttributeKeyTradeIndex, strconv.FormatUint(msg.TradeIndex, 10)),
+			sdk.NewAttribute(types.AttributeKeyTradeIndex, fmt.Sprintf("%d", msg.TradeIndex)),
 			sdk.NewAttribute(types.AttributeKeyStatus, status.String()),
 			sdk.NewAttribute(types.AttributeKeyChecker, msg.Creator),
 			sdk.NewAttribute(types.AttributeKeyMaker, tradeData.Maker),

@@ -34,11 +34,6 @@ func TestValidateAccessDefinitionList(t *testing.T) {
 			accessDefinitionListStr: `[{"module":"module1","is_maker":true,"is_checker":true},{"module":"module1","is_maker":true,"is_checker":true}]`,
 			err:                     ErrInvalidModuleName,
 		},
-		// {
-		// 	name:                    "at least one of is_maker or is_checker must be true",
-		// 	accessDefinitionListStr: `[{"module":"module1","is_maker":false,"is_checker":false}]`,
-		// 	err:                     ErrRequireMakerOrChecker,
-		// },
 		{
 			name:                    "all good",
 			accessDefinitionListStr: `[{"module":"module1","is_maker":false,"is_checker":true},{"module":"module2","is_maker":true,"is_checker":true}]`,
@@ -57,7 +52,7 @@ func TestValidateAccessDefinitionList(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			require.Equal(t, tt.expectedLen, len(accessDefinitions))
+			require.Len(t, accessDefinitions, tt.expectedLen)
 			require.Equal(t, tt.expectedOutput, accessDefinitions)
 		})
 	}
@@ -80,11 +75,7 @@ func TestValidateSingleAccessDefinition(t *testing.T) {
 			accessDefinitionStr: `{"module":"","is_maker":true,"is_checker":true}`,
 			err:                 ErrInvalidModuleName,
 		},
-		// {
-		// 	name:                "at least one of is_maker or is_checker must be true",
-		// 	accessDefinitionStr: `{"module":"module1","is_maker":false,"is_checker":false}`,
-		// 	err:                 ErrRequireMakerOrChecker,
-		// },
+
 		{
 			name:                "all good",
 			accessDefinitionStr: `{"module":"module1","is_maker":false,"is_checker":true}`,
@@ -494,11 +485,6 @@ func TestValidateAndExtractModuleNames(t *testing.T) {
 			addAccessDefinition: `[{"module":"module1","is_maker":true,"is_checker":true},{"module":"module1","is_maker":true,"is_checker":true}]`,
 			err:                 ErrInvalidModuleName,
 		},
-		// {
-		// 	name:                "at least one of is_maker or is_checker must be true",
-		// 	addAccessDefinition: `[{"module":"module1","is_maker":false,"is_checker":false}]`,
-		// 	err:                 ErrRequireMakerOrChecker,
-		// },
 		{
 			name:                "return one module",
 			addAccessDefinition: `[{"module":"module1","is_maker":false,"is_checker":true}]`,
@@ -522,7 +508,7 @@ func TestValidateAndExtractModuleNames(t *testing.T) {
 			}
 			require.NoError(t, err)
 			require.Equal(t, tt.expectedOutput, modules)
-			require.Equal(t, tt.expectedLen, len(modules))
+			require.Len(t, modules, tt.expectedLen)
 		})
 	}
 }
@@ -547,12 +533,6 @@ func TestValidateConflictBetweenAccessDefinition(t *testing.T) {
 			removeList:             []string{""},
 			err:                    ErrInvalidModuleName,
 		},
-		// {
-		// 	name:                   "at least one of is_maker or is_checker must be true for update access definition",
-		// 	updateAccessDefinition: `{"module":"module1","is_maker":false,"is_checker":false}`,
-		// 	removeList:             []string{""},
-		// 	err:                    ErrRequireMakerOrChecker,
-		// },
 		{
 			name:                   "update and remove same module",
 			updateAccessDefinition: `{"module":"module1","is_maker":false,"is_checker":true}`,
@@ -583,12 +563,6 @@ func TestValidateConflictBetweenAccessDefinition(t *testing.T) {
 			removeList:          []string{""},
 			err:                 ErrInvalidModuleName,
 		},
-		// {
-		// 	name:                "at least one of is_maker or is_checker must be true for add access definition",
-		// 	addAccessDefinition: `[{"module":"module1","is_maker":false,"is_checker":false}]`,
-		// 	removeList:          []string{""},
-		// 	err:                 ErrRequireMakerOrChecker,
-		// },
 		{
 			name:                "add and remove same module",
 			addAccessDefinition: `[{"module":"module1","is_maker":false,"is_checker":true}]`,

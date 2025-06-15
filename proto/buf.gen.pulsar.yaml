@@ -7,7 +7,7 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: github.com/GGEZLabs/ggezchain/api
+    default: github.com/ramiqadoumi/ggezchain/api
     except:
       - buf.build/googleapis/googleapis
       - buf.build/cosmos/gogo-proto

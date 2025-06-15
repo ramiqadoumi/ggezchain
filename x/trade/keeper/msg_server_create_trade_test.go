@@ -1,85 +1,83 @@
 package keeper_test
 
 import (
-	acltypes "github.com/GGEZLabs/ggezchain/x/acl/types"
-	"github.com/GGEZLabs/ggezchain/x/trade/testutil"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
+	"time"
 
 	sdkmath "cosmossdk.io/math"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/testutil"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 func (suite *KeeperTestSuite) TestCreateTrade() {
-	indexes := suite.createTrade(1)
-	suite.EqualValues(1, len(indexes))
-	suite.EqualValues(1, indexes[0])
+	indexes := suite.createNTrades(1)
+	suite.Require().EqualValues(1, len(indexes))
+	suite.Require().EqualValues(1, indexes[0])
 }
 
 func (suite *KeeperTestSuite) TestIfTradeSaved() {
-	indexes := suite.createTrade(1)
-	keeper := suite.app.TradeKeeper
+	indexes := suite.createNTrades(1)
+	keeper := suite.tradeKeeper
 
 	tradeIndex, found := keeper.GetTradeIndex(suite.ctx)
-	suite.True(found)
-	suite.EqualValues(types.TradeIndex{
+	suite.Require().True(found)
+	suite.Require().EqualValues(types.TradeIndex{
 		NextId: uint64(len(indexes) + 1),
 	}, tradeIndex)
 
 	trade, found := keeper.GetStoredTrade(suite.ctx, indexes[0])
-	suite.True(found)
-	suite.EqualValues(types.GetSampleStoredTrade(indexes[0]), trade)
+	suite.Require().True(found)
+	suite.Require().EqualValues(types.GetSampleStoredTrade(indexes[0]), trade)
 }
 
 func (suite *KeeperTestSuite) TestIfTempTradeSaved() {
-	indexes := suite.createTrade(1)
-	keeper := suite.app.TradeKeeper
+	indexes := suite.createNTrades(1)
+	keeper := suite.tradeKeeper
 
 	tradeIndex, found := keeper.GetTradeIndex(suite.ctx)
-	suite.True(found)
-	suite.EqualValues(types.TradeIndex{
+	suite.Require().True(found)
+	suite.Require().EqualValues(types.TradeIndex{
 		NextId: uint64(len(indexes) + 1),
 	}, tradeIndex)
 
 	tempTrade, found := keeper.GetStoredTempTrade(suite.ctx, indexes[0])
-	suite.True(found)
-	suite.EqualValues(types.StoredTempTrade{
-		TradeIndex:     indexes[0],
-		CreateDate:     types.GetSampleStoredTrade(indexes[0]).CreateDate,
-		TempTradeIndex: indexes[0],
+	suite.Require().True(found)
+	suite.Require().EqualValues(types.StoredTempTrade{
+		TradeIndex: indexes[0],
+		CreateDate: types.GetSampleStoredTrade(indexes[0]).CreateDate,
 	}, tempTrade)
 }
 
 func (suite *KeeperTestSuite) TestGetAllStoredTrade() {
-	indexes := suite.createTrade(3)
-	keeper := suite.app.TradeKeeper
+	indexes := suite.createNTrades(3)
+	keeper := suite.tradeKeeper
 
 	tradeIndex, found := keeper.GetTradeIndex(suite.ctx)
-	suite.True(found)
-	suite.EqualValues(types.TradeIndex{
+	suite.Require().True(found)
+	suite.Require().EqualValues(types.TradeIndex{
 		NextId: uint64(len(indexes) + 1),
 	}, tradeIndex)
 
 	allTrades := keeper.GetAllStoredTrade(suite.ctx)
-	suite.EqualValues(len(allTrades), len(indexes))
-	suite.EqualValues(types.GetSampleStoredTrade(indexes[0]), allTrades[0])
+	suite.Require().EqualValues(len(allTrades), len(indexes))
+	suite.Require().EqualValues(types.GetSampleStoredTrade(indexes[0]), allTrades[0])
 }
 
 func (suite *KeeperTestSuite) TestGetAllStoredTempTrade() {
-	indexes := suite.createTrade(5)
-	keeper := suite.app.TradeKeeper
+	indexes := suite.createNTrades(5)
+	keeper := suite.tradeKeeper
 
 	tradeIndex, found := keeper.GetTradeIndex(suite.ctx)
-	suite.True(found)
-	suite.EqualValues(types.TradeIndex{
+	suite.Require().True(found)
+	suite.Require().EqualValues(types.TradeIndex{
 		NextId: uint64(len(indexes) + 1),
 	}, tradeIndex)
 
 	allTempTrades := keeper.GetAllStoredTempTrade(suite.ctx)
-	suite.EqualValues(types.StoredTempTrade{
-		TradeIndex:     indexes[0],
-		CreateDate:     types.GetSampleStoredTrade(indexes[0]).CreateDate,
-		TempTradeIndex: indexes[0],
+	suite.Require().EqualValues(types.StoredTempTrade{
+		TradeIndex: indexes[0],
+		CreateDate: types.GetSampleStoredTrade(indexes[0]).CreateDate,
 	}, allTempTrades[0])
 }
 
@@ -90,17 +88,17 @@ func (suite *KeeperTestSuite) TestCreateTradeWithInvalidMakerPermission() {
 		Creator:   testutil.Bob,
 		TradeType: types.TradeTypeBuy,
 		Amount: &sdk.Coin{
-			Denom:  types.DefaultCoinDenom,
+			Denom:  types.DefaultDenom,
 			Amount: sdkmath.NewInt(100000),
 		},
 		Price:             "0.001",
 		ReceiverAddress:   testutil.Alice,
-		TradeData:         `{"trade_info":{"asset_holder_id":1,"asset_id":1,"trade_type":"buy","trade_value":1944.9,"currency":"USD","exchange":"US","fund_name":"Low Carbon Target ETF","issuer":"Blackrock","no_shares":10,"price":0.000000000012,"quantity":162075000000000,"segment":"Equity: Global Low Carbon","share_price":194.49,"ticker":"CRBN","trade_fee":0,"trade_net_price":194.49,"trade_net_value":1944.9},"brokerage":{"name":"Interactive Brokers LLC","type":"Brokerage Firm","country":"US"}}`,
+		TradeData:         types.GetSampleTradeData(),
 		BankingSystemData: "{}",
 	})
 
-	suite.Nil(createResponse)
-	suite.ErrorIs(err, types.ErrInvalidMakerPermission)
+	suite.Require().Nil(createResponse)
+	suite.Require().ErrorIs(err, types.ErrInvalidMakerPermission)
 }
 
 func (suite *KeeperTestSuite) TestCreateTradeAuthorityAddressNotExist() {
@@ -110,49 +108,48 @@ func (suite *KeeperTestSuite) TestCreateTradeAuthorityAddressNotExist() {
 		Creator:   testutil.Eve,
 		TradeType: types.TradeTypeBuy,
 		Amount: &sdk.Coin{
-			Denom:  types.DefaultCoinDenom,
+			Denom:  types.DefaultDenom,
 			Amount: sdkmath.NewInt(100000),
 		},
 		Price:             "0.001",
 		ReceiverAddress:   testutil.Alice,
-		TradeData:         `{"trade_info":{"asset_holder_id":1,"asset_id":1,"trade_type":"buy","trade_value":1944.9,"currency":"USD","exchange":"US","fund_name":"Low Carbon Target ETF","issuer":"Blackrock","no_shares":10,"price":0.000000000012,"quantity":162075000000000,"segment":"Equity: Global Low Carbon","share_price":194.49,"ticker":"CRBN","trade_fee":0,"trade_net_price":194.49,"trade_net_value":1944.9},"brokerage":{"name":"Interactive Brokers LLC","type":"Brokerage Firm","country":"US"}}`,
+		TradeData:         types.GetSampleTradeData(),
 		BankingSystemData: "{}",
 	})
 
-	suite.Nil(createResponse)
-	suite.ErrorIs(err, acltypes.ErrAuthorityAddressNotExist)
-	suite.Contains(err.Error(), "unauthorized account")
+	suite.Require().Nil(createResponse)
+	suite.Require().ErrorIs(err, acltypes.ErrAuthorityAddressNotExist)
+	suite.Require().Contains(err.Error(), "unauthorized account")
 }
 
 func (suite *KeeperTestSuite) TestCreateTradeNoPermissionForModule() {
 	suite.setupTest()
 
 	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
-		Creator:   testutil.Carol,
+		Creator:   testutil.Carol, // Dose not has permission for trade module
 		TradeType: types.TradeTypeBuy,
 		Amount: &sdk.Coin{
-			Denom:  types.DefaultCoinDenom,
+			Denom:  types.DefaultDenom,
 			Amount: sdkmath.NewInt(100000),
 		},
 		Price:             "0.001",
 		ReceiverAddress:   testutil.Alice,
-		TradeData:         `{"trade_info":{"asset_holder_id":1,"asset_id":1,"trade_type":"buy","trade_value":1944.9,"currency":"USD","exchange":"US","fund_name":"Low Carbon Target ETF","issuer":"Blackrock","no_shares":10,"price":0.000000000012,"quantity":162075000000000,"segment":"Equity: Global Low Carbon","share_price":194.49,"ticker":"CRBN","trade_fee":0,"trade_net_price":194.49,"trade_net_value":1944.9},"brokerage":{"name":"Interactive Brokers LLC","type":"Brokerage Firm","country":"US"}}`,
+		TradeData:         types.GetSampleTradeData(),
 		BankingSystemData: "{}",
 	})
 
-	suite.Nil(createResponse)
-	suite.ErrorIs(err, types.ErrModuleNotFound)
-	suite.Contains(err.Error(), "no permission for module trade")
+	suite.Require().Nil(createResponse)
+	suite.Require().ErrorIs(err, types.ErrModuleNotFound)
+	suite.Require().Contains(err.Error(), "no permission for module trade")
 }
 
 func (suite *KeeperTestSuite) TestCreateTradeWithInvalidTradeData() {
 	suite.setupTest()
-
 	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:   testutil.Alice,
 		TradeType: types.TradeTypeBuy,
 		Amount: &sdk.Coin{
-			Denom:  types.DefaultCoinDenom,
+			Denom:  types.DefaultDenom,
 			Amount: sdkmath.NewInt(100000),
 		},
 		Price:             "0.001",
@@ -161,37 +158,137 @@ func (suite *KeeperTestSuite) TestCreateTradeWithInvalidTradeData() {
 		BankingSystemData: "{}",
 	})
 
-	suite.Nil(createResponse)
-	suite.ErrorIs(err, types.ErrInvalidTradeInfo)
+	suite.Require().Nil(createResponse)
+	suite.Require().ErrorIs(err, types.ErrInvalidTradeInfo)
 }
 
 func (suite *KeeperTestSuite) TestCreateTrades() {
-	indexes := suite.createTrade(1000)
-	keeper := suite.app.TradeKeeper
+	indexes := suite.createNTrades(1000)
+	keeper := suite.tradeKeeper
 
 	for _, tradeIndex := range indexes {
 		trade, found := keeper.GetStoredTrade(suite.ctx, tradeIndex)
-		suite.True(found)
-		suite.EqualValues(types.GetSampleStoredTrade(tradeIndex), trade)
+		suite.Require().True(found)
+		suite.Require().EqualValues(types.GetSampleStoredTrade(tradeIndex), trade)
 
 		tempTrade, found := keeper.GetStoredTempTrade(suite.ctx, tradeIndex)
-		suite.True(found)
-		suite.EqualValues(types.StoredTempTrade{
-			TradeIndex:     tradeIndex,
-			CreateDate:     tempTrade.CreateDate,
-			TempTradeIndex: tradeIndex,
+		suite.Require().True(found)
+		suite.Require().EqualValues(types.StoredTempTrade{
+			TradeIndex: tradeIndex,
+			CreateDate: tempTrade.CreateDate,
 		}, tempTrade)
 	}
 
 	// check get all trades and temp trades and next trade index
 	tradeIndex, found := keeper.GetTradeIndex(suite.ctx)
-	suite.True(found)
-	suite.EqualValues(types.TradeIndex{
+	suite.Require().True(found)
+	suite.Require().EqualValues(types.TradeIndex{
 		NextId: uint64(len(indexes) + 1),
 	}, tradeIndex)
 	AllTrades := keeper.GetAllStoredTrade(suite.ctx)
-	suite.EqualValues(len(AllTrades), uint64(len(indexes)))
+	suite.Require().EqualValues(len(AllTrades), uint64(len(indexes)))
 
 	AllTempTrades := keeper.GetAllStoredTempTrade(suite.ctx)
-	suite.EqualValues(len(AllTempTrades), uint64(len(indexes)))
+	suite.Require().EqualValues(len(AllTempTrades), uint64(len(indexes)))
+}
+
+func (suite *KeeperTestSuite) TestCreateTradeWithInvalidCreateDate() {
+	suite.setupTest()
+	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
+		Creator:   testutil.Alice,
+		TradeType: types.TradeTypeBuy,
+		Amount: &sdk.Coin{
+			Denom:  types.DefaultDenom,
+			Amount: sdkmath.NewInt(100000),
+		},
+		Price:             "0.001",
+		ReceiverAddress:   testutil.Alice,
+		TradeData:         types.GetSampleTradeData(),
+		BankingSystemData: "{}",
+		CreateDate:        "2023-05-06",
+	})
+
+	suite.Require().Nil(createResponse)
+	suite.Require().Contains(err.Error(), "invalid date format")
+}
+
+func (suite *KeeperTestSuite) TestCreateTradeWithCreateDateInFuture() {
+	suite.setupTest()
+	blockHeight := int64(1)
+	blockTime := time.Now().UTC()
+	suite.ctx = suite.ctx.WithBlockHeight(blockHeight).WithBlockTime(blockTime)
+
+	// Use EXPECT after update context
+	suite.aclKeeper.EXPECT().GetAclAuthority(suite.ctx, testutil.Alice).Return(acltypes.AclAuthority{
+		Address: testutil.Alice,
+		Name:    "Alice",
+		AccessDefinitions: []*acltypes.AccessDefinition{
+			{
+				Module:    types.ModuleName,
+				IsMaker:   true,
+				IsChecker: false,
+			},
+		},
+	}, true).AnyTimes()
+
+	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
+		Creator:   testutil.Alice,
+		TradeType: types.TradeTypeBuy,
+		Amount: &sdk.Coin{
+			Denom:  types.DefaultDenom,
+			Amount: sdkmath.NewInt(100000),
+		},
+		Price:             "0.001",
+		ReceiverAddress:   testutil.Alice,
+		TradeData:         types.GetSampleTradeData(),
+		BankingSystemData: "{}",
+		CreateDate:        "2050-05-11T08:44:00Z",
+	})
+
+	suite.Require().Nil(createResponse)
+	suite.Require().Contains(err.Error(), "date cannot be in the future")
+}
+
+func (suite *KeeperTestSuite) TestCreateTradeWithValidCreateDate() {
+	suite.setupTest()
+	blockHeight := int64(1)
+	blockTime := time.Now().UTC()
+	suite.ctx = suite.ctx.WithBlockHeight(blockHeight).WithBlockTime(blockTime)
+
+	// Use EXPECT after update context
+	suite.aclKeeper.EXPECT().GetAclAuthority(suite.ctx, testutil.Alice).Return(acltypes.AclAuthority{
+		Address: testutil.Alice,
+		Name:    "Alice",
+		AccessDefinitions: []*acltypes.AccessDefinition{
+			{
+				Module:    types.ModuleName,
+				IsMaker:   true,
+				IsChecker: false,
+			},
+		},
+	}, true).AnyTimes()
+
+	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
+		Creator:   testutil.Alice,
+		TradeType: types.TradeTypeBuy,
+		Amount: &sdk.Coin{
+			Denom:  types.DefaultDenom,
+			Amount: sdkmath.NewInt(100000),
+		},
+		Price:             "0.001",
+		ReceiverAddress:   testutil.Alice,
+		TradeData:         types.GetSampleTradeData(),
+		BankingSystemData: "{}",
+		CreateDate:        "2024-05-11T08:44:00Z",
+	})
+
+	suite.Require().Nil(err)
+	suite.Require().Equal(&types.MsgCreateTradeResponse{
+		TradeIndex: uint64(1),
+		Status:     types.StatusPending,
+	}, createResponse)
+
+	trade, found := suite.tradeKeeper.GetStoredTrade(suite.ctx, 1)
+	suite.Require().True(found)
+	suite.Require().Equal(trade.CreateDate, "2024-05-11T08:44:00Z")
 }

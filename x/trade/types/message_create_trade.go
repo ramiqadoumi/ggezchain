@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 	"strings"
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -46,8 +47,8 @@ func (msg *MsgCreateTrade) ValidateBasic() error {
 		return sdkerrors.ErrInvalidRequest.Wrapf("zero amount not allowed: %s", msg.Amount.String())
 	}
 
-	if msg.Amount.Denom != DefaultCoinDenom {
-		return sdkerrors.ErrInvalidRequest.Wrapf("invalid denom expected: %s, got: %s ", DefaultCoinDenom, msg.Amount.Denom)
+	if msg.Amount.Denom != DefaultDenom {
+		return sdkerrors.ErrInvalidRequest.Wrapf("invalid denom expected: %s, got: %s ", DefaultDenom, msg.Amount.Denom)
 	}
 
 	// Validate price
@@ -88,6 +89,13 @@ func (msg *MsgCreateTrade) ValidateBasic() error {
 	// if msg.ExchangeRateJSON == "" {
 	// 	return ErrInvalidExchangeRateJSON
 	// }
+
+	if msg.CreateDate != "" {
+		_, err = time.Parse(time.RFC3339, msg.CreateDate)
+		if err != nil {
+			return sdkerrors.ErrInvalidRequest.Wrapf("invalid create_date format: %s, date format should be like: %s", msg.CreateDate, time.RFC3339)
+		}
+	}
 
 	return nil
 }

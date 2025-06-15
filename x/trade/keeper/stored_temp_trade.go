@@ -3,12 +3,10 @@ package keeper
 import (
 	"context"
 
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
-
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
-
 	"github.com/cosmos/cosmos-sdk/runtime"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 // SetStoredTempTrade set a specific storedTempTrade in the store from its index

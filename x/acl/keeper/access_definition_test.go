@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"testing"
 
-	keepertest "github.com/GGEZLabs/ggezchain/testutil/keeper"
-	"github.com/GGEZLabs/ggezchain/testutil/sample"
-	"github.com/GGEZLabs/ggezchain/x/acl/types"
+	keepertest "github.com/ramiqadoumi/ggezchain/testutil/keeper"
+	"github.com/ramiqadoumi/ggezchain/testutil/sample"
+	"github.com/ramiqadoumi/ggezchain/x/acl/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -116,16 +116,6 @@ func TestOverwriteAccessDefinitionsList(t *testing.T) {
 			expErr:                  true,
 			expErrMsg:               "invalid module name",
 		},
-		// {
-		// 	name: "at least one of is_maker or is_checker must be true",
-		// 	inputAclAuthority: types.AclAuthority{
-		// 		Address: addr,
-		// 		Name:    "Alice",
-		// 	},
-		// 	accessDefinitionListStr: `[{"module":"module5","is_maker":false,"is_checker":false}]`,
-		// 	expErr:                  true,
-		// 	expErrMsg:               "at least one of is_maker or is_checker must be true",
-		// },
 		{
 			name: "all good",
 			inputAclAuthority: types.AclAuthority{
@@ -150,7 +140,7 @@ func TestOverwriteAccessDefinitionsList(t *testing.T) {
 				require.Contains(t, err.Error(), tc.expErrMsg)
 			} else {
 				require.NoError(t, err)
-				require.Equal(t, tc.expectedLen, len(aclAuthority.AccessDefinitions))
+				require.Len(t, aclAuthority.AccessDefinitions, tc.expectedLen)
 				require.Equal(t, tc.expectedOutput, aclAuthority.AccessDefinitions)
 			}
 		})
@@ -190,19 +180,6 @@ func TestUpdateAccessDefinitions(t *testing.T) {
 			expErr:                     true,
 			expErrMsg:                  "invalid module name",
 		},
-		// {
-		// 	name: "at least one of is_maker or is_checker must be true",
-		// 	inputAclAuthority: types.AclAuthority{
-		// 		Address: addr,
-		// 		Name:    "Alice",
-		// 		AccessDefinitions: []*types.AccessDefinition{
-		// 			{Module: "module1", IsMaker: false, IsChecker: false},
-		// 		},
-		// 	},
-		// 	singleAccessDefinitionsStr: `{"module":"module1","is_maker":false ,"is_checker":false}`,
-		// 	expErr:                     true,
-		// 	expErrMsg:                  "at least one of is_maker or is_checker must be true",
-		// },
 		{
 			name: "fail when module does not exist in current ACL list",
 			inputAclAuthority: types.AclAuthority{
@@ -241,7 +218,7 @@ func TestUpdateAccessDefinitions(t *testing.T) {
 				require.Contains(t, err.Error(), tc.expErrMsg)
 			} else {
 				require.NoError(t, err)
-				require.Equal(t, aclAuthority.AccessDefinitions, tc.expectedOutput)
+				require.Equal(t, tc.expectedOutput, aclAuthority.AccessDefinitions)
 			}
 		})
 	}
@@ -299,16 +276,6 @@ func TestAddAccessDefinitions(t *testing.T) {
 			expErr:                   true,
 			expErrMsg:                "invalid module name",
 		},
-		// {
-		// 	name: "at least one of is_maker or is_checker must be true",
-		// 	inputAclAuthority: types.AclAuthority{
-		// 		Address: addr,
-		// 		Name:    "Alice",
-		// 	},
-		// 	accessDefinitionsListStr: `[{"module":"module5","is_maker":false,"is_checker":false}]`,
-		// 	expErr:                   true,
-		// 	expErrMsg:                "at least one of is_maker or is_checker must be true",
-		// },
 		{
 			name: "add existing module",
 			inputAclAuthority: types.AclAuthority{
@@ -350,7 +317,7 @@ func TestAddAccessDefinitions(t *testing.T) {
 				require.Contains(t, err.Error(), tc.expErrMsg)
 			} else {
 				require.NoError(t, err)
-				require.Equal(t, tc.expectedLen, len(aclAuthority.AccessDefinitions))
+				require.Len(t, aclAuthority.AccessDefinitions, tc.expectedLen)
 				require.Equal(t, tc.expectedOutput, aclAuthority.AccessDefinitions)
 			}
 		})
@@ -434,7 +401,7 @@ func TestDeleteAccessDefinitions(t *testing.T) {
 				require.Contains(t, err.Error(), tc.expErrMsg)
 			} else {
 				require.NoError(t, err)
-				require.Equal(t, tc.expectedLen, len(aclAuthority.AccessDefinitions))
+				require.Len(t, aclAuthority.AccessDefinitions, tc.expectedLen)
 				require.Equal(t, tc.expectedOutput, aclAuthority.AccessDefinitions)
 			}
 		})
@@ -486,7 +453,7 @@ func TestClearAllAccessDefinitions(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			aclAuthority := keeper.ClearAllAccessDefinitions(tc.inputAclAuthority)
-			require.Equal(t, tc.expectedLen, len(aclAuthority.AccessDefinitions))
+			require.Len(t, aclAuthority.AccessDefinitions, tc.expectedLen)
 		})
 	}
 }

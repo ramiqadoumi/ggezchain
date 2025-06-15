@@ -3,11 +3,10 @@ package keeper_test
 import (
 	"testing"
 
-	"github.com/GGEZLabs/ggezchain/testutil/sample"
-	"github.com/GGEZLabs/ggezchain/x/acl/types"
-	"github.com/stretchr/testify/require"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/testutil/sample"
+	"github.com/ramiqadoumi/ggezchain/x/acl/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestMsgAddAuthority(t *testing.T) {
@@ -97,17 +96,6 @@ func TestMsgAddAuthority(t *testing.T) {
 			expErr:    true,
 			expErrMsg: "invalid module name",
 		},
-		// {
-		// 	name: "at least one of is_maker or is_checker must be true",
-		// 	input: &types.MsgAddAuthority{
-		// 		Creator:           admin,
-		// 		AuthAddress:       bob,
-		// 		Name:              "Bob",
-		// 		AccessDefinitions: `[{"module":"module1","is_maker":false,"is_checker":false}]`,
-		// 	},
-		// 	expErr:    true,
-		// 	expErrMsg: "at least one of is_maker or is_checker must be true",
-		// },
 		{
 			name: "all good",
 			input: &types.MsgAddAuthority{

@@ -8,7 +8,6 @@ package acl
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -25,6 +24,7 @@ const (
 	Query_AclAuthorityAll_FullMethodName = "/ggezchain.acl.Query/AclAuthorityAll"
 	Query_AclAdmin_FullMethodName        = "/ggezchain.acl.Query/AclAdmin"
 	Query_AclAdminAll_FullMethodName     = "/ggezchain.acl.Query/AclAdminAll"
+	Query_SuperAdmin_FullMethodName      = "/ggezchain.acl.Query/SuperAdmin"
 )
 
 // QueryClient is the client API for Query service.
@@ -39,6 +39,8 @@ type QueryClient interface {
 	// Queries a list of AclAdmin items.
 	AclAdmin(ctx context.Context, in *QueryGetAclAdminRequest, opts ...grpc.CallOption) (*QueryGetAclAdminResponse, error)
 	AclAdminAll(ctx context.Context, in *QueryAllAclAdminRequest, opts ...grpc.CallOption) (*QueryAllAclAdminResponse, error)
+	// Queries a SuperAdmin by index.
+	SuperAdmin(ctx context.Context, in *QueryGetSuperAdminRequest, opts ...grpc.CallOption) (*QueryGetSuperAdminResponse, error)
 }
 
 type queryClient struct {
@@ -94,6 +96,15 @@ func (c *queryClient) AclAdminAll(ctx context.Context, in *QueryAllAclAdminReque
 	return out, nil
 }
 
+func (c *queryClient) SuperAdmin(ctx context.Context, in *QueryGetSuperAdminRequest, opts ...grpc.CallOption) (*QueryGetSuperAdminResponse, error) {
+	out := new(QueryGetSuperAdminResponse)
+	err := c.cc.Invoke(ctx, Query_SuperAdmin_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -106,30 +117,32 @@ type QueryServer interface {
 	// Queries a list of AclAdmin items.
 	AclAdmin(context.Context, *QueryGetAclAdminRequest) (*QueryGetAclAdminResponse, error)
 	AclAdminAll(context.Context, *QueryAllAclAdminRequest) (*QueryAllAclAdminResponse, error)
+	// Queries a SuperAdmin by index.
+	SuperAdmin(context.Context, *QueryGetSuperAdminRequest) (*QueryGetSuperAdminResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
 // UnimplementedQueryServer must be embedded to have forward compatible implementations.
-type UnimplementedQueryServer struct{}
+type UnimplementedQueryServer struct {
+}
 
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-
 func (UnimplementedQueryServer) AclAuthority(context.Context, *QueryGetAclAuthorityRequest) (*QueryGetAclAuthorityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AclAuthority not implemented")
 }
-
 func (UnimplementedQueryServer) AclAuthorityAll(context.Context, *QueryAllAclAuthorityRequest) (*QueryAllAclAuthorityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AclAuthorityAll not implemented")
 }
-
 func (UnimplementedQueryServer) AclAdmin(context.Context, *QueryGetAclAdminRequest) (*QueryGetAclAdminResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AclAdmin not implemented")
 }
-
 func (UnimplementedQueryServer) AclAdminAll(context.Context, *QueryAllAclAdminRequest) (*QueryAllAclAdminResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AclAdminAll not implemented")
+}
+func (UnimplementedQueryServer) SuperAdmin(context.Context, *QueryGetSuperAdminRequest) (*QueryGetSuperAdminResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SuperAdmin not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -234,6 +247,24 @@ func _Query_AclAdminAll_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_SuperAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetSuperAdminRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).SuperAdmin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_SuperAdmin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).SuperAdmin(ctx, req.(*QueryGetSuperAdminRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -260,6 +291,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AclAdminAll",
 			Handler:    _Query_AclAdminAll_Handler,
+		},
+		{
+			MethodName: "SuperAdmin",
+			Handler:    _Query_SuperAdmin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

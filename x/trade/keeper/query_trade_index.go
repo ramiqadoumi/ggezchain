@@ -3,11 +3,10 @@ package keeper
 import (
 	"context"
 
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (k Keeper) TradeIndex(goCtx context.Context, req *types.QueryGetTradeIndexRequest) (*types.QueryGetTradeIndexResponse, error) {

@@ -17,7 +17,7 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		TradeIndex: TradeIndex{
-			NextId: uint64(DefaultIndex),
+			NextId: DefaultIndex,
 		},
 		StoredTradeList:     []StoredTrade{},
 		StoredTempTradeList: []StoredTempTrade{},
@@ -52,7 +52,6 @@ func (gs GenesisState) ValidateStoredTrade() error {
 	storedTradeIndexMap := make(map[string]struct{})
 
 	for _, elem := range gs.StoredTradeList {
-
 		if elem.TradeIndex <= 0 {
 			return fmt.Errorf("trade_index must be more than 0")
 		}
@@ -77,8 +76,8 @@ func (gs GenesisState) ValidateStoredTrade() error {
 			return fmt.Errorf("zero amount not allowed: %s, trade_index: %d", elem.Amount.String(), elem.TradeIndex)
 		}
 
-		if elem.Amount.Denom != DefaultCoinDenom {
-			return fmt.Errorf("invalid denom expected: %s, got: %s, trade_index: %d", DefaultCoinDenom, elem.Amount.Denom, elem.TradeIndex)
+		if elem.Amount.Denom != DefaultDenom {
+			return fmt.Errorf("invalid denom expected: %s, got: %s, trade_index: %d", DefaultDenom, elem.Amount.Denom, elem.TradeIndex)
 		}
 
 		if strings.TrimSpace(elem.Price) == "" {
@@ -117,19 +116,16 @@ func (gs GenesisState) ValidateStoredTrade() error {
 		}
 
 		_, err = time.Parse(time.RFC3339, elem.CreateDate)
-
 		if err != nil {
 			return fmt.Errorf("invalid create_date format, trade_index: %d", elem.TradeIndex)
 		}
 
 		_, err = time.Parse(time.RFC3339, elem.UpdateDate)
-
 		if err != nil {
 			return fmt.Errorf("invalid update_date format, trade_index: %d", elem.TradeIndex)
 		}
 
 		_, err = time.Parse(time.RFC3339, elem.ProcessDate)
-
 		if err != nil {
 			return fmt.Errorf("invalid process_date format, trade_index: %d", elem.TradeIndex)
 		}
@@ -146,8 +142,7 @@ func (gs GenesisState) ValidateStoredTrade() error {
 }
 
 func (gs GenesisState) ValidateStoredTempTrade() error {
-	storedTempTradeIndexMap := make(map[string]struct{}) // tradeIndex
-	tempTradeIndexMap := make(map[int64]struct{})        // tempTradeIndex
+	storedTradeIndexMap := make(map[string]struct{}) // tradeIndex
 
 	for _, elem := range gs.StoredTempTradeList {
 		if elem.TradeIndex <= 0 {
@@ -156,26 +151,15 @@ func (gs GenesisState) ValidateStoredTempTrade() error {
 
 		// Check for duplicated index in storedTempTrade
 		index := string(StoredTempTradeKey(elem.TradeIndex))
-		if _, ok := storedTempTradeIndexMap[index]; ok {
+		if _, ok := storedTradeIndexMap[index]; ok {
 			return fmt.Errorf("duplicated index for storedTempTrade")
 		}
-		storedTempTradeIndexMap[index] = struct{}{}
-
-		if elem.TempTradeIndex <= 0 {
-			return fmt.Errorf("temp_trade_index must be more than 0")
-		}
-
-		// Check for duplicated TempTradeIndex
-		if _, exists := tempTradeIndexMap[int64(elem.TempTradeIndex)]; exists {
-			return fmt.Errorf("duplicated temp_trade_index: %d", elem.TempTradeIndex)
-		}
-		tempTradeIndexMap[int64(elem.TempTradeIndex)] = struct{}{}
+		storedTradeIndexMap[index] = struct{}{}
 
 		_, err := time.Parse(time.RFC3339, elem.CreateDate)
 		if err != nil {
 			return fmt.Errorf("invalid create_date format, trade_index: %d", elem.TradeIndex)
 		}
-
 	}
 	return nil
 }

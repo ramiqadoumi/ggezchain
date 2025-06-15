@@ -9,15 +9,15 @@ import "ggezchain/trade/trade_index.proto";
 import "ggezchain/trade/stored_trade.proto";
 import "ggezchain/trade/stored_temp_trade.proto";
 
-option go_package = "github.com/GGEZLabs/ggezchain/x/trade/types";
+option go_package = "github.com/ramiqadoumi/ggezchain/x/trade/types";
 
 // GenesisState defines the trade module's genesis state.
 message GenesisState {
   
   // params defines all the parameters of the module.
            Params          params                 = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
-           TradeIndex      trade_index            = 2 [(gogoproto.nullable) = false] ;
-  repeated StoredTrade     stored_trade_list      = 3 [(gogoproto.nullable) = false] ;
-  repeated StoredTempTrade stored_temp_trade_list = 4 [(gogoproto.nullable) = false] ;
+           TradeIndex      trade_index            = 2 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+  repeated StoredTrade     stored_trade_list      = 3 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+  repeated StoredTempTrade stored_temp_trade_list = 4 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
 }
 

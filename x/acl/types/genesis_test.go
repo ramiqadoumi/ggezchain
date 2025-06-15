@@ -3,8 +3,8 @@ package types_test
 import (
 	"testing"
 
-	"github.com/GGEZLabs/ggezchain/testutil/sample"
-	"github.com/GGEZLabs/ggezchain/x/acl/types"
+	"github.com/ramiqadoumi/ggezchain/testutil/sample"
+	"github.com/ramiqadoumi/ggezchain/x/acl/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -17,16 +17,87 @@ func TestGenesisState_Validate(t *testing.T) {
 		expErrMsg string
 	}{
 		{
+			desc: "set admins without super admin",
+			genState: &types.GenesisState{
+				AclAdminList: []types.AclAdmin{
+					{
+						Address: sample.AccAddress(),
+					},
+					{
+						Address: sample.AccAddress(),
+					},
+				},
+				AclAuthorityList: []types.AclAuthority{},
+			},
+			expErr:    true,
+			expErrMsg: "cannot initialize admins or authorities without a super admin",
+		},
+		{
+			desc: "set authorities without super admin",
+			genState: &types.GenesisState{
+				AclAdminList: []types.AclAdmin{
+					{
+						Address: sample.AccAddress(),
+					},
+					{
+						Address: sample.AccAddress(),
+					},
+				},
+				AclAuthorityList: []types.AclAuthority{},
+			},
+			expErr:    true,
+			expErrMsg: "cannot initialize admins or authorities without a super admin",
+		},
+		{
+			desc: "set authorities without admin",
+			genState: &types.GenesisState{
+				SuperAdmin: &types.SuperAdmin{
+					Admin: sample.AccAddress(),
+				},
+				AclAuthorityList: []types.AclAuthority{
+					{
+						Address: sample.AccAddress(),
+						Name:    "Alice",
+					},
+				},
+			},
+			expErr:    true,
+			expErrMsg: "cannot initialize authorities without admin",
+		},
+		{
+			desc: "nil super admin",
+			genState: &types.GenesisState{
+				SuperAdmin: nil,
+			},
+			expErr: false,
+		},
+		{
+			desc: "invalid super admin address",
+			genState: &types.GenesisState{
+				SuperAdmin: &types.SuperAdmin{Admin: "invalid_address"},
+			},
+			expErr:    true,
+			expErrMsg: "invalid super admin address",
+		},
+		{
 			desc: "duplicated aclAuthority",
 			genState: &types.GenesisState{
+				SuperAdmin: &types.SuperAdmin{
+					Admin: sample.AccAddress(),
+				},
+				AclAdminList: []types.AclAdmin{
+					{
+						Address: sample.AccAddress(),
+					},
+				},
 				AclAuthorityList: []types.AclAuthority{
 					{
 						Address: duplicateAddress,
-						Name: "Alice",
+						Name:    "Alice",
 					},
 					{
 						Address: duplicateAddress,
-						Name: "Bob",
+						Name:    "Bob",
 					},
 				},
 			},
@@ -36,6 +107,14 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "invalid aclAuthority address",
 			genState: &types.GenesisState{
+				SuperAdmin: &types.SuperAdmin{
+					Admin: sample.AccAddress(),
+				},
+				AclAdminList: []types.AclAdmin{
+					{
+						Address: sample.AccAddress(),
+					},
+				},
 				AclAuthorityList: []types.AclAuthority{
 					{
 						Address: "invalid_address",
@@ -51,6 +130,9 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "duplicated aclAdmin",
 			genState: &types.GenesisState{
+				SuperAdmin: &types.SuperAdmin{
+					Admin: sample.AccAddress(),
+				},
 				AclAdminList: []types.AclAdmin{
 					{
 						Address: duplicateAddress,
@@ -66,6 +148,9 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "invalid aclAdmin address",
 			genState: &types.GenesisState{
+				SuperAdmin: &types.SuperAdmin{
+					Admin: sample.AccAddress(),
+				},
 				AclAdminList: []types.AclAdmin{
 					{
 						Address: "invalid_address",
@@ -86,6 +171,9 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "valid genesis state",
 			genState: &types.GenesisState{
+				SuperAdmin: &types.SuperAdmin{
+					Admin: sample.AccAddress(),
+				},
 				AclAuthorityList: []types.AclAuthority{
 					{
 						Address: sample.AccAddress(),
@@ -148,11 +236,11 @@ func TestGenesisState_ValidateAclAuthority(t *testing.T) {
 				AclAuthorityList: []types.AclAuthority{
 					{
 						Address: duplicateAddress,
-						Name: "Alice",
+						Name:    "Alice",
 					},
 					{
 						Address: duplicateAddress,
-						Name: "Bob",
+						Name:    "Bob",
 					},
 				},
 			},
@@ -309,6 +397,50 @@ func TestGenesisState_ValidateAclAdmin(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
 			err := tc.genState.ValidateAclAdmin()
+			if tc.expErr {
+				require.Error(t, err)
+				require.Contains(t, err.Error(), tc.expErrMsg)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestGenesisState_ValidateSuperAdmin(t *testing.T) {
+	tests := []struct {
+		desc      string
+		genState  *types.GenesisState
+		expErr    bool
+		expErrMsg string
+	}{
+		{
+			desc: "nil super admin",
+			genState: &types.GenesisState{
+				SuperAdmin: nil,
+			},
+			expErr: false,
+		},
+		{
+			desc: "invalid super admin address",
+			genState: &types.GenesisState{
+				SuperAdmin: &types.SuperAdmin{Admin: "invalid_address"},
+			},
+			expErr:    true,
+			expErrMsg: "invalid super admin address",
+		},
+		{
+			desc: "all good",
+			genState: &types.GenesisState{
+				SuperAdmin: &types.SuperAdmin{Admin: sample.AccAddress()},
+			},
+			expErr: false,
+		},
+		// this line is used by starport scaffolding # types/genesis/testcase
+	}
+	for _, tc := range tests {
+		t.Run(tc.desc, func(t *testing.T) {
+			err := tc.genState.ValidateSuperAdmin()
 			if tc.expErr {
 				require.Error(t, err)
 				require.Contains(t, err.Error(), tc.expErrMsg)

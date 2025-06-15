@@ -3,8 +3,8 @@ package keeper_test
 import (
 	"testing"
 
-	keepertest "github.com/GGEZLabs/ggezchain/testutil/keeper"
-	"github.com/GGEZLabs/ggezchain/x/acl/types"
+	keepertest "github.com/ramiqadoumi/ggezchain/testutil/keeper"
+	"github.com/ramiqadoumi/ggezchain/x/acl/types"
 	"github.com/stretchr/testify/require"
 )
 

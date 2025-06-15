@@ -3,11 +3,10 @@ package types
 import (
 	"testing"
 
-	"github.com/GGEZLabs/ggezchain/testutil/sample"
-	"github.com/stretchr/testify/require"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/ramiqadoumi/ggezchain/testutil/sample"
+	"github.com/stretchr/testify/require"
 )
 
 func TestMsgProcessTrade_ValidateBasic(t *testing.T) {

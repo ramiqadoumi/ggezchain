@@ -1,10 +1,9 @@
 package acl
 
 import (
-	"github.com/GGEZLabs/ggezchain/x/acl/keeper"
-	"github.com/GGEZLabs/ggezchain/x/acl/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/acl/keeper"
+	"github.com/ramiqadoumi/ggezchain/x/acl/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.
@@ -22,6 +21,11 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	for _, elem := range genState.AclAdminList {
 		k.SetAclAdmin(ctx, elem)
 	}
+	// Set if defined
+	if genState.SuperAdmin != nil {
+		k.SetSuperAdmin(ctx, *genState.SuperAdmin)
+	}
+
 	// this line is used by starport scaffolding # genesis/module/init
 	if err := k.SetParams(ctx, genState.Params); err != nil {
 		panic(err)
@@ -35,6 +39,11 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	genesis.AclAuthorityList = k.GetAllAclAuthority(ctx)
 	genesis.AclAdminList = k.GetAllAclAdmin(ctx)
+	// Get all superAdmin
+	superAdmin, found := k.GetSuperAdmin(ctx)
+	if found {
+		genesis.SuperAdmin = &superAdmin
+	}
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

@@ -5,16 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	modulev1 "github.com/GGEZLabs/ggezchain/api/ggezchain/trade/module"
-	"github.com/GGEZLabs/ggezchain/x/trade/keeper"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -22,6 +16,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	modulev1 "github.com/ramiqadoumi/ggezchain/api/ggezchain/trade/module"
+	"github.com/ramiqadoumi/ggezchain/x/trade/keeper"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 var (
@@ -97,6 +95,7 @@ type AppModule struct {
 	keeper        keeper.Keeper
 	accountKeeper types.AccountKeeper
 	bankKeeper    types.BankKeeper
+	aclKeeper     types.AclKeeper
 }
 
 func NewAppModule(
@@ -104,12 +103,14 @@ func NewAppModule(
 	keeper keeper.Keeper,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+	aclKeeper types.AclKeeper,
 ) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
 		accountKeeper:  accountKeeper,
 		bankKeeper:     bankKeeper,
+		aclKeeper:      aclKeeper,
 	}
 }
 
@@ -216,6 +217,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		k,
 		in.AccountKeeper,
 		in.BankKeeper,
+		in.AclKeeper,
 	)
 
 	return ModuleOutputs{TradeKeeper: k, Module: m}

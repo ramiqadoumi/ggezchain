@@ -3,11 +3,11 @@ package types
 import (
 	"testing"
 
-	"github.com/GGEZLabs/ggezchain/testutil/sample"
+	"github.com/ramiqadoumi/ggezchain/testutil/sample"
 	"github.com/stretchr/testify/require"
 )
 
-func TestValidateAddAclAdmin(t *testing.T) {
+func TestValidateAddAdmin(t *testing.T) {
 	alice := sample.AccAddress()
 	testCases := []struct {
 		name          string
@@ -40,7 +40,7 @@ func TestValidateAddAclAdmin(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := ValidateAddAclAdmin(tc.currentAdmins, tc.newAdmins)
+			err := ValidateAddAdmin(tc.currentAdmins, tc.newAdmins)
 			if tc.expErr {
 				require.Error(t, err)
 				require.Contains(t, err.Error(), tc.expErrMsg)
@@ -51,7 +51,7 @@ func TestValidateAddAclAdmin(t *testing.T) {
 	}
 }
 
-func TestValidateDeleteAclAdmin(t *testing.T) {
+func TestValidateDeleteAdmin(t *testing.T) {
 	alice := sample.AccAddress()
 	bob := sample.AccAddress()
 	testCases := []struct {
@@ -68,7 +68,7 @@ func TestValidateDeleteAclAdmin(t *testing.T) {
 			},
 			deletedAdmins: []string{alice},
 			expErr:        true,
-			expErrMsg:     "cannot delete all admins, at least one aclAdmin must remain",
+			expErrMsg:     "cannot delete all admins, at least one admin must remain",
 		},
 		{
 			name: "delete all admins",
@@ -78,7 +78,7 @@ func TestValidateDeleteAclAdmin(t *testing.T) {
 			},
 			deletedAdmins: []string{alice, bob},
 			expErr:        true,
-			expErrMsg:     "cannot delete all admins, at least one aclAdmin must remain",
+			expErrMsg:     "cannot delete all admins, at least one admin must remain",
 		},
 		{
 			name: "address not exist",
@@ -103,7 +103,7 @@ func TestValidateDeleteAclAdmin(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := ValidateDeleteAclAdmin(tc.currentAdmins, tc.deletedAdmins)
+			err := ValidateDeleteAdmin(tc.currentAdmins, tc.deletedAdmins)
 			if tc.expErr {
 				require.Error(t, err)
 				require.Contains(t, err.Error(), tc.expErrMsg)
@@ -134,7 +134,7 @@ func TestConvertStringsToAclAdmins(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			acladmins := ConvertStringsToAclAdmins(tt.addresses)
-			require.EqualValues(t, len(acladmins), tt.expectedLen)
+			require.Len(t, acladmins, tt.expectedLen)
 		})
 	}
 }
@@ -202,7 +202,7 @@ func TestHasDuplicateAddresses(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			hasDuplicate := hasDuplicateAddresses(tt.addresses)
-			require.EqualValues(t, hasDuplicate, tt.expectedOutput)
+			require.EqualValues(t, tt.expectedOutput, hasDuplicate)
 		})
 	}
 }

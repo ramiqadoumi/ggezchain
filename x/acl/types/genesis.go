@@ -14,6 +14,7 @@ func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		AclAuthorityList: []AclAuthority{},
 		AclAdminList:     []AclAdmin{},
+		SuperAdmin:       nil,
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
@@ -22,12 +23,28 @@ func DefaultGenesis() *GenesisState {
 // Validate performs basic genesis state validation returning an error upon any
 // failure.
 func (gs GenesisState) Validate() error {
-	err := gs.ValidateAclAuthority()
+	if gs.SuperAdmin == nil {
+		if len(gs.AclAdminList) > 0 || len(gs.AclAuthorityList) > 0 {
+			return fmt.Errorf("cannot initialize admins or authorities without a super admin: super admin must be set")
+		}
+		return nil
+	}
+
+	if len(gs.AclAdminList) == 0 && len(gs.AclAuthorityList) > 0 {
+		return fmt.Errorf("cannot initialize authorities without admin: admin must be set")
+	}
+
+	err := gs.ValidateSuperAdmin()
 	if err != nil {
 		return err
 	}
 
 	err = gs.ValidateAclAdmin()
+	if err != nil {
+		return err
+	}
+
+	err = gs.ValidateAclAuthority()
 	if err != nil {
 		return err
 	}
@@ -49,7 +66,7 @@ func (gs GenesisState) ValidateAclAuthority() error {
 		if authority.Name == "" {
 			return fmt.Errorf("empty name not allowed, authority address: %s", authority.Address)
 		}
-		
+
 		// Check for duplicated index in aclAuthority
 		index := string(AclAuthorityKey(authority.Address))
 		if _, ok := aclAuthorityIndexMap[index]; ok {
@@ -66,12 +83,6 @@ func (gs GenesisState) ValidateAclAuthority() error {
 				return fmt.Errorf("duplicate module '%s' found in access definitions for address '%s'", access.Module, authority.Address)
 			}
 			seenModules[access.Module] = struct{}{}
-
-			// todo
-			// Must have at least one role
-			// if !access.IsMaker && !access.IsChecker {
-			// 	return fmt.Errorf("access definition for module '%s' must be either maker or checker (address: %s)", access.Module, authority.Address)
-			// }
 		}
 	}
 	return nil
@@ -93,5 +104,17 @@ func (gs GenesisState) ValidateAclAdmin() error {
 		}
 		aclAdminIndexMap[index] = struct{}{}
 	}
+	return nil
+}
+
+func (gs GenesisState) ValidateSuperAdmin() error {
+	if gs.SuperAdmin == nil {
+		return nil
+	}
+
+	if _, err := sdk.AccAddressFromBech32(gs.SuperAdmin.Admin); err != nil {
+		return fmt.Errorf("invalid super admin address %s: %w", gs.SuperAdmin.Admin, err)
+	}
+
 	return nil
 }

@@ -3,16 +3,14 @@ package trade_test
 import (
 	"testing"
 
-	keepertest "github.com/GGEZLabs/ggezchain/testutil/keeper"
-	"github.com/GGEZLabs/ggezchain/testutil/nullify"
-	"github.com/GGEZLabs/ggezchain/testutil/sample"
-	trade "github.com/GGEZLabs/ggezchain/x/trade/module"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
-	"github.com/stretchr/testify/require"
-
 	"cosmossdk.io/math"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	keepertest "github.com/ramiqadoumi/ggezchain/testutil/keeper"
+	"github.com/ramiqadoumi/ggezchain/testutil/nullify"
+	"github.com/ramiqadoumi/ggezchain/testutil/sample"
+	trade "github.com/ramiqadoumi/ggezchain/x/trade/module"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGenesis(t *testing.T) {
@@ -26,7 +24,7 @@ func TestGenesis(t *testing.T) {
 			{
 				TradeIndex:        1,
 				TradeType:         types.TradeTypeBuy,
-				Amount:            &sdk.Coin{Denom: types.DefaultCoinDenom, Amount: math.NewInt(100000)},
+				Amount:            &sdk.Coin{Denom: types.DefaultDenom, Amount: math.NewInt(100000)},
 				Price:             "0.01",
 				ReceiverAddress:   sample.AccAddress(),
 				Status:            types.StatusPending,
@@ -41,7 +39,7 @@ func TestGenesis(t *testing.T) {
 			{
 				TradeIndex:        2,
 				TradeType:         types.TradeTypeSell,
-				Amount:            &sdk.Coin{Denom: types.DefaultCoinDenom, Amount: math.NewInt(100000)},
+				Amount:            &sdk.Coin{Denom: types.DefaultDenom, Amount: math.NewInt(100000)},
 				Price:             "0.01",
 				ReceiverAddress:   sample.AccAddress(),
 				Status:            types.StatusPending,
@@ -56,14 +54,12 @@ func TestGenesis(t *testing.T) {
 		},
 		StoredTempTradeList: []types.StoredTempTrade{
 			{
-				TradeIndex:     1,
-				TempTradeIndex: 1,
-				CreateDate:     "2023-05-11T08:44:00Z",
+				TradeIndex: 1,
+				CreateDate: "2023-05-11T08:44:00Z",
 			},
 			{
-				TradeIndex:     2,
-				TempTradeIndex: 2,
-				CreateDate:     "2023-05-11T08:44:00Z",
+				TradeIndex: 2,
+				CreateDate: "2023-05-11T08:44:00Z",
 			},
 		},
 		// this line is used by starport scaffolding # genesis/test/state

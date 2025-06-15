@@ -7,9 +7,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// ValidateAddAclAdmin validates whether any of the new admin addresses already exist
+// ValidateAddAdmin validates whether any of the new admin addresses already exist
 // in the current admin list
-func ValidateAddAclAdmin(currentAdmins []AclAdmin, newAdmins []string) error {
+func ValidateAddAdmin(currentAdmins []AclAdmin, newAdmins []string) error {
 	adminMap := make(map[string]struct{}, len(currentAdmins))
 	for _, admin := range currentAdmins {
 		adminMap[admin.Address] = struct{}{}
@@ -29,9 +29,8 @@ func ValidateAddAclAdmin(currentAdmins []AclAdmin, newAdmins []string) error {
 	return nil
 }
 
-// ValidateDeleteAclAdmin validates whether any of the new admin addresses not exist
-// in the current admin list
-func ValidateDeleteAclAdmin(currentAdmins []AclAdmin, deletedAdmins []string) error {
+// ValidateDeleteAdmin ensures that deletion admins exist and that the admin list is not emptied.
+func ValidateDeleteAdmin(currentAdmins []AclAdmin, deletedAdmins []string) error {
 	adminMap := make(map[string]struct{}, len(currentAdmins))
 	for _, admin := range currentAdmins {
 		adminMap[admin.Address] = struct{}{}
@@ -49,7 +48,9 @@ func ValidateDeleteAclAdmin(currentAdmins []AclAdmin, deletedAdmins []string) er
 		return ErrAdminNotExist.Wrapf("%s", strings.Join(notExistingAdmins, ", "))
 	}
 
-	// AclAdmin list can not be empty
+	// todo : check if that condition necessary
+	// After validate if admins exist (because may be send admins not exist on current list)
+	// check if the length of current addresses equal deleted addresses
 	if len(currentAdmins) == len(deletedAdmins) {
 		return ErrAllAdminDeletion
 	}

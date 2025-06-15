@@ -3,9 +3,8 @@ package keeper
 import (
 	"context"
 
-	"github.com/GGEZLabs/ggezchain/x/acl/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/acl/types"
 )
 
 func (k msgServer) UpdateAuthority(goCtx context.Context, msg *types.MsgUpdateAuthority) (*types.MsgUpdateAuthorityResponse, error) {
@@ -25,17 +24,17 @@ func (k msgServer) UpdateAuthority(goCtx context.Context, msg *types.MsgUpdateAu
 	}
 
 	var err error
+	switch {
 	// If OverwriteAccessDefinitions passed ignore another flags
-	if msg.OverwriteAccessDefinitions != "" {
+	case msg.OverwriteAccessDefinitions != "":
 		aclAuthority, err = k.OverwriteAccessDefinitionList(aclAuthority, msg.OverwriteAccessDefinitions)
 		if err != nil {
 			return nil, err
 		}
-	} else if msg.ClearAllAccessDefinitions {
-		// If ClearAllAccessDefinitions passed ignore another flags
+	// If ClearAllAccessDefinitions passed ignore another flags
+	case msg.ClearAllAccessDefinitions:
 		aclAuthority = k.ClearAllAccessDefinitions(aclAuthority)
-	} else {
-
+	default:
 		if len(msg.DeleteAccessDefinitions) != 0 {
 			if err := types.ValidateDeletedModules(msg.DeleteAccessDefinitions); err != nil {
 				return nil, err

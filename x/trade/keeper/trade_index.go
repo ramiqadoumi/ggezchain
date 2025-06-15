@@ -3,11 +3,9 @@ package keeper
 import (
 	"context"
 
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
-
 	"cosmossdk.io/store/prefix"
-
 	"github.com/cosmos/cosmos-sdk/runtime"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 // SetTradeIndex set tradeIndex in the store

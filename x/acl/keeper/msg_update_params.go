@@ -3,11 +3,9 @@ package keeper
 import (
 	"context"
 
-	"github.com/GGEZLabs/ggezchain/x/acl/types"
-
 	errorsmod "cosmossdk.io/errors"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/acl/types"
 )
 
 func (k msgServer) UpdateParams(goCtx context.Context, req *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {

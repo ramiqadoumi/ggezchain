@@ -2,16 +2,16 @@ package keeper
 
 import (
 	"context"
-	"strconv"
+	"fmt"
 	"time"
 
-	acltypes "github.com/GGEZLabs/ggezchain/x/acl/types"
-	"github.com/GGEZLabs/ggezchain/x/trade/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
-// HasPermission checks if the given address has permission for a specific msgType within this module based on ACL rules.
+// HasPermission checks if the given address has permission
+// for a specific msgType within this module based on ACL rules.
 func (k Keeper) HasPermission(ctx sdk.Context, address string, msgType int32) (bool, error) {
 	authority, found := k.aclKeeper.GetAclAuthority(ctx, address)
 	if !found {
@@ -43,10 +43,12 @@ func (k Keeper) HasPermission(ctx sdk.Context, address string, msgType int32) (b
 	return false, types.ErrModuleNotFound.Wrapf("no permission for module %s", types.ModuleName)
 }
 
+// MintOrBurnCoins processes a trade by minting coins for a 'buy' or burning coins for a 'sell',
+// handling transfers and rollbacks on failure.
 func (k Keeper) MintOrBurnCoins(ctx sdk.Context, tradeData types.StoredTrade) (types.TradeStatus, error) {
 	receiverAddress, err := sdk.AccAddressFromBech32(tradeData.ReceiverAddress)
 	if err != nil {
-		return types.StatusFailed, types.ErrInvalidReceiverAddress
+		return types.StatusFailed, types.ErrInvalidReceiverAddress.Wrap(err.Error())
 	}
 
 	coins := sdk.NewCoins(*tradeData.Amount)
@@ -61,7 +63,6 @@ func (k Keeper) MintOrBurnCoins(ctx sdk.Context, tradeData types.StoredTrade) (t
 		// Send coins to user
 		if err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receiverAddress, coins); err != nil {
 			// Rollback: burn minted coins
-			// todo: check update CoinsStuckOnModule to StatusFailed
 			if err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, coins); err != nil {
 				return types.StatusFailed, err
 			}
@@ -79,7 +80,6 @@ func (k Keeper) MintOrBurnCoins(ctx sdk.Context, tradeData types.StoredTrade) (t
 		// Burn coins from module
 		if err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, coins); err != nil {
 			// Rollback: refund coins to user
-			// todo: check update CoinsStuckOnModule to StatusFailed
 			if err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receiverAddress, coins); err != nil {
 				return types.StatusFailed, err
 			}
@@ -93,6 +93,7 @@ func (k Keeper) MintOrBurnCoins(ctx sdk.Context, tradeData types.StoredTrade) (t
 	}
 }
 
+// CancelExpiredPendingTrades automatically cancels pending trades older than 1 day.
 func (k Keeper) CancelExpiredPendingTrades(goCtx context.Context) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	allStoredTempTrade := k.GetAllStoredTempTrade(ctx)
@@ -114,24 +115,23 @@ func (k Keeper) CancelExpiredPendingTrades(goCtx context.Context) {
 		totalDays := int(differenceTime.Hours() / 24)
 
 		if totalDays >= 1 {
-
-			storedTrade, _ := k.GetStoredTrade(ctx, allStoredTempTrade[i].TempTradeIndex)
+			storedTrade, _ := k.GetStoredTrade(ctx, allStoredTempTrade[i].TradeIndex)
 			storedTrade.Status = types.StatusCanceled
 			storedTrade.UpdateDate = currentDate.Format(time.RFC3339)
+			storedTrade.Result = types.TradeIsCanceled
 
 			k.SetStoredTrade(ctx, storedTrade)
-			k.RemoveStoredTempTrade(ctx, allStoredTempTrade[i].TempTradeIndex)
+			k.RemoveStoredTempTrade(ctx, allStoredTempTrade[i].TradeIndex)
 
-			canceledIds = append(canceledIds, allStoredTempTrade[i].TempTradeIndex)
+			canceledIds = append(canceledIds, allStoredTempTrade[i].TradeIndex)
 		}
-
 	}
 
 	if len(canceledIds) > 0 {
 		var attributes []sdk.Attribute
 
 		for _, id := range canceledIds {
-			attributes = append(attributes, sdk.NewAttribute(types.AttributeKeyTradeIndex, strconv.FormatUint(id, 10)))
+			attributes = append(attributes, sdk.NewAttribute(types.AttributeKeyTradeIndex, fmt.Sprintf("%d", id)))
 		}
 
 		ctx.EventManager().EmitEvent(

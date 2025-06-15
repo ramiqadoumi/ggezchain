@@ -3,11 +3,9 @@ package types
 import (
 	"encoding/json"
 
-	"github.com/GGEZLabs/ggezchain/x/trade/testutil"
-
 	"cosmossdk.io/math"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/testutil"
 )
 
 func GetSampleTradeData() string {
@@ -49,7 +47,7 @@ func GetBaseStoredTrade() StoredTrade {
 	return StoredTrade{
 		TradeType: TradeTypeBuy,
 		Amount: &sdk.Coin{
-			Denom:  DefaultCoinDenom,
+			Denom:  DefaultDenom,
 			Amount: math.NewInt(100000),
 		},
 		Price:                "0.001",
@@ -70,7 +68,7 @@ func GetSampleMsgCreateTrade() *MsgCreateTrade {
 	return NewMsgCreateTrade(
 		testutil.Alice,
 		TradeTypeBuy,
-		&sdk.Coin{Denom: DefaultCoinDenom, Amount: math.NewInt(100000)},
+		&sdk.Coin{Denom: DefaultDenom, Amount: math.NewInt(100000)},
 		"0.001",
 		testutil.Alice,
 		GetSampleTradeData(),
@@ -86,7 +84,7 @@ func GetMsgCreateTradeWithTypeAndAmount(tradeType TradeType, amount int64) *MsgC
 		Creator:   testutil.Alice,
 		TradeType: tradeType,
 		Amount: &sdk.Coin{
-			Denom:  DefaultCoinDenom,
+			Denom:  DefaultDenom,
 			Amount: math.NewInt(amount),
 		},
 		Price:             "0.001",
