@@ -84,7 +84,7 @@ func TestOverwriteAccessDefinitionsList(t *testing.T) {
 			},
 			accessDefinitionListStr: `[]`,
 			expErr:                  true,
-			expErrMsg:               "access definition list is empty",
+			expErrMsg:               "access definition list is required and cannot be empty",
 		},
 		{
 			name: "invalid access definitions format",
@@ -212,7 +212,7 @@ func TestUpdateAccessDefinitions(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			aclAuthority, err := keeper.UpdateAccessDefinitions(tc.inputAclAuthority, tc.singleAccessDefinitionsStr)
+			aclAuthority, err := keeper.UpdateAccessDefinition(tc.inputAclAuthority, tc.singleAccessDefinitionsStr)
 			if tc.expErr {
 				require.Error(t, err)
 				require.Contains(t, err.Error(), tc.expErrMsg)
@@ -244,7 +244,7 @@ func TestAddAccessDefinitions(t *testing.T) {
 			},
 			accessDefinitionsListStr: `[]`,
 			expErr:                   true,
-			expErrMsg:                "access definition list is empty",
+			expErrMsg:                "access definition list is required and cannot be empty",
 		},
 		{
 			name: "invalid access definitions format",
@@ -287,7 +287,7 @@ func TestAddAccessDefinitions(t *testing.T) {
 			},
 			accessDefinitionsListStr: `[{"module":"module1","is_maker":true,"is_checker":true}]`,
 			expErr:                   true,
-			expErrMsg:                "module already exist",
+			expErrMsg:                "module name already exists",
 		},
 		{
 			name: "all good",
@@ -354,7 +354,7 @@ func TestDeleteAccessDefinitions(t *testing.T) {
 			},
 			moduleNames: []string{"module1"},
 			expErr:      true,
-			expErrMsg:   "access definition list is empty",
+			expErrMsg:   "access definition list is required and cannot be empty",
 		},
 
 		{
@@ -369,7 +369,7 @@ func TestDeleteAccessDefinitions(t *testing.T) {
 			moduleNames: []string{"module2"},
 			expectedLen: 0,
 			expErr:      true,
-			expErrMsg:   "module not exist",
+			expErrMsg:   "module name does not exist",
 		},
 		{
 			name: "all good",
