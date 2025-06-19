@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ramiqadoumi/ggezchain/x/acl/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (k msgServer) AddAuthority(goCtx context.Context, msg *types.MsgAddAuthority) (*types.MsgAddAuthorityResponse, error) {

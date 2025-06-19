@@ -3,8 +3,8 @@ package types
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // AccountKeeper defines the expected interface for the Account module.

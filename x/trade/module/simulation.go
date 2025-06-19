@@ -3,13 +3,13 @@ package trade
 import (
 	"math/rand"
 
+	"github.com/ramiqadoumi/ggezchain/testutil/sample"
+	tradesimulation "github.com/ramiqadoumi/ggezchain/x/trade/simulation"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"github.com/ramiqadoumi/ggezchain/testutil/sample"
-	tradesimulation "github.com/ramiqadoumi/ggezchain/x/trade/simulation"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 // avoid unused import issue

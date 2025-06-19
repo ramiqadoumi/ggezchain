@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ramiqadoumi/ggezchain/x/trade/keeper"
 	"github.com/ramiqadoumi/ggezchain/x/trade/testutil"
 	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"gotest.tools/v3/assert"
 )
 

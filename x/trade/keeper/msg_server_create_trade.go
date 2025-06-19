@@ -6,9 +6,9 @@ import (
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade) (*types.MsgCreateTradeResponse, error) {
@@ -43,6 +43,8 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		createDateTime = msg.CreateDate
 	}
 
+	k.Keeper.CancelExpiredPendingTrades(ctx)
+
 	newIndex := tradeIndex.NextId
 	status := types.StatusPending
 
@@ -53,7 +55,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		UpdateDate:           createDateTime,
 		TradeType:            td.TradeInfo.TradeType,
 		Amount:               td.TradeInfo.Quantity,
-		Price:                fmt.Sprint(td.TradeInfo.Price),
+		Price:                types.FormatPrice(td.TradeInfo.Price),
 		ReceiverAddress:      msg.ReceiverAddress,
 		Maker:                msg.Creator,
 		ProcessDate:          createDateTime,
@@ -73,10 +75,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	k.Keeper.SetStoredTempTrade(ctx, storedTempTrade)
 
 	tradeIndex.NextId++
-
 	k.Keeper.SetTradeIndex(ctx, tradeIndex)
-
-	k.Keeper.CancelExpiredPendingTrades(ctx)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(

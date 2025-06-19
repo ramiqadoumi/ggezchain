@@ -5,9 +5,9 @@ import (
 
 	storetypes "cosmossdk.io/store/types"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/ramiqadoumi/ggezchain/app/upgrade/v2_0_0"
 	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
 )
 
 func (app *App) setupUpgradeHandlers(configurator module.Configurator) {
