@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
+	"github.com/ramiqadoumi/ggezchain/x/trade/types"
 	"gotest.tools/v3/assert"
 )
 

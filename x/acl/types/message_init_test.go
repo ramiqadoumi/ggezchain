@@ -3,8 +3,8 @@ package types
 import (
 	"testing"
 
-	"github.com/ramiqadoumi/ggezchain/testutil/sample"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/ramiqadoumi/ggezchain/testutil/sample"
 	"github.com/stretchr/testify/require"
 )
 

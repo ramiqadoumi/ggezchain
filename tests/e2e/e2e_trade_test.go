@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"cosmossdk.io/math"
-	tradetypes "github.com/ramiqadoumi/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	tradetypes "github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 func (s *IntegrationTestSuite) testTrade() {

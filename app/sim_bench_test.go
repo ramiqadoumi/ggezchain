@@ -5,7 +5,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ramiqadoumi/ggezchain/app"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/server"
@@ -13,6 +12,7 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
+	"github.com/ramiqadoumi/ggezchain/app"
 	"github.com/stretchr/testify/require"
 )
 

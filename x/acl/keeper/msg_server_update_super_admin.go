@@ -3,8 +3,8 @@ package keeper
 import (
 	"context"
 
-	"github.com/ramiqadoumi/ggezchain/x/acl/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/acl/types"
 )
 
 func (k msgServer) UpdateSuperAdmin(goCtx context.Context, msg *types.MsgUpdateSuperAdmin) (*types.MsgUpdateSuperAdminResponse, error) {

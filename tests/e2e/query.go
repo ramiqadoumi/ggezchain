@@ -9,8 +9,6 @@ import (
 
 	"cosmossdk.io/math"
 	evidencetypes "cosmossdk.io/x/evidence/types"
-	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
-	tradetypes "github.com/ramiqadoumi/ggezchain/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	authvesting "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
@@ -20,6 +18,8 @@ import (
 	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	icacontrollertypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/controller/types"
+	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
+	tradetypes "github.com/ramiqadoumi/ggezchain/x/trade/types"
 )
 
 func queryTx(endpoint, txHash string) error {

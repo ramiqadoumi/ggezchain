@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 
 	"cosmossdk.io/math"
-	"github.com/ramiqadoumi/ggezchain/x/trade/testutil"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/trade/testutil"
 )
 
 func GetSampleTradeData(tradeType TradeType) string {

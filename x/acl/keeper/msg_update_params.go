@@ -4,8 +4,8 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
-	"github.com/ramiqadoumi/ggezchain/x/acl/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/x/acl/types"
 )
 
 func (k msgServer) UpdateParams(goCtx context.Context, req *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {

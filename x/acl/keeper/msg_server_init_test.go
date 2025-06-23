@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ramiqadoumi/ggezchain/testutil/sample"
 	"github.com/ramiqadoumi/ggezchain/x/acl/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 

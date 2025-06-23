@@ -19,9 +19,6 @@ import (
 	_ "cosmossdk.io/x/upgrade"    // import for side-effects
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	"github.com/ramiqadoumi/ggezchain/docs"
-	aclmodulekeeper "github.com/ramiqadoumi/ggezchain/x/acl/keeper"
-	trademodulekeeper "github.com/ramiqadoumi/ggezchain/x/trade/keeper"
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	dbm "github.com/cosmos/cosmos-db"
@@ -79,6 +76,9 @@ import (
 	ibcfeekeeper "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/keeper"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
+	"github.com/ramiqadoumi/ggezchain/docs"
+	aclmodulekeeper "github.com/ramiqadoumi/ggezchain/x/acl/keeper"
+	trademodulekeeper "github.com/ramiqadoumi/ggezchain/x/trade/keeper"
 )
 
 const (
