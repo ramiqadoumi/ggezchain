@@ -5,11 +5,11 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	keepertest "github.com/ramiqadoumi/ggezchain/testutil/keeper"
-	"github.com/ramiqadoumi/ggezchain/testutil/nullify"
-	"github.com/ramiqadoumi/ggezchain/testutil/sample"
-	trade "github.com/ramiqadoumi/ggezchain/x/trade/module"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	keepertest "github.com/ramiqadoumi/ggezchain/v2/testutil/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/testutil/nullify"
+	"github.com/ramiqadoumi/ggezchain/v2/testutil/sample"
+	trade "github.com/ramiqadoumi/ggezchain/v2/x/trade/module"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"github.com/stretchr/testify/require"
 )
 

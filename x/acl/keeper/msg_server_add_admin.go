@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ramiqadoumi/ggezchain/x/acl/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 )
 
 func (k msgServer) AddAdmin(goCtx context.Context, msg *types.MsgAddAdmin) (*types.MsgAddAdminResponse, error) {

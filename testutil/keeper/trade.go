@@ -15,8 +15,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	"github.com/ramiqadoumi/ggezchain/x/trade/keeper"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"github.com/stretchr/testify/require"
 )
 

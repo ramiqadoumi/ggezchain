@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/testutil/network"
-	"github.com/ramiqadoumi/ggezchain/app"
+	"github.com/ramiqadoumi/ggezchain/v2/app"
 	"github.com/stretchr/testify/require"
 )
 

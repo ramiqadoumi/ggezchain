@@ -12,7 +12,7 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
-	"github.com/ramiqadoumi/ggezchain/app"
+	"github.com/ramiqadoumi/ggezchain/v2/app"
 	"github.com/stretchr/testify/require"
 )
 

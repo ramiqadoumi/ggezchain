@@ -3,11 +3,11 @@ package acl_test
 import (
 	"testing"
 
-	keepertest "github.com/ramiqadoumi/ggezchain/testutil/keeper"
-	"github.com/ramiqadoumi/ggezchain/testutil/nullify"
-	"github.com/ramiqadoumi/ggezchain/testutil/sample"
-	acl "github.com/ramiqadoumi/ggezchain/x/acl/module"
-	"github.com/ramiqadoumi/ggezchain/x/acl/types"
+	keepertest "github.com/ramiqadoumi/ggezchain/v2/testutil/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/testutil/nullify"
+	"github.com/ramiqadoumi/ggezchain/v2/testutil/sample"
+	acl "github.com/ramiqadoumi/ggezchain/v2/x/acl/module"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 	"github.com/stretchr/testify/require"
 )
 

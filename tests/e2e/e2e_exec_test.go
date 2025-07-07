@@ -21,8 +21,8 @@ import (
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/ory/dockertest/v3/docker"
-	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
-	tradetypes "github.com/ramiqadoumi/ggezchain/x/trade/types"
+	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	tradetypes "github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 const (
@@ -1139,11 +1139,11 @@ func (s *IntegrationTestSuite) execCreateTrade(c *chain, valIdx int,
 		txCommand,
 		tradetypes.ModuleName,
 		"create-trade",
-		receiverAddress,
 		tradeData,
 		bankingSystemData,
 		coinMintingPriceJson,
 		exchangeRateJson,
+		receiverAddress,
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, from),
 		fmt.Sprintf("--%s=%s", flags.FlagChainID, c.id),
 		fmt.Sprintf("--%s=%s", flags.FlagGas, "200000"),

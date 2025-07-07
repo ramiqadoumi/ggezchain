@@ -21,9 +21,9 @@ import (
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	"github.com/ramiqadoumi/ggezchain/x/acl/keeper"
-	acl "github.com/ramiqadoumi/ggezchain/x/acl/module"
-	"github.com/ramiqadoumi/ggezchain/x/acl/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/module"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 	"gotest.tools/v3/assert"
 )
 

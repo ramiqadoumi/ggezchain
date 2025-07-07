@@ -1,18 +1,20 @@
 package simulation
 
 import (
+	"encoding/json"
 	"math/rand"
 	"strconv"
 	"time"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
-	"github.com/ramiqadoumi/ggezchain/x/trade/keeper"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 func SimulateMsgCreateTrade(
@@ -44,10 +46,30 @@ func SimulateMsgCreateTrade(
 			return simtypes.NoOpMsg(types.ModuleName, "MsgCreateTrade", "create date is future date"), nil, nil
 		}
 
+		tradeType := randomTradeType(r)
+		receiverAddress := simAccount.Address.String()
+		tradeData := types.GetSampleTradeData(tradeType)
+
+		var td types.TradeData
+		if err := json.Unmarshal([]byte(tradeData), &td); err != nil {
+			panic(err)
+		}
+
+		if td.TradeInfo.TradeType == types.TradeTypeSplit ||
+			td.TradeInfo.TradeType == types.TradeTypeReinvestment {
+			td.TradeInfo.Quantity = &sdk.Coin{Denom: "", Amount: math.NewInt(0)}
+			receiverAddress = ""
+			tdBytes, err := json.Marshal(td)
+			if err != nil {
+				panic(err)
+			}
+			tradeData = string(tdBytes)
+		}
+
 		msg := &types.MsgCreateTrade{
 			Creator:              simAccount.Address.String(),
-			ReceiverAddress:      simAccount.Address.String(),
-			TradeData:            types.GetSampleTradeData(randomTradeType(r)),
+			ReceiverAddress:      receiverAddress,
+			TradeData:            tradeData,
 			BankingSystemData:    `{}`,
 			CoinMintingPriceJson: `{}`,
 			ExchangeRateJson:     `{}`,

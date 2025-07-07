@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"github.com/stretchr/testify/require"
 )
 

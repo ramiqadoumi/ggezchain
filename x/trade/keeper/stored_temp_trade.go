@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 // SetStoredTempTrade set a specific storedTempTrade in the store from its index

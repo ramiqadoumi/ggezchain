@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"gotest.tools/v3/assert"
 )
 

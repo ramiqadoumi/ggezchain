@@ -6,8 +6,8 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 // HasPermission checks if the given address has permission

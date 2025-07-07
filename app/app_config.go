@@ -52,12 +52,12 @@ import (
 	ibcfeetypes "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
-	aclmodulev1 "github.com/ramiqadoumi/ggezchain/api/ggezchain/acl/module"
-	trademodulev1 "github.com/ramiqadoumi/ggezchain/api/ggezchain/trade/module"
-	_ "github.com/ramiqadoumi/ggezchain/x/acl/module" // import for side-effects
-	aclmoduletypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
-	_ "github.com/ramiqadoumi/ggezchain/x/trade/module" // import for side-effects
-	trademoduletypes "github.com/ramiqadoumi/ggezchain/x/trade/types"
+	aclmodulev1 "github.com/ramiqadoumi/ggezchain/v2/api/ggezchain/acl/module"
+	trademodulev1 "github.com/ramiqadoumi/ggezchain/v2/api/ggezchain/trade/module"
+	_ "github.com/ramiqadoumi/ggezchain/v2/x/acl/module" // import for side-effects
+	aclmoduletypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	_ "github.com/ramiqadoumi/ggezchain/v2/x/trade/module" // import for side-effects
+	trademoduletypes "github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 

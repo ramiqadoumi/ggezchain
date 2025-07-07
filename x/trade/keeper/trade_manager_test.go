@@ -8,8 +8,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/ramiqadoumi/ggezchain/x/trade/testutil"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/testutil"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 func (suite *KeeperTestSuite) TestHasPermission() {

@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/store/prefix"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

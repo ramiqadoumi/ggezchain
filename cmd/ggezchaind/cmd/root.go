@@ -17,7 +17,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtxconfig "github.com/cosmos/cosmos-sdk/x/auth/tx/config"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/ramiqadoumi/ggezchain/app"
+	"github.com/ramiqadoumi/ggezchain/v2/app"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )

@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"testing"
 
-	keepertest "github.com/ramiqadoumi/ggezchain/testutil/keeper"
-	"github.com/ramiqadoumi/ggezchain/testutil/sample"
-	"github.com/ramiqadoumi/ggezchain/x/acl/types"
+	keepertest "github.com/ramiqadoumi/ggezchain/v2/testutil/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/testutil/sample"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 	"github.com/stretchr/testify/require"
 )
 

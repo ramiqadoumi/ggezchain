@@ -17,8 +17,8 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	govlegacytypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
-	tradetypes "github.com/ramiqadoumi/ggezchain/x/trade/types"
+	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	tradetypes "github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 func modifyGenesis(path, moniker, amountStr string, addrAll []sdk.AccAddress, denom string) error {

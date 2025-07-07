@@ -27,9 +27,9 @@ import (
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	ratelimittypes "github.com/cosmos/ibc-apps/modules/rate-limiting/v8/types"
-	ggezchain "github.com/ramiqadoumi/ggezchain/app"
-	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
-	tradetypes "github.com/ramiqadoumi/ggezchain/x/trade/types"
+	ggezchain "github.com/ramiqadoumi/ggezchain/v2/app"
+	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	tradetypes "github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 const (

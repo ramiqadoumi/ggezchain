@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"testing"
 
-	keepertest "github.com/ramiqadoumi/ggezchain/testutil/keeper"
-	"github.com/ramiqadoumi/ggezchain/testutil/nullify"
-	"github.com/ramiqadoumi/ggezchain/x/acl/keeper"
-	"github.com/ramiqadoumi/ggezchain/x/acl/types"
+	keepertest "github.com/ramiqadoumi/ggezchain/v2/testutil/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/testutil/nullify"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 	"github.com/stretchr/testify/require"
 )
 

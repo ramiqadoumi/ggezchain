@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"time"
 
-	acltypes "github.com/ramiqadoumi/ggezchain/x/acl/types"
-	"github.com/ramiqadoumi/ggezchain/x/trade/testutil"
-	"github.com/ramiqadoumi/ggezchain/x/trade/types"
+	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/testutil"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 func (suite *KeeperTestSuite) TestCreateTrade() {
@@ -128,7 +128,7 @@ func (suite *KeeperTestSuite) TestCreateTradeWithInvalidTradeData() {
 	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
 		Creator:           testutil.Alice,
 		ReceiverAddress:   testutil.Alice,
-		TradeData:         `{"trade_info":{"asset_holder_id":0,"asset_id":1,"trade_type":1,"trade_value":1944.9,"currency":"USD","exchange":"US","fund_name":"Low Carbon Target ETF","issuer":"Blackrock","no_shares":10,"price":0.000000000012,"quantity":{"amount":"162075000000000","denom":"uggz"},"segment":"Equity: Global Low Carbon","share_price":194.49,"ticker":"CRBN","trade_fee":0,"trade_net_price":194.49,"trade_net_value":1944.9},"brokerage":{"name":"Interactive Brokers LLC","type":"Brokerage Firm","country":"US"}}`,
+		TradeData:         `{"trade_info":{"asset_holder_id":0,"asset_id":1,"trade_type":1,"trade_value":1944.9,"base_currency":"USD","settlement_currency":"USD","exchange_rate":1,"exchange":"US","fund_name":"Low Carbon Target ETF","issuer":"Blackrock","no_shares":10,"price":0.000000000012,"quantity":{"amount":"162075000000000","denom":"uggz"},"segment":"Equity: Global Low Carbon","share_price":194.49,"ticker":"CRBN","trade_fee":0,"trade_net_price":194.49,"trade_net_value":1944.9},"brokerage":{"name":"Interactive Brokers LLC","type":"Brokerage Firm","country":"US"}}`,
 		BankingSystemData: "{}",
 	})
 
@@ -249,4 +249,67 @@ func (suite *KeeperTestSuite) TestCreateTradeWithValidCreateDate() {
 	trade, found := suite.tradeKeeper.GetStoredTrade(suite.ctx, 1)
 	suite.Require().True(found)
 	suite.Require().Equal(trade.CreateDate, "2024-05-11T08:44:00Z")
+}
+
+func (suite *KeeperTestSuite) TestCreateTradeWithTypeSplit() {
+	suite.setupTest()
+	keeper := suite.tradeKeeper
+
+	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
+		Creator:           testutil.Alice,
+		TradeData:         `{"trade_info":{"asset_holder_id":1,"asset_id":1,"trade_type":3,"trade_value":1944.9,"base_currency":"USD","settlement_currency":"USD","exchange_rate":1,"exchange":"US","fund_name":"Low Carbon Target ETF","issuer":"Blackrock","no_shares":10,"price":0.000000000012,"segment":"Equity: Global Low Carbon","share_price":194.49,"ticker":"CRBN","trade_fee":1,"trade_net_price":194.49,"trade_net_value":1944.9},"brokerage":{"name":"Interactive Brokers LLC","type":"Brokerage Firm","country":"US"}}`,
+		BankingSystemData: "{}",
+	})
+
+	suite.Require().Equal(&types.MsgCreateTradeResponse{
+		TradeIndex: 1,
+		Status:     types.StatusPending,
+	}, createResponse)
+	suite.Require().NoError(err)
+
+	trade, found := keeper.GetStoredTrade(suite.ctx, 1)
+	suite.Require().True(found)
+	suite.Require().EqualValues(types.StoredTrade{
+		TradeIndex:        1,
+		TradeType:         types.TradeTypeSplit,
+		Price:             "0.000000000012",
+		Status:            types.StatusPending,
+		Maker:             testutil.Alice,
+		TxDate:            "0001-01-01T00:00:00Z",
+		CreateDate:        "0001-01-01T00:00:00Z",
+		UpdateDate:        "0001-01-01T00:00:00Z",
+		ProcessDate:       "0001-01-01T00:00:00Z",
+		TradeData:         `{"trade_info":{"asset_holder_id":1,"asset_id":1,"trade_type":3,"trade_value":1944.9,"base_currency":"USD","settlement_currency":"USD","exchange_rate":1,"exchange":"US","fund_name":"Low Carbon Target ETF","issuer":"Blackrock","no_shares":10,"price":0.000000000012,"segment":"Equity: Global Low Carbon","share_price":194.49,"ticker":"CRBN","trade_fee":1,"trade_net_price":194.49,"trade_net_value":1944.9},"brokerage":{"name":"Interactive Brokers LLC","type":"Brokerage Firm","country":"US"}}`,
+		BankingSystemData: "{}",
+		Result:            types.TradeCreatedSuccessfully,
+		Amount:            nil,
+	}, trade)
+}
+
+func (suite *KeeperTestSuite) TestCreateTradeWithTypeSplitAndReceiverAddress() {
+	suite.setupTest()
+
+	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
+		Creator:           testutil.Alice,
+		ReceiverAddress:   testutil.Alice,
+		TradeData:         `{"trade_info":{"asset_holder_id":1,"asset_id":1,"trade_type":3,"trade_value":1944.9,"base_currency":"USD","settlement_currency":"USD","exchange_rate":1,"exchange":"US","fund_name":"Low Carbon Target ETF","issuer":"Blackrock","no_shares":10,"price":0.000000000012,"segment":"Equity: Global Low Carbon","share_price":194.49,"ticker":"CRBN","trade_fee":1,"trade_net_price":194.49,"trade_net_value":1944.9},"brokerage":{"name":"Interactive Brokers LLC","type":"Brokerage Firm","country":"US"}}`,
+		BankingSystemData: "{}",
+	})
+
+	suite.Require().Nil(createResponse)
+	suite.Require().Contains(err.Error(), "receiver address must not be set for trade type TRADE_TYPE_SPLIT")
+}
+
+func (suite *KeeperTestSuite) TestCreateTradeWithTypeSplitAndQuantity() {
+	suite.setupTest()
+	createResponse, err := suite.msgServer.CreateTrade(suite.ctx, &types.MsgCreateTrade{
+		Creator:           testutil.Alice,
+		ReceiverAddress:   testutil.Alice,
+		TradeData:         `{"trade_info":{"asset_holder_id":1,"asset_id":1,"trade_type":3,"trade_value":1944.9,"base_currency":"USD","settlement_currency":"USD","exchange_rate":1,"exchange":"US","fund_name":"Low Carbon Target ETF","issuer":"Blackrock","no_shares":10,"price":0.000000000012,"quantity":{"amount":"162075000000000","denom":"uggz"},"segment":"Equity: Global Low Carbon","share_price":194.49,"ticker":"CRBN","trade_fee":0,"trade_net_price":194.49,"trade_net_value":1944.9},"brokerage":{"name":"Interactive Brokers LLC","type":"Brokerage Firm","country":"US"}}`,
+		BankingSystemData: "{}",
+	})
+
+	suite.Require().Nil(createResponse)
+	suite.Require().ErrorIs(err, types.ErrInvalidTradeInfo)
+	suite.Require().Contains(err.Error(), "quantity must not be set")
 }

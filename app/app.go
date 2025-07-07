@@ -76,9 +76,9 @@ import (
 	ibcfeekeeper "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/keeper"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
-	"github.com/ramiqadoumi/ggezchain/docs"
-	aclmodulekeeper "github.com/ramiqadoumi/ggezchain/x/acl/keeper"
-	trademodulekeeper "github.com/ramiqadoumi/ggezchain/x/trade/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/docs"
+	aclmodulekeeper "github.com/ramiqadoumi/ggezchain/v2/x/acl/keeper"
+	trademodulekeeper "github.com/ramiqadoumi/ggezchain/v2/x/trade/keeper"
 )
 
 const (
