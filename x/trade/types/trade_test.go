@@ -29,6 +29,11 @@ func TestIsTypeValid(t *testing.T) {
 			valid:     true,
 		},
 		{
+			name:      "trade type reverse split",
+			tradeType: types.TradeTypeReverseSplit,
+			valid:     true,
+		},
+		{
 			name:      "trade type reinvestment",
 			tradeType: types.TradeTypeReinvestment,
 			valid:     true,
@@ -36,7 +41,7 @@ func TestIsTypeValid(t *testing.T) {
 		{
 			name:      "trade type dividends",
 			tradeType: types.TradeTypeDividends,
-			valid:     false,
+			valid:     true,
 		},
 		{
 			name:      "trade type unspecified",

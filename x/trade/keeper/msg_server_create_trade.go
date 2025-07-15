@@ -28,9 +28,21 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		return nil, err
 	}
 
+	err = types.ValidateCoinMintingPriceJson(msg.CoinMintingPriceJson)
+	if err != nil {
+		return nil, err
+	}
+
+	err = types.ValidateExchangeRateJson(msg.ExchangeRateJson)
+	if err != nil {
+		return nil, err
+	}
+
 	// Validate receiver address if trade type not split or reinvestment
 	if td.TradeInfo.TradeType != types.TradeTypeSplit &&
-		td.TradeInfo.TradeType != types.TradeTypeReinvestment {
+		td.TradeInfo.TradeType != types.TradeTypeReverseSplit &&
+		td.TradeInfo.TradeType != types.TradeTypeReinvestment &&
+		td.TradeInfo.TradeType != types.TradeTypeDividends {
 		_, err = sdk.AccAddressFromBech32(msg.ReceiverAddress)
 		if err != nil {
 			return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid receiver address (%s)", err)
@@ -55,11 +67,9 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		createDateTime = msg.CreateDate
 	}
 
-	k.Keeper.CancelExpiredPendingTrades(ctx)
-
 	newIndex := tradeIndex.NextId
 	tradeType := td.TradeInfo.TradeType
-	formattedPrice := types.FormatPrice(td.TradeInfo.Price)
+	formattedPrice := types.FormatPrice(td.TradeInfo.CoinMintingPriceUsd)
 
 	storedTrade := types.StoredTrade{
 		TradeIndex:           newIndex,
@@ -71,18 +81,13 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		Amount:               td.TradeInfo.Quantity,
 		TradeData:            msg.TradeData,
 		ReceiverAddress:      msg.ReceiverAddress,
-		Price:                formattedPrice,
+		CoinMintingPriceUsd:  formattedPrice,
 		Maker:                msg.Creator,
 		ProcessDate:          formattedDateTime,
 		BankingSystemData:    msg.BankingSystemData,
 		CoinMintingPriceJson: msg.CoinMintingPriceJson,
 		ExchangeRateJson:     msg.ExchangeRateJson,
 		Result:               types.TradeCreatedSuccessfully,
-	}
-
-	if td.TradeInfo.TradeType == types.TradeTypeSplit ||
-		td.TradeInfo.TradeType == types.TradeTypeReinvestment {
-		storedTrade.ReceiverAddress = ""
 	}
 
 	storedTempTrade := types.StoredTempTrade{
@@ -95,6 +100,9 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 
 	tradeIndex.NextId++
 	k.Keeper.SetTradeIndex(ctx, tradeIndex)
+
+	// Cancel expired trades
+	k.Keeper.CancelExpiredPendingTrades(ctx)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(

@@ -8,7 +8,7 @@ import (
 func ValidateTradeData(tradeData string) (TradeData, error) {
 	var td TradeData
 	if err := json.Unmarshal([]byte(tradeData), &td); err != nil {
-		return td, ErrInvalidTradeData.Wrapf(err.Error())
+		return td, ErrInvalidTradeData.Wrap(err.Error())
 	}
 
 	if td.TradeInfo == nil || td.Brokerage == nil {
@@ -43,10 +43,10 @@ func ValidateTradeData(tradeData string) (TradeData, error) {
 		return td, ErrInvalidTradeInfo.Wrap("issuer must not be empty or whitespace")
 	}
 	if td.TradeInfo.NoShares <= 0 {
-		return td, ErrInvalidTradeInfo.Wrapf("no_shares must be greater than 0, got: %d", td.TradeInfo.NoShares)
+		return td, ErrInvalidTradeInfo.Wrapf("no_shares must be greater than 0, got: %f", td.TradeInfo.NoShares)
 	}
-	if td.TradeInfo.Price <= 0 {
-		return td, ErrInvalidTradeInfo.Wrapf("price must be greater than 0, got: %f", td.TradeInfo.Price)
+	if td.TradeInfo.CoinMintingPriceUsd <= 0 {
+		return td, ErrInvalidTradeInfo.Wrapf("coin_minting_price_usd must be greater than 0, got: %f", td.TradeInfo.CoinMintingPriceUsd)
 	}
 	if strings.TrimSpace(td.TradeInfo.Segment) == "" {
 		return td, ErrInvalidTradeInfo.Wrap("segment must not be empty or whitespace")
@@ -72,7 +72,9 @@ func ValidateTradeData(tradeData string) (TradeData, error) {
 
 	// Validate quantity if trade type not split or reinvestment
 	if td.TradeInfo.TradeType != TradeTypeSplit &&
-		td.TradeInfo.TradeType != TradeTypeReinvestment {
+		td.TradeInfo.TradeType != TradeTypeReverseSplit &&
+		td.TradeInfo.TradeType != TradeTypeReinvestment &&
+		td.TradeInfo.TradeType != TradeTypeDividends {
 		if !td.TradeInfo.Quantity.IsValid() {
 			return td, ErrInvalidTradeInfo.Wrapf("invalid quantity: %s", td.TradeInfo.Quantity)
 		}

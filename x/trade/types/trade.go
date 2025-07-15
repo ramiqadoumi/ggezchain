@@ -6,14 +6,16 @@ func (tt TradeType) IsTypeValid() bool {
 	case TradeTypeBuy,
 		TradeTypeSell,
 		TradeTypeSplit,
-		TradeTypeReinvestment:
+		TradeTypeReverseSplit,
+		TradeTypeReinvestment,
+		TradeTypeDividends:
 		return true
 	default:
 		return false
 	}
 }
 
-// IsValid check if a trade status is valid
+// IsStatusValid check if a trade status is valid
 func (tt TradeStatus) IsStatusValid() bool {
 	switch tt {
 	case StatusProcessed,
