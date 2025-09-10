@@ -45,11 +45,11 @@ func ValidateExchangeRateJson(exchangeRateJson string) error {
 		if strings.TrimSpace(rate.ToCurrency) == "" {
 			return ErrInvalidExchangeRateJson.Wrapf("to_currency must not be empty or whitespace at index: %d", i)
 		}
-		if rate.OriginalAmount <= 0 {
-			return ErrInvalidExchangeRateJson.Wrapf("original_amount must be greater than 0, got: %f, at index: %d", rate.OriginalAmount, i)
+		if rate.OriginalAmount < 0 {
+			return ErrInvalidExchangeRateJson.Wrapf("original_amount must be a non-negative number, got: %f, at index: %d", rate.OriginalAmount, i)
 		}
-		if rate.ConvertedAmount <= 0 {
-			return ErrInvalidExchangeRateJson.Wrapf("converted_amount must be greater than 0, got: %f, at index: %d", rate.ConvertedAmount, i)
+		if rate.ConvertedAmount < 0 {
+			return ErrInvalidExchangeRateJson.Wrapf("converted_amount must be a non-negative number, got: %f, at index: %d", rate.ConvertedAmount, i)
 		}
 		if rate.CurrencyRate <= 0 {
 			return ErrInvalidExchangeRateJson.Wrapf("currency_rate must be greater than 0, got: %f, at index: %d", rate.CurrencyRate, i)

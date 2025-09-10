@@ -5,8 +5,8 @@ import (
 
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 )
 
 // SetAclAuthority set a specific aclAuthority in the store from its index

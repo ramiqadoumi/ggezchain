@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"cosmossdk.io/math"
+	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	tradetypes "github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"github.com/cosmos/cosmos-sdk/server"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -17,8 +19,6 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	govlegacytypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
-	tradetypes "github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 func modifyGenesis(path, moniker, amountStr string, addrAll []sdk.AccAddress, denom string) error {

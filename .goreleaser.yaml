@@ -12,7 +12,7 @@ builds:
     binary: ggezchaind
     hooks:
       pre:
-        - wget https://github.com/CosmWasm/wasmvm/releases/download/{{ .Env.COSMWASM_VERSION }}/libwasmvm_muslc.x86_64.a -O /usr/lib/libwasmvm_muslc.x86_64.a
+        - sudo wget https://github.com/CosmWasm/wasmvm/releases/download/{{ .Env.COSMWASM_VERSION }}/libwasmvm_muslc.x86_64.a -O /usr/lib/libwasmvm_muslc.x86_64.a
     goos:
       - linux
     goarch:
@@ -42,7 +42,7 @@ builds:
     binary: ggezchaind
     hooks:
       pre:
-        - wget https://github.com/CosmWasm/wasmvm/releases/download/{{ .Env.COSMWASM_VERSION }}/libwasmvm_muslc.aarch64.a -O /usr/lib/libwasmvm_muslc.aarch64.a
+        - sudo wget https://github.com/CosmWasm/wasmvm/releases/download/{{ .Env.COSMWASM_VERSION }}/libwasmvm_muslc.aarch64.a -O /usr/lib/libwasmvm_muslc.aarch64.a
     goos:
       - linux
     goarch:
@@ -72,7 +72,7 @@ builds:
     binary: ggezchaind
     hooks:
       pre:
-        - wget https://github.com/CosmWasm/wasmvm/releases/download/{{ .Env.COSMWASM_VERSION }}/libwasmvmstatic_darwin.a -O /lib/libwasmvmstatic_darwin.a
+        - sudo wget https://github.com/CosmWasm/wasmvm/releases/download/{{ .Env.COSMWASM_VERSION }}/libwasmvmstatic_darwin.a -O /lib/libwasmvmstatic_darwin.a
     env:
       - CC=o64-clang
       - CGO_CFLAGS=-mmacosx-version-min=10.12
@@ -102,7 +102,7 @@ builds:
     binary: ggezchaind
     hooks:
       pre:
-        - wget https://github.com/CosmWasm/wasmvm/releases/download/{{ .Env.COSMWASM_VERSION }}/libwasmvmstatic_darwin.a -O /lib/libwasmvmstatic_darwin.a
+        - sudo wget https://github.com/CosmWasm/wasmvm/releases/download/{{ .Env.COSMWASM_VERSION }}/libwasmvmstatic_darwin.a -O /lib/libwasmvmstatic_darwin.a
     env:
       - CC=oa64-clang
       - CGO_LDFLAGS=-L/lib
@@ -174,14 +174,10 @@ release:
   replace_existing_draft: true
   header: |
 
-    ## Changelog
-
-    See the full changelog [here](https://github.com/ramiqadoumi/ggezchain/blob/v{{ .Version }}/CHANGELOG.md)
-
     ## ⚡️ Binaries
 
     Binaries for Linux (amd64 and arm64) are available below.
-
+    
     #### 🔨 Build from source
 
     If you prefer to build from source, you can use the following commands:

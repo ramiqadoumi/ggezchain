@@ -7,6 +7,9 @@ import (
 	"cosmossdk.io/log"
 	evidencetypes "cosmossdk.io/x/evidence/types"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
+	ggezchain "github.com/ramiqadoumi/ggezchain/v2/app"
+	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	tradetypes "github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -26,10 +29,7 @@ import (
 	paramsproptypes "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	ratelimittypes "github.com/cosmos/ibc-apps/modules/rate-limiting/v8/types"
-	ggezchain "github.com/ramiqadoumi/ggezchain/v2/app"
-	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
-	tradetypes "github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
+	ratelimittypes "github.com/cosmos/ibc-apps/modules/rate-limiting/v10/types"
 )
 
 const (
@@ -96,7 +96,7 @@ func (c *chain) createAndInitValidators(count int) error {
 	appOptions[flags.FlagHome] = ggezchain.DefaultNodeHome
 	appOptions[server.FlagInvCheckPeriod] = simcli.FlagPeriodValue
 
-	tempApplication, _ := ggezchain.New(
+	tempApplication := ggezchain.New(
 		log.NewNopLogger(),
 		dbm.NewMemDB(),
 		nil,
@@ -142,7 +142,7 @@ func (c *chain) createAndInitValidatorsWithMnemonics(count int, mnemonics []stri
 	appOptions[flags.FlagHome] = ggezchain.DefaultNodeHome
 	appOptions[server.FlagInvCheckPeriod] = simcli.FlagPeriodValue
 
-	tempApplication, _ := ggezchain.New(
+	tempApplication := ggezchain.New(
 		log.NewNopLogger(),
 		dbm.NewMemDB(),
 		nil,

@@ -558,17 +558,17 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"GGEZLabs", "ggezchain", "acl", "params"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"ramiqadoumi", "ggezchain", "acl", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AclAuthority_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"GGEZLabs", "ggezchain", "acl", "acl_authority", "address"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AclAuthority_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"ramiqadoumi", "ggezchain", "acl", "acl_authority", "address"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AclAuthorityAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"GGEZLabs", "ggezchain", "acl", "acl_authority"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AclAuthorityAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"ramiqadoumi", "ggezchain", "acl", "acl_authority"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AclAdmin_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"GGEZLabs", "ggezchain", "acl", "acl_admin", "address"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AclAdmin_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"ramiqadoumi", "ggezchain", "acl", "acl_admin", "address"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AclAdminAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"GGEZLabs", "ggezchain", "acl", "acl_admin"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AclAdminAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"ramiqadoumi", "ggezchain", "acl", "acl_admin"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_SuperAdmin_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"GGEZLabs", "ggezchain", "acl", "super_admin"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_SuperAdmin_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"ramiqadoumi", "ggezchain", "acl", "super_admin"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

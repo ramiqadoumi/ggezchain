@@ -18,33 +18,33 @@ service Query {
   
   // Parameters queries the parameters of the module.
   rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/GGEZLabs/ggezchain/trade/params";
+    option (google.api.http).get = "/ramiqadoumi/ggezchain/trade/params";
   
   }
   
   // Queries a TradeIndex by index.
   rpc TradeIndex (QueryGetTradeIndexRequest) returns (QueryGetTradeIndexResponse) {
-    option (google.api.http).get = "/GGEZLabs/ggezchain/trade/trade_index";
+    option (google.api.http).get = "/ramiqadoumi/ggezchain/trade/trade_index";
   
   }
   
   // Queries a list of StoredTrade items.
   rpc StoredTrade    (QueryGetStoredTradeRequest) returns (QueryGetStoredTradeResponse) {
-    option (google.api.http).get = "/GGEZLabs/ggezchain/trade/stored_trade/{trade_index}";
+    option (google.api.http).get = "/ramiqadoumi/ggezchain/trade/stored_trade/{trade_index}";
   
   }
   rpc StoredTradeAll (QueryAllStoredTradeRequest) returns (QueryAllStoredTradeResponse) {
-    option (google.api.http).get = "/GGEZLabs/ggezchain/trade/stored_trade";
+    option (google.api.http).get = "/ramiqadoumi/ggezchain/trade/stored_trade";
   
   }
   
   // Queries a list of StoredTempTrade items.
   rpc StoredTempTrade    (QueryGetStoredTempTradeRequest) returns (QueryGetStoredTempTradeResponse) {
-    option (google.api.http).get = "/GGEZLabs/ggezchain/trade/stored_temp_trade/{trade_index}";
+    option (google.api.http).get = "/ramiqadoumi/ggezchain/trade/stored_temp_trade/{trade_index}";
   
   }
   rpc StoredTempTradeAll (QueryAllStoredTempTradeRequest) returns (QueryAllStoredTempTradeResponse) {
-    option (google.api.http).get = "/GGEZLabs/ggezchain/trade/stored_temp_trade";
+    option (google.api.http).get = "/ramiqadoumi/ggezchain/trade/stored_temp_trade";
   
   }
 }
