@@ -6,9 +6,9 @@ import (
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
-	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrade) (*types.MsgProcessTradeResponse, error) {
@@ -23,7 +23,7 @@ func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrad
 		return nil, types.ErrInvalidCheckerPermission
 	}
 
-	st, found := k.Keeper.GetStoredTrade(ctx, msg.TradeIndex)
+	st, found := k.GetStoredTrade(ctx, msg.TradeIndex)
 	if !found {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrNotFound, "trade with index %d not found", msg.TradeIndex)
 	}
@@ -71,7 +71,7 @@ func (k msgServer) ProcessTrade(goCtx context.Context, msg *types.MsgProcessTrad
 	st.Status = finalStatus
 	st.Result = finalResult
 
-	k.Keeper.SetStoredTrade(ctx, st)
+	k.SetStoredTrade(ctx, st)
 	k.RemoveStoredTempTrade(ctx, msg.TradeIndex)
 
 	ctx.EventManager().EmitEvent(

@@ -1,9 +1,9 @@
 package acl
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ramiqadoumi/ggezchain/v2/x/acl/keeper"
 	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

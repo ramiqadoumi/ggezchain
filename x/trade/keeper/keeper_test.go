@@ -7,10 +7,6 @@ import (
 	"cosmossdk.io/store"
 	"cosmossdk.io/store/metrics"
 	storetypes "cosmossdk.io/store/types"
-	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
-	"github.com/ramiqadoumi/ggezchain/v2/x/trade/keeper"
-	"github.com/ramiqadoumi/ggezchain/v2/x/trade/testutil"
-	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -22,6 +18,10 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/testutil"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	gomock "go.uber.org/mock/gomock"
@@ -174,7 +174,7 @@ func (suite *KeeperTestSuite) createNTrades(numberOfTrades uint64) (tradeIndex [
 	for i := uint64(0); i < numberOfTrades; i++ {
 		createResponse, err := suite.msgServer.CreateTrade(suite.ctx, types.GetSampleMsgCreateTrade())
 		suite.Require().NoError(err)
-		suite.Require().EqualValues(types.MsgCreateTradeResponse{
+		suite.Require().Equal(types.MsgCreateTradeResponse{
 			TradeIndex: i + 1,
 			Status:     types.StatusPending,
 		}, *createResponse)

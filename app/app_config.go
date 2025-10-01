@@ -38,12 +38,6 @@ import (
 	_ "cosmossdk.io/x/upgrade"    // import for side-effects
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
-	aclmodulev1 "github.com/ramiqadoumi/ggezchain/v2/api/ggezchain/acl/module"
-	trademodulev1 "github.com/ramiqadoumi/ggezchain/v2/api/ggezchain/trade/module"
-	_ "github.com/ramiqadoumi/ggezchain/v2/x/acl/module" // import for side-effects
-	aclmoduletypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
-	_ "github.com/ramiqadoumi/ggezchain/v2/x/trade/module" // import for side-effects
-	trademoduletypes "github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config" // import for side-effects
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -77,6 +71,12 @@ import (
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
+	aclmodulev1 "github.com/ramiqadoumi/ggezchain/v2/api/ggezchain/acl/module"
+	trademodulev1 "github.com/ramiqadoumi/ggezchain/v2/api/ggezchain/trade/module"
+	_ "github.com/ramiqadoumi/ggezchain/v2/x/acl/module" // import for side-effects
+	aclmoduletypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
+	_ "github.com/ramiqadoumi/ggezchain/v2/x/trade/module" // import for side-effects
+	trademoduletypes "github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
@@ -201,9 +201,9 @@ var (
 			{
 				Name: authtypes.ModuleName,
 				Config: appconfig.WrapAny(&authmodulev1.Module{
-					Bech32Prefix:                AccountAddressPrefix,
-					ModuleAccountPermissions:    moduleAccPerms,
-					EnableUnorderedTransactions: true,
+					Bech32Prefix:             AccountAddressPrefix,
+					ModuleAccountPermissions: moduleAccPerms,
+					// EnableUnorderedTransactions: true,
 					// By default modules authority is the governance module. This is configurable with the following:
 					// Authority: "group", // A custom module authority can be set using a module name
 					// Authority: "cosmos1cwwv22j5ca08ggdv9c2uky355k908694z577tv", // or a specific address

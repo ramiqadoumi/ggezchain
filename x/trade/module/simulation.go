@@ -3,13 +3,13 @@ package trade
 import (
 	"math/rand"
 
-	"github.com/ramiqadoumi/ggezchain/v2/testutil/sample"
-	tradesimulation "github.com/ramiqadoumi/ggezchain/v2/x/trade/simulation"
-	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
+	"github.com/ramiqadoumi/ggezchain/v2/testutil/sample"
+	tradesimulation "github.com/ramiqadoumi/ggezchain/v2/x/trade/simulation"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 // avoid unused import issue
@@ -64,7 +64,7 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgCreateTrade,
-		tradesimulation.SimulateMsgCreateTrade(am.accountKeeper, am.bankKeeper, am.aclKeeper, am.keeper),
+		tradesimulation.SimulateMsgCreateTrade(am.accountKeeper, am.bankKeeper, am.aclKeeper, am.keeper, simState.TxConfig),
 	))
 
 	var weightMsgProcessTrade int
@@ -75,7 +75,7 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgProcessTrade,
-		tradesimulation.SimulateMsgProcessTrade(am.accountKeeper, am.bankKeeper, am.aclKeeper, am.keeper),
+		tradesimulation.SimulateMsgProcessTrade(am.accountKeeper, am.bankKeeper, am.aclKeeper, am.keeper, simState.TxConfig),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation
@@ -90,7 +90,7 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			opWeightMsgCreateTrade,
 			defaultWeightMsgCreateTrade,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				tradesimulation.SimulateMsgCreateTrade(am.accountKeeper, am.bankKeeper, am.aclKeeper, am.keeper)
+				tradesimulation.SimulateMsgCreateTrade(am.accountKeeper, am.bankKeeper, am.aclKeeper, am.keeper, simState.TxConfig)
 				return nil
 			},
 		),
@@ -98,7 +98,7 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			opWeightMsgProcessTrade,
 			defaultWeightMsgProcessTrade,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				tradesimulation.SimulateMsgProcessTrade(am.accountKeeper, am.bankKeeper, am.aclKeeper, am.keeper)
+				tradesimulation.SimulateMsgProcessTrade(am.accountKeeper, am.bankKeeper, am.aclKeeper, am.keeper, simState.TxConfig)
 				return nil
 			},
 		),

@@ -6,10 +6,10 @@ import (
 	"time"
 
 	sdkmath "cosmossdk.io/math"
-	"github.com/ramiqadoumi/ggezchain/v2/x/trade/testutil"
-	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/testutil"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 func (suite *KeeperTestSuite) TestHasPermission() {

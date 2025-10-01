@@ -15,8 +15,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtxconfig "github.com/cosmos/cosmos-sdk/x/auth/tx/config"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/spf13/cobra"
 	"github.com/ramiqadoumi/ggezchain/v2/app"
+	"github.com/spf13/cobra"
 )
 
 // NewRootCmd creates a new root command for ggezchaind. It is called once in the main function.

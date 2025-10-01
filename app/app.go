@@ -12,9 +12,6 @@ import (
 	feegrantkeeper "cosmossdk.io/x/feegrant/keeper"
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	"github.com/ramiqadoumi/ggezchain/v2/docs"
-	aclmodulekeeper "github.com/ramiqadoumi/ggezchain/v2/x/acl/keeper"
-	trademodulekeeper "github.com/ramiqadoumi/ggezchain/v2/x/trade/keeper"
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	dbm "github.com/cosmos/cosmos-db"
@@ -51,6 +48,9 @@ import (
 	icahostkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/keeper"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v10/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/docs"
+	aclmodulekeeper "github.com/ramiqadoumi/ggezchain/v2/x/acl/keeper"
+	trademodulekeeper "github.com/ramiqadoumi/ggezchain/v2/x/trade/keeper"
 )
 
 const (
@@ -94,7 +94,7 @@ type App struct {
 	AuthzKeeper           authzkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 	CircuitBreakerKeeper  circuitkeeper.Keeper
-	ParamsKeeper          paramskeeper.Keeper
+	ParamsKeeper          paramskeeper.Keeper //nolint:staticcheck
 
 	// ibc keepers
 	IBCKeeper           *ibckeeper.Keeper
@@ -118,7 +118,6 @@ type App struct {
 }
 
 func init() {
-
 	sdk.DefaultBondDenom = "uggez1"
 
 	var err error
@@ -227,7 +226,7 @@ func New(
 		if err := app.UpgradeKeeper.SetModuleVersionMap(ctx, app.ModuleManager.GetVersionMap()); err != nil {
 			return nil, err
 		}
-		return app.App.InitChainer(ctx, req)
+		return app.InitChainer(ctx, req)
 	})
 
 	app.setupUpgradeHandlers(app.Configurator())

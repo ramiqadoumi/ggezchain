@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"cosmossdk.io/store/prefix"
-	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 )
 
 // SetTradeIndex set tradeIndex in the store

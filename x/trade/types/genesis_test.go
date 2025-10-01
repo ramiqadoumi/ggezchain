@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ramiqadoumi/ggezchain/v2/testutil/sample"
 	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -1484,7 +1484,7 @@ func TestGenesisState_ValidateStoredTempTrade(t *testing.T) {
 }
 
 func TestDefaultGenesisState_ExpectedInitialNextId(t *testing.T) {
-	require.EqualValues(t,
+	require.Equal(t,
 		&types.GenesisState{
 			StoredTrades:     []types.StoredTrade{},
 			TradeIndex:       types.TradeIndex{NextId: 1},

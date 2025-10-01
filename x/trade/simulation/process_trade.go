@@ -4,14 +4,14 @@ import (
 	"math/rand"
 	"strconv"
 
+	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/cosmos/cosmos-sdk/client"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	"github.com/cosmos/cosmos-sdk/x/simulation"
 	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 	"github.com/ramiqadoumi/ggezchain/v2/x/trade/keeper"
 	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
-	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/cosmos/cosmos-sdk/x/simulation"
 )
 
 func SimulateMsgProcessTrade(
@@ -19,6 +19,7 @@ func SimulateMsgProcessTrade(
 	bk types.BankKeeper,
 	aclk types.AclKeeper,
 	k keeper.Keeper,
+	txGen client.TxConfig,
 ) simtypes.Operation {
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
@@ -65,7 +66,7 @@ func SimulateMsgProcessTrade(
 		txCtx := simulation.OperationInput{
 			R:               r,
 			App:             app,
-			TxGen:           moduletestutil.MakeTestEncodingConfig().TxConfig,
+			TxGen:           txGen,
 			Cdc:             nil,
 			Msg:             msg,
 			Context:         ctx,

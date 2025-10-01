@@ -3,8 +3,8 @@ package keeper
 import (
 	"context"
 
-	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 )
 
 // GetParams get all parameters as types.Params

@@ -3,8 +3,8 @@ package keeper
 import (
 	"context"
 
-	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ramiqadoumi/ggezchain/v2/x/trade/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

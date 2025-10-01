@@ -3,24 +3,24 @@ package simulation
 import (
 	"math/rand"
 
-	"github.com/ramiqadoumi/ggezchain/v2/x/acl/keeper"
-	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/cosmos/cosmos-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 )
 
 func SimulateMsgInit(
 	ak types.AccountKeeper,
 	bk types.BankKeeper,
 	k keeper.Keeper,
+	txGen client.TxConfig,
 ) simtypes.Operation {
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
-
 		_, found := k.GetSuperAdmin(ctx)
 		if found {
 			return simtypes.NoOpMsg(types.ModuleName, "MsgInit", "super admin already initialized"), nil, nil
@@ -34,7 +34,7 @@ func SimulateMsgInit(
 		txCtx := simulation.OperationInput{
 			R:               r,
 			App:             app,
-			TxGen:           moduletestutil.MakeTestEncodingConfig().TxConfig,
+			TxGen:           txGen,
 			Cdc:             nil,
 			Msg:             msg,
 			Context:         ctx,

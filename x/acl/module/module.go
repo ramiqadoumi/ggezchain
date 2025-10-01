@@ -9,9 +9,6 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
-	modulev1 "github.com/ramiqadoumi/ggezchain/v2/api/ggezchain/acl/module"
-	"github.com/ramiqadoumi/ggezchain/v2/x/acl/keeper"
-	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -20,13 +17,16 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	modulev1 "github.com/ramiqadoumi/ggezchain/v2/api/ggezchain/acl/module"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/keeper"
+	"github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 )
 
 var (
 	_ module.AppModuleBasic      = (*AppModule)(nil)
 	_ module.AppModuleSimulation = (*AppModule)(nil)
 	_ module.HasGenesis          = (*AppModule)(nil)
-	_ module.HasInvariants       = (*AppModule)(nil)
+	_ module.HasInvariants       = (*AppModule)(nil) //nolint:staticcheck
 	_ module.HasConsensusVersion = (*AppModule)(nil)
 
 	_ appmodule.AppModule       = (*AppModule)(nil)
@@ -118,7 +118,7 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 }
 
 // RegisterInvariants registers the invariants of the module. If an invariant deviates from its predicted value, the InvariantRegistry triggers appropriate logic (most often the chain will be halted)
-func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
+func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {} //nolint:staticcheck
 
 // InitGenesis performs the module's genesis initialization. It returns no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) {

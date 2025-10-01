@@ -13,7 +13,7 @@ cryptocurrencies rooted in sustainable and socially responsible investments.
 ## Installation
 
 ```sh
-git clone https://github.com/ramiqadoumi/ggezchain.git
+git clone https://github.com/GGEZLabs/ggezchain.git
 cd ggezchain
 make install
 ```
