@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/log"
 	evidencetypes "cosmossdk.io/x/evidence/types"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -27,6 +28,7 @@ import (
 	protocolpooltypes "github.com/cosmos/cosmos-sdk/x/protocolpool/types"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	feemarkettypes "github.com/cosmos/evm/x/feemarket/types"
 	ratelimittypes "github.com/cosmos/ibc-apps/modules/rate-limiting/v10/types"
 	ggezchain "github.com/ramiqadoumi/ggezchain/v2/app"
 	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
@@ -62,6 +64,7 @@ func init() {
 	ratelimittypes.RegisterInterfaces(encodingConfig.InterfaceRegistry)
 	tradetypes.RegisterInterfaces(encodingConfig.InterfaceRegistry)
 	acltypes.RegisterInterfaces(encodingConfig.InterfaceRegistry)
+	feemarkettypes.RegisterInterfaces(encodingConfig.InterfaceRegistry)
 
 	cdc = encodingConfig.Codec
 	txConfig = encodingConfig.TxConfig
@@ -104,6 +107,8 @@ func (c *chain) createAndInitValidators(count int) error {
 		nil,
 		true,
 		appOptions,
+		[]wasmkeeper.Option{},
+		ggezchain.EVMAppOptions,
 		baseapp.SetChainID("ggezchain-testnet"),
 	)
 	defer func() {
@@ -150,6 +155,8 @@ func (c *chain) createAndInitValidatorsWithMnemonics(count int, mnemonics []stri
 		nil,
 		true,
 		appOptions,
+		[]wasmkeeper.Option{},
+		ggezchain.EVMAppOptions,
 		baseapp.SetChainID("ggezchain-testnet"),
 	)
 	defer func() {
