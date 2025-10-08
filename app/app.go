@@ -117,8 +117,8 @@ import (
 	feemarkettypes "github.com/cosmos/evm/x/feemarket/types"
 	"github.com/cosmos/evm/x/ibc/transfer"
 	ibctransferkeeper "github.com/cosmos/evm/x/ibc/transfer/keeper"
-	"github.com/cosmos/evm/x/precisebank"
-	precisebankkeeper "github.com/cosmos/evm/x/precisebank/keeper"
+	// "github.com/cosmos/evm/x/precisebank"
+	// precisebankkeeper "github.com/cosmos/evm/x/precisebank/keeper"
 	precisebanktypes "github.com/cosmos/evm/x/precisebank/types"
 	evm "github.com/cosmos/evm/x/vm"
 	evmkeeper "github.com/cosmos/evm/x/vm/keeper"
@@ -226,7 +226,7 @@ type App struct {
 	FeeMarketKeeper   feemarketkeeper.Keeper
 	EVMKeeper         *evmkeeper.Keeper
 	Erc20Keeper       erc20keeper.Keeper
-	PreciseBankKeeper precisebankkeeper.Keeper
+	// PreciseBankKeeper precisebankkeeper.Keeper
 
 	// chain keepers
 	AclKeeper   aclkeeper.Keeper
@@ -613,12 +613,12 @@ func New(
 	)
 
 	// PreciseBank wraps BankKeeper to support 18 decimals
-	app.PreciseBankKeeper = precisebankkeeper.NewKeeper(
-		app.appCodec,
-		keys[precisebanktypes.StoreKey],
-		app.BankKeeper,
-		app.AccountKeeper,
-	)
+	// app.PreciseBankKeeper = precisebankkeeper.NewKeeper(
+	// 	app.appCodec,
+	// 	keys[precisebanktypes.StoreKey],
+	// 	app.BankKeeper,
+	// 	app.AccountKeeper,
+	// )
 
 	tracer := cast.ToString(appOpts.Get(evmsrvflags.EVMTracer))
 	// NOTE: it's required to set up the EVM keeper before the ERC-20 keeper, because it is used in its instantiation.
@@ -629,7 +629,7 @@ func New(
 		keys,
 		authtypes.NewModuleAddress(govtypes.ModuleName),
 		app.AccountKeeper,
-		app.PreciseBankKeeper, // TODO: check bank vs precise
+		app.BankKeeper, // TODO: check bank vs precise
 		app.StakingKeeper,
 		app.FeeMarketKeeper,
 		&app.ConsensusParamsKeeper,
@@ -638,7 +638,7 @@ func New(
 	).WithStaticPrecompiles(NewAvailableStaticPrecompiles( // TODO: check precompiles
 		*app.StakingKeeper,
 		app.DistrKeeper,
-		app.PreciseBankKeeper,
+		app.BankKeeper,
 		app.Erc20Keeper,
 		app.TransferKeeper,
 		app.IBCKeeper.ChannelKeeper,
@@ -653,7 +653,7 @@ func New(
 		app.appCodec,
 		authtypes.NewModuleAddress(govtypes.ModuleName),
 		app.AccountKeeper,
-		app.PreciseBankKeeper, // TODO: check bank vs precise
+		app.BankKeeper, // TODO: check bank vs precise
 		app.EVMKeeper,
 		app.StakingKeeper,
 		&app.TransferKeeper,
@@ -808,7 +808,7 @@ func New(
 		evm.NewAppModule(app.EVMKeeper, app.AccountKeeper, app.AccountKeeper.AddressCodec()),
 		feemarket.NewAppModule(app.FeeMarketKeeper),
 		erc20.NewAppModule(app.Erc20Keeper, app.AccountKeeper),
-		precisebank.NewAppModule(app.PreciseBankKeeper, app.BankKeeper, app.AccountKeeper),
+		// precisebank.NewAppModule(app.PreciseBankKeeper, app.BankKeeper, app.AccountKeeper),
 	)
 
 	// BasicModuleManager defines the module BasicManager is in charge of setting up basic,
