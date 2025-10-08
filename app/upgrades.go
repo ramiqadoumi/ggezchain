@@ -14,7 +14,7 @@ import (
 	protocolpooltypes "github.com/cosmos/cosmos-sdk/x/protocolpool/types"
 	erc20types "github.com/cosmos/evm/x/erc20/types"
 	feemarkettypes "github.com/cosmos/evm/x/feemarket/types"
-	// precisebanktypes "github.com/cosmos/evm/x/precisebank/types"
+	precisebanktypes "github.com/cosmos/evm/x/precisebank/types"
 	evmtypes "github.com/cosmos/evm/x/vm/types"
 )
 
@@ -62,7 +62,7 @@ func (app *App) setupUpgradeHandlers(configurator module.Configurator) {
 			Added: []string{
 				erc20types.StoreKey,
 				feemarkettypes.StoreKey,
-				// precisebanktypes.StoreKey,
+				precisebanktypes.StoreKey,
 				evmtypes.StoreKey,
 			},
 		}
