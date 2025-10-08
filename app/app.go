@@ -119,7 +119,7 @@ import (
 	ibctransferkeeper "github.com/cosmos/evm/x/ibc/transfer/keeper"
 	// "github.com/cosmos/evm/x/precisebank"
 	// precisebankkeeper "github.com/cosmos/evm/x/precisebank/keeper"
-	precisebanktypes "github.com/cosmos/evm/x/precisebank/types"
+	// precisebanktypes "github.com/cosmos/evm/x/precisebank/types"
 	evm "github.com/cosmos/evm/x/vm"
 	evmkeeper "github.com/cosmos/evm/x/vm/keeper"
 	evmtypes "github.com/cosmos/evm/x/vm/types"
@@ -279,7 +279,7 @@ var maccPerms = map[string][]string{
 	evmtypes.ModuleName:                         {authtypes.Minter, authtypes.Burner},
 	feemarkettypes.ModuleName:                   nil,
 	erc20types.ModuleName:                       {authtypes.Minter, authtypes.Burner},
-	precisebanktypes.ModuleName:                 {authtypes.Minter, authtypes.Burner},
+	// precisebanktypes.ModuleName:                 {authtypes.Minter, authtypes.Burner},
 }
 
 // New returns a reference to an initialized App.
@@ -343,7 +343,8 @@ func New(
 		evmtypes.StoreKey,
 		feemarkettypes.StoreKey,
 		erc20types.StoreKey,
-		precisebanktypes.StoreKey)
+		// precisebanktypes.StoreKey,
+	)
 
 	tkeys := storetypes.NewTransientStoreKeys(
 		paramstypes.TStoreKey,
@@ -853,7 +854,7 @@ func New(
 		wasmtypes.ModuleName,
 		acltypes.ModuleName,
 		tradetypes.ModuleName,
-		precisebanktypes.ModuleName,
+		// precisebanktypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
@@ -873,7 +874,7 @@ func New(
 		wasmtypes.ModuleName,
 		acltypes.ModuleName,
 		tradetypes.ModuleName,
-		precisebanktypes.ModuleName,
+		// precisebanktypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -901,7 +902,7 @@ func New(
 		evmtypes.ModuleName,
 		feemarkettypes.ModuleName,
 		erc20types.ModuleName,
-		precisebanktypes.ModuleName,
+		// precisebanktypes.ModuleName,
 
 		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
