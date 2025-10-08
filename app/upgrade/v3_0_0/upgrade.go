@@ -14,6 +14,8 @@ import (
 	precisebank "github.com/cosmos/evm/x/precisebank"
 	evmtypes "github.com/cosmos/evm/x/vm/types"
 	evm "github.com/cosmos/evm/x/vm"
+	"github.com/cosmos/cosmos-sdk/x/staking"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 )
 
@@ -27,6 +29,7 @@ func CreateUpgradeHandler(
 		fromVM[feemarkettypes.ModuleName] = feemarket.AppModule{}.ConsensusVersion()
 		fromVM[precisebanktypes.ModuleName] = precisebank.AppModule{}.ConsensusVersion()
 		fromVM[evmtypes.ModuleName] = evm.AppModule{}.ConsensusVersion()
+		fromVM[stakingtypes.ModuleName] = staking.AppModule{}.ConsensusVersion()
 
 		logger := ctx.Logger().With("upgrade", UpgradeName)
 
