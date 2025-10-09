@@ -636,18 +636,19 @@ func New(
 		&app.ConsensusParamsKeeper,
 		&app.Erc20Keeper,
 		tracer,
-	).WithStaticPrecompiles(NewAvailableStaticPrecompiles( // TODO: check precompiles
-		*app.StakingKeeper,
-		app.DistrKeeper,
-		app.PreciseBankKeeper,
-		app.Erc20Keeper,
-		app.TransferKeeper,
-		app.IBCKeeper.ChannelKeeper,
-		app.EVMKeeper,
-		app.GovKeeper,
-		app.SlashingKeeper,
-		app.AppCodec(),
-	))
+	)
+	// .WithStaticPrecompiles(NewAvailableStaticPrecompiles( // TODO: check precompiles
+	// 	*app.StakingKeeper,
+	// 	app.DistrKeeper,
+	// 	app.PreciseBankKeeper,
+	// 	app.Erc20Keeper,
+	// 	app.TransferKeeper,
+	// 	app.IBCKeeper.ChannelKeeper,
+	// 	app.EVMKeeper,
+	// 	app.GovKeeper,
+	// 	app.SlashingKeeper,
+	// 	app.AppCodec(),
+	// ))
 
 	app.Erc20Keeper = erc20keeper.NewKeeper(
 		app.GetKey(erc20types.StoreKey),
@@ -761,6 +762,21 @@ func New(
 	storeProvider := app.IBCKeeper.ClientKeeper.GetStoreProvider()
 	tmLightClientModule := ibctm.NewLightClientModule(app.appCodec, storeProvider)
 	clientKeeper.AddRoute(ibctm.ModuleName, &tmLightClientModule)
+
+	app.EVMKeeper.WithStaticPrecompiles(
+		NewAvailableStaticPrecompiles(
+			*app.StakingKeeper,
+			app.DistrKeeper,
+			app.PreciseBankKeeper,
+			app.Erc20Keeper,
+			app.TransferKeeper,
+			app.IBCKeeper.ChannelKeeper,
+			app.EVMKeeper,
+			app.GovKeeper,
+			app.SlashingKeeper,
+			app.AppCodec(),
+		),
+	)
 
 	// NOTE: Any module instantiated in the module manager that is later modified
 	// must be passed by reference here.
