@@ -1,10 +1,11 @@
 package app
 
 import (
-	"fmt"
+	// "fmt"
 
-	"cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	// "cosmossdk.io/math"
+	// sdk "github.com/cosmos/cosmos-sdk/types"
+	evmconfig "github.com/cosmos/evm/config"
 	evmtypes "github.com/cosmos/evm/x/vm/types"
 )
 
@@ -15,7 +16,7 @@ func NoOpEVMOptions(_ uint32) error {
 	return nil
 }
 
-var sealed = false
+// var sealed = false
 
 // ChainsCoinInfo maps EVM chain IDs to coin configuration
 // IMPORTANT: Uses uint64 EVM chain IDs as keys, not Cosmos chain ID strings
@@ -30,39 +31,40 @@ var ChainsCoinInfo = map[uint64]evmtypes.EvmCoinInfo{
 
 // EVMAppOptions sets up global configuration
 func EVMAppOptions(chainID uint32) error {
-	if sealed {
-		return nil
-	}
+	return evmconfig.EvmAppOptionsWithConfig(EVMChainID, ChainsCoinInfo, cosmosEVMActivators)
+	// if sealed {
+	// 	return nil
+	// }
 
-	// IMPORTANT: Lookup uses numeric EVMChainID, not Cosmos chainID string
-	coinInfo, found := ChainsCoinInfo[EVMChainID]
-	if !found {
-		return fmt.Errorf("unknown EVM chain id: %d", EVMChainID)
-	}
+	// // IMPORTANT: Lookup uses numeric EVMChainID, not Cosmos chainID string
+	// coinInfo, found := ChainsCoinInfo[EVMChainID]
+	// if !found {
+	// 	return fmt.Errorf("unknown EVM chain id: %d", EVMChainID)
+	// }
 
-	// Set denom info for the chain
-	if err := setBaseDenom(coinInfo); err != nil {
-		return err
-	}
+	// // Set denom info for the chain
+	// if err := setBaseDenom(coinInfo); err != nil {
+	// 	return err
+	// }
 
-	ethCfg := evmtypes.DefaultChainConfig(EVMChainID)
+	// ethCfg := evmtypes.DefaultChainConfig(EVMChainID)
 
-	err := evmtypes.NewEVMConfigurator().
-		WithChainConfig(ethCfg).
-		WithEVMCoinInfo(coinInfo).
-		Configure()
-	if err != nil {
-		return err
-	}
+	// err := evmtypes.NewEVMConfigurator().
+	// 	WithChainConfig(ethCfg).
+	// 	WithEVMCoinInfo(coinInfo).
+	// 	Configure()
+	// if err != nil {
+	// 	return err
+	// }
 
-	sealed = true
-	return nil
+	// sealed = true
+	// return nil
 }
 
 // setBaseDenom registers display and base denoms
-func setBaseDenom(ci evmtypes.EvmCoinInfo) error {
-	if err := sdk.RegisterDenom(ci.DisplayDenom, math.LegacyOneDec()); err != nil {
-		return err
-	}
-	return sdk.RegisterDenom(ci.Denom, math.LegacyNewDecWithPrec(1, int64(ci.Decimals)))
-}
+// func setBaseDenom(ci evmtypes.EvmCoinInfo) error {
+// 	if err := sdk.RegisterDenom(ci.DisplayDenom, math.LegacyOneDec()); err != nil {
+// 		return err
+// 	}
+// 	return sdk.RegisterDenom(ci.Denom, math.LegacyNewDecWithPrec(1, int64(ci.Decimals)))
+// }
