@@ -2,6 +2,7 @@ package v3_0_0
 
 import (
 	"context"
+	"fmt"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -19,14 +20,17 @@ func CreateUpgradeHandler(
 		ctx := sdk.UnwrapSDKContext(context)
 
 		logger := ctx.Logger().With("upgrade", UpgradeName)
-		
+
 		evmParams := evmkeeper.GetParams(ctx)
+		fmt.Println(evmParams)
 		evmParams.EvmDenom = BaseDenom
 		evmParams.ExtendedDenomOptions = &evmtypes.ExtendedDenomOptions{ExtendedDenom: BaseDenom}
 		// evmParams.AllowUnprotectedTxs = true // TODO:
 		if err := evmkeeper.SetParams(ctx, evmParams); err != nil {
 			return nil, err
 		}
+
+		fmt.Println(evmParams)
 
 		logger.Debug("running module migrations ...")
 
