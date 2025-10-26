@@ -27,10 +27,11 @@ func CreateUpgradeHandler(
 
 		evmParams := evmkeeper.GetParams(ctx)
 		evmParams.EvmDenom = BaseDenom
-		evmParams.AllowUnprotectedTxs = true // TODO:
+		// evmParams.AllowUnprotectedTxs = true // TODO:
 		if err := evmkeeper.SetParams(ctx, evmParams); err != nil {
 			return nil, err
 		}
+
 		logger.Info("Upgrade v3 complete")
 		return fromVM, nil
 	}

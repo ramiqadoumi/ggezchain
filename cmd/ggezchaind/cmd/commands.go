@@ -10,7 +10,6 @@ import (
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmcli "github.com/CosmWasm/wasmd/x/wasm/client/cli"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	"github.com/ramiqadoumi/ggezchain/v2/app"
 	cmtcli "github.com/cometbft/cometbft/libs/cli"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -28,6 +27,7 @@ import (
 	evmserver "github.com/cosmos/evm/server"
 	srvflags "github.com/cosmos/evm/server/flags"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/ramiqadoumi/ggezchain/v2/app"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -148,7 +148,6 @@ func newApp(
 		logger, db, traceStore, true,
 		appOpts,
 		wasmOpts,
-		app.EVMAppOptions,
 		baseappOptions...,
 	)
 }
@@ -180,12 +179,12 @@ func appExport(
 
 	appOpts = viperAppOpts
 	if height != -1 {
-		bApp = app.New(logger, db, traceStore, false, appOpts, []wasmkeeper.Option{}, app.EVMAppOptions)
+		bApp = app.New(logger, db, traceStore, false, appOpts, []wasmkeeper.Option{})
 		if err := bApp.LoadHeight(height); err != nil {
 			return servertypes.ExportedApp{}, err
 		}
 	} else {
-		bApp = app.New(logger, db, traceStore, true, appOpts, []wasmkeeper.Option{}, app.EVMAppOptions)
+		bApp = app.New(logger, db, traceStore, true, appOpts, []wasmkeeper.Option{})
 	}
 
 	return bApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs, modulesToExport)

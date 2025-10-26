@@ -5,10 +5,6 @@ import (
 
 	storetypes "cosmossdk.io/store/types"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
-	"github.com/ramiqadoumi/ggezchain/v2/app/upgrade/v2_0_0"
-	"github.com/ramiqadoumi/ggezchain/v2/app/upgrade/v2_1_0"
-	"github.com/ramiqadoumi/ggezchain/v2/app/upgrade/v3_0_0"
-	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	epochstypes "github.com/cosmos/cosmos-sdk/x/epochs/types"
 	protocolpooltypes "github.com/cosmos/cosmos-sdk/x/protocolpool/types"
@@ -16,6 +12,10 @@ import (
 	feemarkettypes "github.com/cosmos/evm/x/feemarket/types"
 	precisebanktypes "github.com/cosmos/evm/x/precisebank/types"
 	evmtypes "github.com/cosmos/evm/x/vm/types"
+	"github.com/ramiqadoumi/ggezchain/v2/app/upgrade/v2_0_0"
+	"github.com/ramiqadoumi/ggezchain/v2/app/upgrade/v2_1_0"
+	"github.com/ramiqadoumi/ggezchain/v2/app/upgrade/v3_0_0"
+	acltypes "github.com/ramiqadoumi/ggezchain/v2/x/acl/types"
 )
 
 func (app *App) setupUpgradeHandlers(configurator module.Configurator) {

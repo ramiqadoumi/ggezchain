@@ -53,11 +53,11 @@ In this section we describe the processing of the `trade` messages and the corre
 The `MsgCreateTrade` message creates both a `StoredTrade` and `StoredTempTrade`.
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/trade/tx.proto#L21
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/trade/tx.proto#L21
 ```
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/trade/tx.proto#L42-L51
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/trade/tx.proto#L42-L51
 ```
 
 This message is expected to fail if:
@@ -71,11 +71,11 @@ This message is expected to fail if:
 The `MsgProcessTrade` message creates both a `StoredTrade` and `StoredTempTrade`.
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/trade/tx.proto#L22
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/trade/tx.proto#L22
 ```
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/trade/tx.proto#L58-L63
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/trade/tx.proto#L58-L63
 ```
 
 This message is expected to fail if:

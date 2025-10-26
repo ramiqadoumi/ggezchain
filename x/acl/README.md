@@ -54,11 +54,11 @@ In this section we describe the processing of the `acl` messages and the corresp
 A super admin is initialized using the `MsgInit` message.
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L20
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L20
 ```
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L46-L50
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L46-L50
 ```
 
 This message is expected to fail if the super admin already initialized.
@@ -68,11 +68,11 @@ This message is expected to fail if the super admin already initialized.
 A super admin can be updated using the `MsgUpdateSuperAdmin` message.
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L21
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L21
 ```
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L54-L58
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L54-L58
 ```
 
 This message is expected to fail if:
@@ -85,11 +85,11 @@ This message is expected to fail if:
 One or more admins can be added using the `MsgAddAdmin` message.
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L22
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L22
 ```
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L62-L66
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L62-L66
 ```
 
 This message is expected to fail if:
@@ -102,11 +102,11 @@ This message is expected to fail if:
 One or more admins can be deleted using the `MsgDeleteAdmin` message.
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L23
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L23
 ```
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L70-L74
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L70-L74
 ```
 
 This message is expected to fail if:
@@ -119,11 +119,11 @@ This message is expected to fail if:
 An authority can be added using the `MsgAddAuthority` message.
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L24
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L24
 ```
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L78-L84
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L78-L84
 ```
 
 This message is expected to fail if:
@@ -140,11 +140,11 @@ This message is expected to fail if:
 An authority can be updated using the `MsgUpdateAuthority` message.
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L25
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L25
 ```
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L88-L98
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L88-L98
 ```
 
 This message is expected to fail if:
@@ -159,11 +159,11 @@ This message is expected to fail if:
 An authority can be deleted using the `MsgDeleteAuthority` message.
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L26
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L26
 ```
 
 ```protobuf reference
-https://github.com/GGEZLabs/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L102-L106
+https://github.com/ramiqadoumi/ggezchain/blob/main/proto/ggezchain/acl/tx.proto#L102-L106
 ```
 
 This message is expected to fail if:
