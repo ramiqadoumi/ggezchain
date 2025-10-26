@@ -24,7 +24,7 @@ func CreateUpgradeHandler(
 
 		evmParams := evmkeeper.GetParams(ctx)
 		fmt.Println(evmParams)
-		evmParams.EvmDenom = BaseDenom
+		// evmParams.EvmDenom = BaseDenom
 		evmParams.ExtendedDenomOptions = &evmtypes.ExtendedDenomOptions{ExtendedDenom: BaseDenom}
 		// evmParams.AllowUnprotectedTxs = true // TODO:
 		if err := evmkeeper.SetParams(ctx, evmParams); err != nil {
