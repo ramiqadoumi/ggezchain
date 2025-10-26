@@ -7,6 +7,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	evmkeeper "github.com/cosmos/evm/x/vm/keeper"
+	evmtypes "github.com/cosmos/evm/x/vm/types"
+
 )
 
 func CreateUpgradeHandler(
@@ -27,7 +29,7 @@ func CreateUpgradeHandler(
 
 		evmParams := evmkeeper.GetParams(ctx)
 		evmParams.EvmDenom = BaseDenom
-		evmParams.ExtendedDenomOptions.ExtendedDenom = BaseDenom
+		evmParams.ExtendedDenomOptions = &evmtypes.ExtendedDenomOptions{ExtendedDenom: BaseDenom}
 		// evmParams.AllowUnprotectedTxs = true // TODO:
 		if err := evmkeeper.SetParams(ctx, evmParams); err != nil {
 			return nil, err
