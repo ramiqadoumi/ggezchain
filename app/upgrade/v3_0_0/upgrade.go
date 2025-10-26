@@ -8,6 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	evmkeeper "github.com/cosmos/evm/x/vm/keeper"
+	// evm "github.com/cosmos/evm/x/vm"
 	evmtypes "github.com/cosmos/evm/x/vm/types"
 )
 
@@ -27,19 +28,19 @@ func CreateUpgradeHandler(
 		evmParams.ExtendedDenomOptions = &evmtypes.ExtendedDenomOptions{ExtendedDenom: BaseDenom}
 		// evmParams.AllowUnprotectedTxs = true // TODO:
 		if err := evmkeeper.SetParams(ctx, evmParams); err != nil {
+			return fromVM, err
+		}
+
+		// Initialize EvmCoinInfo in the module store
+		if err := evmkeeper.InitEvmCoinInfo(ctx); err != nil {
 			return nil, err
 		}
 
 		fmt.Println(evmParams)
 
 		logger.Debug("running module migrations ...")
+		// fromVM[evmtypes.ModuleName] = evm.AppModule{}.ConsensusVersion()
 
-		fromVM, err := mm.RunMigrations(ctx, configurator, fromVM)
-		if err != nil {
-			return fromVM, err
-		}
-
-		logger.Info("Upgrade v3 complete")
-		return fromVM, nil
+		return mm.RunMigrations(ctx, configurator, fromVM)
 	}
 }
