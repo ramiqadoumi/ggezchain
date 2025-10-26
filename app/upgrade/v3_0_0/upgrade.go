@@ -8,7 +8,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	evmkeeper "github.com/cosmos/evm/x/vm/keeper"
 	evmtypes "github.com/cosmos/evm/x/vm/types"
-
 )
 
 func CreateUpgradeHandler(
@@ -20,19 +19,20 @@ func CreateUpgradeHandler(
 		ctx := sdk.UnwrapSDKContext(context)
 
 		logger := ctx.Logger().With("upgrade", UpgradeName)
-		logger.Debug("running module migrations ...")
-
-		fromVM, err := mm.RunMigrations(ctx, configurator, fromVM)
-		if err != nil {
-			return fromVM, err
-		}
-
+		
 		evmParams := evmkeeper.GetParams(ctx)
 		evmParams.EvmDenom = BaseDenom
 		evmParams.ExtendedDenomOptions = &evmtypes.ExtendedDenomOptions{ExtendedDenom: BaseDenom}
 		// evmParams.AllowUnprotectedTxs = true // TODO:
 		if err := evmkeeper.SetParams(ctx, evmParams); err != nil {
 			return nil, err
+		}
+
+		logger.Debug("running module migrations ...")
+
+		fromVM, err := mm.RunMigrations(ctx, configurator, fromVM)
+		if err != nil {
+			return fromVM, err
 		}
 
 		logger.Info("Upgrade v3 complete")
